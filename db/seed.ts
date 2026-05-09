@@ -66,6 +66,11 @@ const INSIGHTS = [
   { type: 'win', title: 'Pencapaian: 87% siswa tuntas Bilangan Berpangkat (target 80%)', body: 'Kelas VIII-A melampaui target untuk CP-MTK-8.1. Strategi diferensiasi yang Anda terapkan minggu lalu efektif — pertimbangkan dokumentasi sebagai praktik terbaik.', action: 'Bagikan ke rekan guru' },
 ];
 
+const USERS = [
+  { email: 'sari.rahmawati@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Sari Rahmawati, S.Pd', initials: 'SR', role: 'guru', jabatan: 'Guru Matematika' },
+  { email: 'kepala@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Dr. Baskoro Adi, M.Pd', initials: 'BA', role: 'kepsek', jabatan: 'Kepala Sekolah' },
+];
+
 const PARENTS = [
   { email: 'budi.santoso@email.com', password: 'password123', nama: 'Bp. Budi Santoso', studentIds: ['S001'] },
   { email: 'hadi.pratama@email.com', password: 'password123', nama: 'Bp. Hadi Pratama', studentIds: ['S003', 'S004'] },
@@ -137,6 +142,12 @@ async function main() {
   for (let i = 0; i < ACTIVITY.length; i++) {
     const a = ACTIVITY[i];
     await sql`INSERT INTO recent_activity (time_label, type, title, description, ord) VALUES (${a.time}, ${a.type}, ${a.title}, ${a.desc}, ${i})`;
+  }
+
+  console.log('Seeding users...');
+  for (const u of USERS) {
+    const pw_hash = await bcrypt.hash(u.password, 10);
+    await sql`INSERT INTO users (email, pw_hash, nama, initials, role, jabatan) VALUES (${u.email}, ${pw_hash}, ${u.nama}, ${u.initials}, ${u.role}, ${u.jabatan})`;
   }
 
   console.log('Seeding parents...');

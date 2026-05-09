@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Icon, type IconName } from '@/components/Icon';
 
+type SidebarUser = { nama: string; initials: string; jabatan: string };
+
 const NAV: { id: string; href: string; icon: IconName; label: string; badge?: number; group: string }[] = [
   { id: 'dashboard', href: '/dashboard', icon: 'home', label: 'Beranda', group: 'Utama' },
   { id: 'analytics', href: '/analytics', icon: 'chart', label: 'Analitik', badge: 3, group: 'Utama' },
@@ -14,7 +16,7 @@ const NAV: { id: string; href: string; icon: IconName; label: string; badge?: nu
   { id: 'kurikulum', href: '/kurikulum', icon: 'layers', label: 'Kurikulum', group: 'Administrasi' },
 ];
 
-export function Sidebar() {
+export function Sidebar({ user }: { user: SidebarUser }) {
   const pathname = usePathname();
   let lastGroup = '';
   return (
@@ -55,19 +57,27 @@ export function Sidebar() {
         );
       })}
 
-      <div style={{ marginTop: 'auto', borderTop: '1px solid var(--color-line)', paddingTop: 14, display: 'flex', alignItems: 'center', gap: 10, padding: '14px 8px 4px' }}>
-        <div style={{
-          width: 34, height: 34, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #FCA5A5, #F59E0B)',
-          display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 13,
-        }}>SR</div>
-        <div style={{ flex: 1, minWidth: 0, lineHeight: 1.2 }}>
-          <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Sari Rahmawati, S.Pd</div>
-          <div style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>Guru Matematika</div>
+      <div style={{ marginTop: 'auto', borderTop: '1px solid var(--color-line)', padding: '14px 8px 4px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: 'linear-gradient(135deg, #FCA5A5, #F59E0B)',
+            display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 13,
+            flexShrink: 0,
+          }}>{user.initials}</div>
+          <div style={{ flex: 1, minWidth: 0, lineHeight: 1.2 }}>
+            <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.nama}</div>
+            <div style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>{user.jabatan}</div>
+          </div>
+          <Link href="/settings" className="icon-btn" style={{ width: 30, height: 30 }}>
+            <Icon name="settings" size={14} />
+          </Link>
         </div>
-        <Link href="/settings" className="icon-btn" style={{ width: 30, height: 30 }}>
-          <Icon name="settings" size={14} />
-        </Link>
+        <form action="/api/auth/logout" method="post">
+          <button type="submit" className="btn btn-ghost" style={{ width: '100%', fontSize: 12, justifyContent: 'center', padding: '6px 0' }}>
+            Keluar
+          </button>
+        </form>
       </div>
     </aside>
   );

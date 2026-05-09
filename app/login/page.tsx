@@ -1,6 +1,6 @@
 'use client';
-import { useState, type FormEvent } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 
 const ROLES = [
@@ -43,7 +43,6 @@ const CONTENT = {
 };
 
 export default function LoginPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const hasError = searchParams.get('error') === '1';
   const [role, setRole] = useState<'guru' | 'kepsek' | 'ortu'>('guru');
@@ -52,8 +51,6 @@ export default function LoginPage() {
 
   const c = CONTENT[role];
   const isOrtu = role === 'ortu';
-
-  const onTeacherSubmit = (e: FormEvent) => { e.preventDefault(); router.push('/dashboard'); };
 
   return (
     <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1.1fr' }}>
@@ -115,29 +112,36 @@ export default function LoginPage() {
               </button>
             </form>
           ) : (
-            <form onSubmit={onTeacherSubmit}>
+            <form action="/api/auth/login" method="post" onSubmit={() => setLoading(true)}>
               <div className="field">
                 <label className="field-label">{c.emailLabel}</label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Icon name="message" size={16} style={{ position: 'absolute', left: 12, color: 'var(--color-ink-4)', pointerEvents: 'none' }} />
-                  <input style={{ width: '100%', paddingLeft: 38 }} defaultValue={c.emailDefault} />
+                  <input name="email" type="email" required style={{ width: '100%', paddingLeft: 38 }} defaultValue={c.emailDefault} />
                 </div>
               </div>
               <div className="field">
                 <label className="field-label">Kata sandi</label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Icon name="settings" size={16} style={{ position: 'absolute', left: 12, color: 'var(--color-ink-4)', pointerEvents: 'none' }} />
-                  <input type={showPw ? 'text' : 'password'} style={{ width: '100%', paddingLeft: 38, paddingRight: 60 }} defaultValue={c.pwDefault} />
+                  <input name="password" type={showPw ? 'text' : 'password'} required style={{ width: '100%', paddingLeft: 38, paddingRight: 60 }} defaultValue={c.pwDefault} />
                   <button type="button" onClick={() => setShowPw(p => !p)} style={{ position: 'absolute', right: 8, padding: '4px 8px', fontSize: 11, color: 'var(--color-ink-3)', borderRadius: 6 }}>
                     {showPw ? 'Sembunyi' : 'Lihat'}
                   </button>
                 </div>
               </div>
+              {hasError && (
+                <div style={{ fontSize: 12.5, color: 'var(--color-bad)', marginBottom: 12 }}>
+                  Email atau kata sandi salah. Coba lagi.
+                </div>
+              )}
               <div className="flex justify-between items-center" style={{ margin: '12px 0 20px', fontSize: 12.5 }}>
                 <label className="flex gap-1 small items-center"><input type="checkbox" defaultChecked /> Ingat saya</label>
                 <a href="#" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>Lupa kata sandi?</a>
               </div>
-              <button type="submit" className="btn btn-primary btn-block">{c.cta}</button>
+              <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                {loading ? 'Memuat...' : c.cta}
+              </button>
             </form>
           )}
 

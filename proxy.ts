@@ -1,24 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const SECRET = new TextEncoder().encode(process.env.PARENT_JWT_SECRET!);
+const PARENT_SECRET = new TextEncoder().encode(process.env.PARENT_JWT_SECRET!);
+const TEACHER_SECRET = new TextEncoder().encode(process.env.TEACHER_JWT_SECRET!);
+
+const TEACHER_ROUTES = [
+  '/dashboard', '/analytics', '/jurnal', '/penilaian',
+  '/bank', '/catatan', '/admin', '/kurikulum', '/settings', '/siswa',
+];
 
 export const config = {
-  matcher: ['/orang-tua/dashboard/:path*', '/orang-tua/anak/:path*'],
+  matcher: [
+    '/orang-tua/dashboard/:path*',
+    '/orang-tua/anak/:path*',
+    '/dashboard/:path*',
+    '/analytics/:path*',
+    '/jurnal/:path*',
+    '/penilaian/:path*',
+    '/bank/:path*',
+    '/catatan/:path*',
+    '/admin/:path*',
+    '/kurikulum/:path*',
+    '/settings/:path*',
+    '/siswa/:path*',
+  ],
 };
 
 export async function proxy(req: NextRequest) {
-  const token = req.cookies.get('parent_session')?.value;
+  const { pathname } = req.nextUrl;
 
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', req.url));
+  // Parent routes
+  if (pathname.startsWith('/orang-tua/')) {
+    const token = req.cookies.get('parent_session')?.value;
+    if (!token) return NextResponse.redirect(new URL('/login', req.url));
+    try {
+      const { payload } = await jwtVerify(token, PARENT_SECRET);
+      const res = NextResponse.next();
+      res.headers.set('x-parent-id', payload.parentId as string);
+      res.headers.set('x-parent-nama', payload.nama as string);
+      return res;
+    } catch {
+      return NextResponse.redirect(new URL('/login', req.url));
+    }
   }
 
+  // Teacher routes
+  const token = req.cookies.get('teacher_session')?.value;
+  if (!token) return NextResponse.redirect(new URL('/login', req.url));
   try {
-    const { payload } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, TEACHER_SECRET);
     const res = NextResponse.next();
-    res.headers.set('x-parent-id', payload.parentId as string);
-    res.headers.set('x-parent-nama', payload.nama as string);
+    res.headers.set('x-user-id', payload.userId as string);
+    res.headers.set('x-user-nama', payload.nama as string);
+    res.headers.set('x-user-initials', payload.initials as string);
+    res.headers.set('x-user-role', payload.role as string);
+    res.headers.set('x-user-jabatan', payload.jabatan as string);
     return res;
   } catch {
     return NextResponse.redirect(new URL('/login', req.url));
