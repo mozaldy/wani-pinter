@@ -29,7 +29,8 @@ export async function POST(req: NextRequest) {
     jabatan: user.jabatan,
   });
 
-  const res = NextResponse.redirect(new URL('/dashboard', req.url));
+  const dest = user.role === 'kepsek' ? '/kepsek/dashboard' : '/dashboard';
+  const res = NextResponse.redirect(new URL(dest, req.url));
   res.cookies.set(TEACHER_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
