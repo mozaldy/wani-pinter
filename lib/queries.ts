@@ -59,6 +59,60 @@ export async function getCatatanForParent(studentId: string): Promise<CatatanSis
   `) as CatatanSiswa[];
 }
 
+export type TeacherActivity = {
+  id: string;
+  nama: string;
+  initials: string;
+  jabatan: string;
+  total_bulan: number;
+  total_minggu: number;
+  terakhir_aktif: string | null;
+};
+
+export async function getTeacherProfile(userId: string): Promise<TeacherActivity | null> {
+  const rows = await sql`
+    SELECT
+      u.id, u.nama, u.initials, u.jabatan,
+      COUNT(j.id)::int                                                     AS total_bulan,
+      COUNT(j.id) FILTER (WHERE j.tgl >= CURRENT_DATE - 7)::int            AS total_minggu,
+      MAX(j.tgl)::text                                                     AS terakhir_aktif
+    FROM users u
+    LEFT JOIN jurnal_entries j
+      ON j.user_id = u.id AND j.tgl >= CURRENT_DATE - 30
+    WHERE u.id = ${userId} AND u.role = 'guru'
+    GROUP BY u.id, u.nama, u.initials, u.jabatan
+  `;
+  return (rows[0] as TeacherActivity) || null;
+}
+
+export type TeacherClass = { kelas: string; mapel: string; entry_count: number };
+
+export async function getTeacherClasses(userId: string): Promise<TeacherClass[]> {
+  return (await sql`
+    SELECT kelas, mapel, COUNT(*)::int AS entry_count
+    FROM jurnal_entries
+    WHERE user_id = ${userId}
+    GROUP BY kelas, mapel
+    ORDER BY kelas, mapel
+  `) as TeacherClass[];
+}
+
+export async function getTeacherActivity(): Promise<TeacherActivity[]> {
+  return (await sql`
+    SELECT
+      u.id, u.nama, u.initials, u.jabatan,
+      COUNT(j.id)::int                                                     AS total_bulan,
+      COUNT(j.id) FILTER (WHERE j.tgl >= CURRENT_DATE - 7)::int            AS total_minggu,
+      MAX(j.tgl)::text                                                     AS terakhir_aktif
+    FROM users u
+    LEFT JOIN jurnal_entries j
+      ON j.user_id = u.id AND j.tgl >= CURRENT_DATE - 30
+    WHERE u.role = 'guru'
+    GROUP BY u.id, u.nama, u.initials, u.jabatan
+    ORDER BY u.nama
+  `) as TeacherActivity[];
+}
+
 export async function getHeatmap(): Promise<HeatmapRow[]> {
   const [students, cps] = await Promise.all([getStudents(), getCPList()]);
   const cps8 = cps.slice(0, 8);

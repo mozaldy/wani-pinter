@@ -1,7 +1,8 @@
+import Link from 'next/link';
 import { headers } from 'next/headers';
 import { Icon } from '@/components/Icon';
 import { StatCard, StudentAvatar, Pill } from '@/components/ui';
-import { getStudents } from '@/lib/queries';
+import { getStudents, getTeacherActivity, type TeacherActivity } from '@/lib/queries';
 import type { Student } from '@/lib/types';
 
 function groupByKelas(students: Student[]) {
@@ -20,7 +21,7 @@ function groupByKelas(students: Student[]) {
 }
 
 export default async function KepsekDashboardPage() {
-  const [students, hdrs] = await Promise.all([getStudents(), headers()]);
+  const [students, teachers, hdrs] = await Promise.all([getStudents(), getTeacherActivity(), headers()]);
 
   const nama = hdrs.get('x-user-nama') || 'Kepala Sekolah';
   const firstName = nama.split(' ')[0].replace(',', '');
@@ -32,6 +33,13 @@ export default async function KepsekDashboardPage() {
 
   const kelasList = groupByKelas(students);
   const atRisk = students.filter(s => s.risiko !== 'rendah').sort((a, b) => a.rerata - b.rerata);
+
+  const guruAktif = teachers.filter(t => t.total_minggu > 0).length;
+  const guruTidakAktif = teachers.filter(t => {
+    if (t.total_minggu > 0) return false;
+    if (!t.terakhir_aktif) return true;
+    return Math.floor((Date.now() - new Date(t.terakhir_aktif).getTime()) / 86400000) > 14;
+  }).length;
 
   return (
     <div className="screen-enter">
@@ -88,7 +96,7 @@ export default async function KepsekDashboardPage() {
           </div>
         </div>
 
-        <div className="col-span-4">
+        <div className="col-span-4 flex flex-col gap-4">
           <div className="ai-card">
             <div className="ai-badge">
               <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
@@ -97,6 +105,44 @@ export default async function KepsekDashboardPage() {
             <div className="ai-text">
               Rerata sekolah <strong>{rerataSekolah}</strong> — {rerataSekolah >= 75 ? 'di atas KKM' : 'di bawah KKM'}. Terdapat <strong>{siswaBerisiko} siswa berisiko tinggi</strong> yang membutuhkan intervensi segera. Tingkat kehadiran <strong>{rerataKehadiran}%</strong>.
             </div>
+          </div>
+
+          <div className="card">
+            <div className="card-title">
+              <h3>Aktivitas Guru</h3>
+              <Link href="/kepsek/guru" className="btn btn-ghost small">Lihat semua</Link>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {teachers.slice(0, 4).map(t => {
+                const aktif = t.total_minggu > 0;
+                const days = t.terakhir_aktif
+                  ? Math.floor((Date.now() - new Date(t.terakhir_aktif).getTime()) / 86400000)
+                  : null;
+                const status = aktif ? 'aktif' : days !== null && days <= 14 ? 'perhatian' : 'tidak-aktif';
+                return (
+                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{
+                      width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
+                      background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
+                      display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 11,
+                    }}>{t.initials}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.nama}</div>
+                      <div className="tiny muted">{t.total_bulan} entri bulan ini</div>
+                    </div>
+                    {status === 'aktif' && <Pill kind="good" dot>Aktif</Pill>}
+                    {status === 'perhatian' && <Pill kind="warn" dot>Perhatian</Pill>}
+                    {status === 'tidak-aktif' && <Pill kind="bad" dot>Tidak aktif</Pill>}
+                  </div>
+                );
+              })}
+            </div>
+            {guruTidakAktif > 0 && (
+              <div style={{ marginTop: 12, padding: '8px 12px', borderRadius: 8, background: 'color-mix(in oklab, var(--color-bad) 8%, transparent)', border: '1px solid color-mix(in oklab, var(--color-bad) 20%, transparent)', fontSize: 12.5, color: 'var(--color-bad)' }}>
+                <Icon name="alert" size={13} style={{ display: 'inline', marginRight: 5 }} />
+                {guruTidakAktif} guru tidak aktif lebih dari 14 hari
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS recent_activity, ai_insights, kehadiran_minggu, jadwal_hari_ini, cp_list, mapel, catatan_siswa, parent_students, parents, students, users CASCADE;
+DROP TABLE IF EXISTS recent_activity, ai_insights, kehadiran_minggu, jadwal_hari_ini, cp_list, mapel, catatan_siswa, parent_students, parents, jurnal_entries, students, users CASCADE;
 
 CREATE TABLE students (
   id TEXT PRIMARY KEY,
@@ -74,6 +74,23 @@ CREATE TABLE users (
   role       TEXT NOT NULL,
   jabatan    TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE jurnal_entries (
+  id         SERIAL PRIMARY KEY,
+  user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  tgl        DATE NOT NULL,
+  kelas      TEXT NOT NULL,
+  mapel      TEXT NOT NULL,
+  topic      TEXT NOT NULL,
+  metode     TEXT,
+  hadir      INT DEFAULT 0,
+  izin       INT DEFAULT 0,
+  sakit      INT DEFAULT 0,
+  alpa       INT DEFAULT 0,
+  catatan    TEXT,
+  mood       TEXT CHECK (mood IN ('baik', 'netral', 'sulit')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE parents (

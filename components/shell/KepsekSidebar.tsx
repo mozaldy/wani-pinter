@@ -7,6 +7,7 @@ type SidebarUser = { nama: string; initials: string; jabatan: string };
 
 const NAV: { id: string; href: string; icon: IconName; label: string; group: string }[] = [
   { id: 'dashboard', href: '/kepsek/dashboard', icon: 'home', label: 'Beranda', group: 'Utama' },
+  { id: 'guru', href: '/kepsek/guru', icon: 'star', label: 'Guru', group: 'Utama' },
   { id: 'siswa', href: '/kepsek/siswa', icon: 'users', label: 'Data Siswa', group: 'Utama' },
   { id: 'laporan', href: '/kepsek/laporan', icon: 'chart', label: 'Laporan', group: 'Administrasi' },
 ];

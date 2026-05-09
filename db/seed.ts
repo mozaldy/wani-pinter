@@ -69,6 +69,9 @@ const INSIGHTS = [
 const USERS = [
   { email: 'sari.rahmawati@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Sari Rahmawati, S.Pd', initials: 'SR', role: 'guru', jabatan: 'Guru Matematika' },
   { email: 'kepala@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Dr. Baskoro Adi, M.Pd', initials: 'BA', role: 'kepsek', jabatan: 'Kepala Sekolah' },
+  { email: 'ahmad.fadli@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Ahmad Fadli, S.Pd', initials: 'AF', role: 'guru', jabatan: 'Guru IPA Terpadu' },
+  { email: 'rina.kusuma@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Rina Kusuma, S.Pd', initials: 'RK', role: 'guru', jabatan: 'Guru Bahasa Indonesia' },
+  { email: 'dwi.santoso@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Dwi Santoso, S.Pd', initials: 'DS', role: 'guru', jabatan: 'Guru IPS Terpadu' },
 ];
 
 const PARENTS = [
@@ -94,6 +97,56 @@ const ACTIVITY = [
   { time: '2 jam lalu', type: 'default', title: 'Impor data Quizizz selesai', desc: '4 file → 96 record nilai formatif' },
   { time: 'Kemarin', type: 'muted', title: 'Catatan perilaku ditambahkan', desc: 'Siti Nurhaliza — kontribusi luar biasa dalam diskusi kelompok' },
 ];
+
+type JurnalEntry = { tgl: string; kelas: string; mapel: string; topic: string; metode: string; hadir: number; izin: number; sakit: number; alpa: number; catatan: string; mood: 'baik' | 'netral' | 'sulit' };
+
+const JURNAL: Record<string, JurnalEntry[]> = {
+  'sari.rahmawati@sdn1keputran.sch.id': [
+    { tgl: '2026-04-14', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Persamaan Garis Lurus', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 1, alpa: 0, catatan: 'Siswa antusias, diskusi berjalan baik.', mood: 'baik' },
+    { tgl: '2026-04-16', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Persamaan Garis Lurus', metode: 'Ekspositori', hadir: 28, izin: 0, sakit: 2, alpa: 1, catatan: 'Perlu remedial untuk 3 siswa.', mood: 'netral' },
+    { tgl: '2026-04-18', kelas: 'IX-A', mapel: 'Matematika', topic: 'Bangun Ruang Sisi Lengkung', metode: 'Inkuiri', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Konsep silinder sudah dipahami dengan baik.', mood: 'baik' },
+    { tgl: '2026-04-21', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Teorema Pythagoras', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: 'Latihan soal berjalan lancar.', mood: 'baik' },
+    { tgl: '2026-04-23', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Teorema Pythagoras', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-24', kelas: 'IX-A', mapel: 'Matematika', topic: 'Bangun Ruang Sisi Lengkung', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Presentasi kelompok sangat memuaskan.', mood: 'baik' },
+    { tgl: '2026-04-25', kelas: 'VII-A', mapel: 'Matematika', topic: 'Bilangan Bulat', metode: 'Berbasis permainan', hadir: 33, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa aktif dan semangat.', mood: 'baik' },
+    { tgl: '2026-04-28', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Lingkaran', metode: 'Inkuiri', hadir: 30, izin: 1, sakit: 1, alpa: 0, catatan: 'Konsep busur perlu diulang.', mood: 'netral' },
+    { tgl: '2026-04-29', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Lingkaran', metode: 'Ekspositori', hadir: 28, izin: 0, sakit: 2, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-04-30', kelas: 'IX-A', mapel: 'Matematika', topic: 'Statistika', metode: 'Diskusi kelompok', hadir: 31, izin: 0, sakit: 1, alpa: 0, catatan: 'Pengolahan data berjalan baik.', mood: 'baik' },
+    { tgl: '2026-05-05', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Lingkaran — Lanjutan', metode: 'Demonstrasi', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: 'Pemahaman meningkat setelah remedial.', mood: 'baik' },
+    { tgl: '2026-05-07', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Lingkaran — Lanjutan', metode: 'Berbasis proyek', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-05-08', kelas: 'VII-A', mapel: 'Matematika', topic: 'Pecahan', metode: 'Berbasis permainan', hadir: 33, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa sangat antusias.', mood: 'baik' },
+    { tgl: '2026-05-09', kelas: 'IX-A', mapel: 'Matematika', topic: 'Peluang', metode: 'Diskusi kelompok', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Pengenalan materi peluang berjalan baik.', mood: 'baik' },
+  ],
+  'ahmad.fadli@sdn1keputran.sch.id': [
+    { tgl: '2026-04-15', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Gerak Manusia', metode: 'Inkuiri', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: 'Praktikum berjalan lancar.', mood: 'baik' },
+    { tgl: '2026-04-17', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Gerak Manusia', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-18', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Listrik Statis', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Eksperimen muatan listrik sukses.', mood: 'baik' },
+    { tgl: '2026-04-21', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Pencernaan', metode: 'Diskusi kelompok', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-23', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Pencernaan', metode: 'Ekspositori', hadir: 28, izin: 1, sakit: 1, alpa: 1, catatan: 'Materi padat, perlu sesi lanjutan.', mood: 'netral' },
+    { tgl: '2026-04-25', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Listrik Dinamis', metode: 'Inkuiri', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Rangkaian seri dan paralel dipahami.', mood: 'baik' },
+    { tgl: '2026-04-28', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Pernapasan', metode: 'Demonstrasi', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-29', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Pernapasan', metode: 'Diskusi kelompok', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-05-01', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Kemagnetan', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Praktikum magnet berjalan baik.', mood: 'baik' },
+    { tgl: '2026-05-06', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Ekskresi', metode: 'Inkuiri', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-05-07', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Ekskresi', metode: 'Ekspositori', hadir: 29, izin: 1, sakit: 0, alpa: 1, catatan: 'Perlu pendalaman konsep ginjal.', mood: 'netral' },
+    { tgl: '2026-05-08', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Bioteknologi', metode: 'Diskusi kelompok', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Antusias tinggi pada topik ini.', mood: 'baik' },
+  ],
+  'rina.kusuma@sdn1keputran.sch.id': [
+    { tgl: '2026-04-14', kelas: 'VIII-A', mapel: 'Bahasa Indonesia', topic: 'Teks Eksposisi', metode: 'Diskusi kelompok', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa aktif berdiskusi.', mood: 'baik' },
+    { tgl: '2026-04-18', kelas: 'VIII-B', mapel: 'Bahasa Indonesia', topic: 'Teks Eksposisi', metode: 'Ekspositori', hadir: 28, izin: 1, sakit: 1, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-04-21', kelas: 'IX-A', mapel: 'Bahasa Indonesia', topic: 'Teks Argumentasi', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Proyek berjalan baik.', mood: 'baik' },
+    { tgl: '2026-04-23', kelas: 'VIII-A', mapel: 'Bahasa Indonesia', topic: 'Menulis Cerpen', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-29', kelas: 'VIII-B', mapel: 'Bahasa Indonesia', topic: 'Puisi', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: 'Perlu latihan lebih banyak.', mood: 'sulit' },
+    { tgl: '2026-04-30', kelas: 'IX-A', mapel: 'Bahasa Indonesia', topic: 'Debat', metode: 'Diskusi kelompok', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Debat berjalan seru.', mood: 'baik' },
+    { tgl: '2026-05-02', kelas: 'VIII-A', mapel: 'Bahasa Indonesia', topic: 'Laporan Observasi', metode: 'Inkuiri', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: '', mood: 'netral' },
+    { tgl: '2026-05-02', kelas: 'VIII-B', mapel: 'Bahasa Indonesia', topic: 'Laporan Observasi', metode: 'Inkuiri', hadir: 28, izin: 1, sakit: 0, alpa: 1, catatan: 'Perlu bimbingan lebih lanjut.', mood: 'netral' },
+  ],
+  'dwi.santoso@sdn1keputran.sch.id': [
+    { tgl: '2026-04-14', kelas: 'VIII-A', mapel: 'IPS Terpadu', topic: 'Kondisi Geografis Indonesia', metode: 'Ekspositori', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: 'Materi tersampaikan.', mood: 'netral' },
+    { tgl: '2026-04-16', kelas: 'VIII-B', mapel: 'IPS Terpadu', topic: 'Kondisi Geografis Indonesia', metode: 'Diskusi kelompok', hadir: 29, izin: 1, sakit: 0, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-04-22', kelas: 'IX-A', mapel: 'IPS Terpadu', topic: 'Perdagangan Internasional', metode: 'Ekspositori', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Perlu referensi lebih banyak.', mood: 'sulit' },
+  ],
+};
 
 async function main() {
   const schema = readFileSync(join(__dirname, 'schema.sql'), 'utf8');
@@ -145,9 +198,20 @@ async function main() {
   }
 
   console.log('Seeding users...');
+  const userIdsByEmail: Record<string, string> = {};
   for (const u of USERS) {
     const pw_hash = await bcrypt.hash(u.password, 10);
-    await sql`INSERT INTO users (email, pw_hash, nama, initials, role, jabatan) VALUES (${u.email}, ${pw_hash}, ${u.nama}, ${u.initials}, ${u.role}, ${u.jabatan})`;
+    const rows = await sql`INSERT INTO users (email, pw_hash, nama, initials, role, jabatan) VALUES (${u.email}, ${pw_hash}, ${u.nama}, ${u.initials}, ${u.role}, ${u.jabatan}) RETURNING id`;
+    userIdsByEmail[u.email] = rows[0].id as string;
+  }
+
+  console.log('Seeding jurnal entries...');
+  for (const [email, entries] of Object.entries(JURNAL)) {
+    const userId = userIdsByEmail[email];
+    for (const e of entries) {
+      await sql`INSERT INTO jurnal_entries (user_id, tgl, kelas, mapel, topic, metode, hadir, izin, sakit, alpa, catatan, mood)
+        VALUES (${userId}, ${e.tgl}, ${e.kelas}, ${e.mapel}, ${e.topic}, ${e.metode}, ${e.hadir}, ${e.izin}, ${e.sakit}, ${e.alpa}, ${e.catatan}, ${e.mood})`;
+    }
   }
 
   console.log('Seeding parents...');
