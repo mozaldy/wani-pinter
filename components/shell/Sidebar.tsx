@@ -1,0 +1,74 @@
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Icon, type IconName } from '@/components/Icon';
+
+const NAV: { id: string; href: string; icon: IconName; label: string; badge?: number; group: string }[] = [
+  { id: 'dashboard', href: '/dashboard', icon: 'home', label: 'Beranda', group: 'Utama' },
+  { id: 'analytics', href: '/analytics', icon: 'chart', label: 'Analitik', badge: 3, group: 'Utama' },
+  { id: 'jurnal', href: '/jurnal', icon: 'clipboard', label: 'Jurnal Harian', group: 'Operasional' },
+  { id: 'penilaian', href: '/penilaian', icon: 'edit', label: 'Penilaian', group: 'Operasional' },
+  { id: 'bank', href: '/bank', icon: 'folder', label: 'Bank Soal', group: 'Operasional' },
+  { id: 'catatan', href: '/catatan', icon: 'fileText', label: 'Catatan Siswa', group: 'Operasional' },
+  { id: 'admin', href: '/admin', icon: 'db', label: 'Master Data', group: 'Administrasi' },
+  { id: 'kurikulum', href: '/kurikulum', icon: 'layers', label: 'Kurikulum', group: 'Administrasi' },
+];
+
+export function Sidebar() {
+  const pathname = usePathname();
+  let lastGroup = '';
+  return (
+    <aside style={{
+      width: 260, background: 'var(--color-surface)',
+      borderRight: '1px solid var(--color-line)',
+      display: 'flex', flexDirection: 'column',
+      padding: '20px 16px', gap: 4,
+      position: 'sticky', top: 0, height: '100vh',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 8px 20px' }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: 10,
+          background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
+          display: 'grid', placeItems: 'center', color: 'white', fontWeight: 800,
+          fontFamily: 'var(--font-display)', fontSize: 18, flexShrink: 0,
+          boxShadow: '0 4px 12px color-mix(in oklab, var(--color-primary) 30%, transparent)',
+        }}>w</div>
+        <div>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 17, letterSpacing: '-0.01em', lineHeight: 1.1 }}>wani·pinter</div>
+          <div style={{ fontSize: 11, color: 'var(--color-ink-3)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>SDN 1 Keputran Surabaya</div>
+        </div>
+      </div>
+
+      {NAV.map(n => {
+        const showGroup = n.group !== lastGroup;
+        lastGroup = n.group;
+        const active = pathname === n.href || pathname.startsWith(n.href + '/');
+        return (
+          <div key={n.id}>
+            {showGroup && <div className="nav-group-label">{n.group}</div>}
+            <Link href={n.href} className={`nav-item ${active ? 'active' : ''}`}>
+              <Icon name={n.icon} />
+              <span>{n.label}</span>
+              {n.badge && <span className="nav-badge">{n.badge}</span>}
+            </Link>
+          </div>
+        );
+      })}
+
+      <div style={{ marginTop: 'auto', borderTop: '1px solid var(--color-line)', paddingTop: 14, display: 'flex', alignItems: 'center', gap: 10, padding: '14px 8px 4px' }}>
+        <div style={{
+          width: 34, height: 34, borderRadius: '50%',
+          background: 'linear-gradient(135deg, #FCA5A5, #F59E0B)',
+          display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 13,
+        }}>SR</div>
+        <div style={{ flex: 1, minWidth: 0, lineHeight: 1.2 }}>
+          <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Sari Rahmawati, S.Pd</div>
+          <div style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>Guru Matematika</div>
+        </div>
+        <Link href="/settings" className="icon-btn" style={{ width: 30, height: 30 }}>
+          <Icon name="settings" size={14} />
+        </Link>
+      </div>
+    </aside>
+  );
+}
