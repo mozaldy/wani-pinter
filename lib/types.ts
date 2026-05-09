@@ -46,6 +46,16 @@ export type Kehadiran = { hari: string; hadir: number; izin: number; sakit: numb
 export type AIInsight = { id: number; type: string; title: string; body: string; action: string };
 export type Activity = { id: number; time_label: string; type: string; title: string; description: string };
 
+export type CatatanSiswa = {
+  id: number;
+  student_id: string;
+  tgl: string;
+  kategori: 'positif' | 'perhatian' | 'akademik' | 'sosial';
+  text: string;
+  tags: string[];
+  visible_to_parent: boolean;
+};
+
 export type HeatmapRow = {
   student: Student;
   cells: { cp: string; value: number }[];

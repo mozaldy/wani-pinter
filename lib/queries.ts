@@ -1,5 +1,5 @@
 import { sql } from './db';
-import type { Student, Mapel, CP, Jadwal, Kehadiran, AIInsight, Activity, HeatmapRow } from './types';
+import type { Student, Mapel, CP, Jadwal, Kehadiran, AIInsight, Activity, HeatmapRow, CatatanSiswa } from './types';
 
 export async function getStudents(): Promise<Student[]> {
   return (await sql`SELECT * FROM students ORDER BY id`) as Student[];
@@ -32,6 +32,31 @@ export async function getInsights(): Promise<AIInsight[]> {
 
 export async function getActivity(): Promise<Activity[]> {
   return (await sql`SELECT id, time_label, type, title, description FROM recent_activity ORDER BY ord`) as Activity[];
+}
+
+export async function getParentStudentIds(parentId: string): Promise<string[]> {
+  const rows = await sql`SELECT student_id FROM parent_students WHERE parent_id = ${parentId}`;
+  return rows.map(r => r.student_id as string);
+}
+
+export async function getStudentForParent(studentId: string): Promise<Student | null> {
+  const rows = (await sql`SELECT * FROM students WHERE id = ${studentId}`) as Student[];
+  return rows[0] || null;
+}
+
+export async function assertParentOwnsStudent(parentId: string, studentId: string): Promise<boolean> {
+  const rows = await sql`SELECT 1 FROM parent_students WHERE parent_id = ${parentId} AND student_id = ${studentId}`;
+  return rows.length > 0;
+}
+
+export async function getCatatanForParent(studentId: string): Promise<CatatanSiswa[]> {
+  return (await sql`
+    SELECT id, student_id, tgl::text, kategori, text, tags, visible_to_parent
+    FROM catatan_siswa
+    WHERE student_id = ${studentId} AND visible_to_parent = TRUE
+    ORDER BY tgl DESC
+    LIMIT 10
+  `) as CatatanSiswa[];
 }
 
 export async function getHeatmap(): Promise<HeatmapRow[]> {

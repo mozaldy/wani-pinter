@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS recent_activity, ai_insights, kehadiran_minggu, jadwal_hari_ini, cp_list, mapel, students CASCADE;
+DROP TABLE IF EXISTS recent_activity, ai_insights, kehadiran_minggu, jadwal_hari_ini, cp_list, mapel, catatan_siswa, parent_students, parents, students CASCADE;
 
 CREATE TABLE students (
   id TEXT PRIMARY KEY,
@@ -63,6 +63,31 @@ CREATE TABLE ai_insights (
   body TEXT NOT NULL,
   action TEXT NOT NULL,
   ord INT NOT NULL
+);
+
+CREATE TABLE parents (
+  id         TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  email      TEXT UNIQUE NOT NULL,
+  pw_hash    TEXT NOT NULL,
+  nama       TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE parent_students (
+  parent_id  TEXT NOT NULL REFERENCES parents(id) ON DELETE CASCADE,
+  student_id TEXT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  PRIMARY KEY (parent_id, student_id)
+);
+
+CREATE TABLE catatan_siswa (
+  id                SERIAL PRIMARY KEY,
+  student_id        TEXT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  tgl               DATE NOT NULL,
+  kategori          TEXT NOT NULL,
+  text              TEXT NOT NULL,
+  tags              TEXT[] NOT NULL DEFAULT '{}',
+  visible_to_parent BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at        TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE recent_activity (

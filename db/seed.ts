@@ -5,6 +5,7 @@ import { neon } from '@neondatabase/serverless';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import bcrypt from 'bcryptjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const sql = neon(process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL!);
@@ -65,6 +66,22 @@ const INSIGHTS = [
   { type: 'win', title: 'Pencapaian: 87% siswa tuntas Bilangan Berpangkat (target 80%)', body: 'Kelas VIII-A melampaui target untuk CP-MTK-8.1. Strategi diferensiasi yang Anda terapkan minggu lalu efektif — pertimbangkan dokumentasi sebagai praktik terbaik.', action: 'Bagikan ke rekan guru' },
 ];
 
+const PARENTS = [
+  { email: 'budi.santoso@email.com', password: 'password123', nama: 'Bp. Budi Santoso', studentIds: ['S001'] },
+  { email: 'hadi.pratama@email.com', password: 'password123', nama: 'Bp. Hadi Pratama', studentIds: ['S003', 'S004'] },
+];
+
+const CATATAN = [
+  { studentId: 'S001', tgl: '2026-05-01', kategori: 'positif', text: 'Ahmad aktif berdiskusi dan membantu teman dalam kelompok. Sangat kooperatif.', tags: ['diskusi', 'kerjasama'], visible: true },
+  { studentId: 'S001', tgl: '2026-04-20', kategori: 'akademik', text: 'Nilai formatif Matematika meningkat dari 82 ke 88. Konsep SPLDV sudah dikuasai dengan baik.', tags: ['matematika', 'formatif'], visible: true },
+  { studentId: 'S001', tgl: '2026-04-10', kategori: 'perhatian', text: 'Ahmad tampak kurang fokus pada 2 pertemuan terakhir. Perlu dikomunikasikan ke orang tua.', tags: ['fokus'], visible: false },
+  { studentId: 'S003', tgl: '2026-05-05', kategori: 'perhatian', text: 'Bagas absen 3 kali dalam 2 minggu terakhir. Mohon orang tua memantau kehadiran.', tags: ['kehadiran'], visible: true },
+  { studentId: 'S003', tgl: '2026-04-28', kategori: 'akademik', text: 'Nilai sumatif IPA di bawah KKM (58). Butuh program remediasi.', tags: ['ipa', 'sumatif', 'remedial'], visible: true },
+  { studentId: 'S003', tgl: '2026-04-15', kategori: 'sosial', text: 'Bagas tampak menarik diri dari teman-teman. Perlu perhatian khusus dari wali kelas.', tags: ['sosial', 'observasi'], visible: false },
+  { studentId: 'S004', tgl: '2026-05-08', kategori: 'positif', text: 'Dewi mendapat nilai tertinggi di kelas pada ulangan Bahasa Indonesia. Prestasi luar biasa!', tags: ['bahasa-indonesia', 'prestasi'], visible: true },
+  { studentId: 'S004', tgl: '2026-04-22', kategori: 'akademik', text: 'Progres CP Matematika Dewi konsisten. Sudah menguasai 4 dari 6 CP yang ditargetkan semester ini.', tags: ['matematika', 'cp'], visible: true },
+];
+
 const ACTIVITY = [
   { time: '5 menit lalu', type: 'good', title: 'Penilaian Harian VIII-B tersimpan', desc: '24 dari 30 siswa mendapat nilai ≥ KKM (75)' },
   { time: '32 menit lalu', type: 'default', title: 'Jurnal mengajar VIII-A diperbarui', desc: 'Sistem Persamaan Linear — pertemuan ke-3' },
@@ -120,6 +137,21 @@ async function main() {
   for (let i = 0; i < ACTIVITY.length; i++) {
     const a = ACTIVITY[i];
     await sql`INSERT INTO recent_activity (time_label, type, title, description, ord) VALUES (${a.time}, ${a.type}, ${a.title}, ${a.desc}, ${i})`;
+  }
+
+  console.log('Seeding parents...');
+  for (const p of PARENTS) {
+    const pw_hash = await bcrypt.hash(p.password, 10);
+    const rows = await sql`INSERT INTO parents (email, pw_hash, nama) VALUES (${p.email}, ${pw_hash}, ${p.nama}) RETURNING id`;
+    const parentId = rows[0].id as string;
+    for (const studentId of p.studentIds) {
+      await sql`INSERT INTO parent_students (parent_id, student_id) VALUES (${parentId}, ${studentId})`;
+    }
+  }
+
+  console.log('Seeding catatan siswa...');
+  for (const c of CATATAN) {
+    await sql`INSERT INTO catatan_siswa (student_id, tgl, kategori, text, tags, visible_to_parent) VALUES (${c.studentId}, ${c.tgl}, ${c.kategori}, ${c.text}, ${c.tags}, ${c.visible})`;
   }
 
   console.log('Done.');
