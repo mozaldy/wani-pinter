@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 
@@ -42,7 +42,7 @@ const CONTENT = {
   },
 };
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const hasError = searchParams.get('error') === '1';
   const [role, setRole] = useState<'guru' | 'kepsek' | 'ortu'>('guru');
@@ -242,5 +242,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
   );
 }

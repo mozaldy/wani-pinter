@@ -1,9 +1,9 @@
 'use client';
-import { useState, type FormEvent } from 'react';
+import { useState, Suspense, type FormEvent } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 
-export default function ParentLoginPage() {
+function ParentLoginContent() {
   const searchParams = useSearchParams();
   const hasError = searchParams.get('error') === '1';
   const [showPw, setShowPw] = useState(false);
@@ -118,5 +118,13 @@ export default function ParentLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ParentLoginPage() {
+  return (
+    <Suspense>
+      <ParentLoginContent />
+    </Suspense>
   );
 }
