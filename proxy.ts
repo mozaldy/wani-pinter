@@ -4,11 +4,6 @@ import { jwtVerify } from 'jose';
 const PARENT_SECRET = new TextEncoder().encode(process.env.PARENT_JWT_SECRET!);
 const TEACHER_SECRET = new TextEncoder().encode(process.env.TEACHER_JWT_SECRET!);
 
-const TEACHER_ROUTES = [
-  '/dashboard', '/analytics', '/jurnal', '/penilaian',
-  '/bank', '/catatan', '/admin', '/kurikulum', '/settings', '/siswa',
-];
-
 export const config = {
   matcher: [
     '/orang-tua/dashboard/:path*',
@@ -20,6 +15,7 @@ export const config = {
     '/penilaian/:path*',
     '/bank/:path*',
     '/catatan/:path*',
+    '/rpp/:path*',
     '/admin/:path*',
     '/kurikulum/:path*',
     '/settings/:path*',

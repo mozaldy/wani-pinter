@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS recent_activity, ai_insights, kehadiran_minggu, jadwal_hari_ini, cp_list, mapel, catatan_siswa, parent_students, parents, jurnal_entries, students, users CASCADE;
+DROP TABLE IF EXISTS rpp, recent_activity, ai_insights, kehadiran_minggu, jadwal_hari_ini, cp_list, mapel, catatan_siswa, parent_students, parents, jurnal_entries, students, users CASCADE;
 
 CREATE TABLE students (
   id TEXT PRIMARY KEY,
@@ -126,3 +126,15 @@ CREATE TABLE recent_activity (
   description TEXT NOT NULL,
   ord INT NOT NULL
 );
+
+CREATE TABLE rpp (
+  id         TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  judul      TEXT NOT NULL,
+  mapel      TEXT NOT NULL,
+  kelas      TEXT NOT NULL,
+  content    JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX rpp_user_idx ON rpp (user_id, updated_at DESC);

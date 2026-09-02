@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
+import { cookies } from 'next/headers';
 import { sql } from './db';
 
 const TTL = 60 * 60 * 24 * 7; // 7 days
@@ -65,4 +66,21 @@ export async function verifyTeacherToken(token: string): Promise<TeacherJWTPaylo
 export async function getTeacherByEmail(email: string): Promise<{ id: string; pw_hash: string; nama: string; initials: string; role: string; jabatan: string } | null> {
   const rows = await sql`SELECT id, pw_hash, nama, initials, role, jabatan FROM users WHERE email = ${email}`;
   return (rows[0] as { id: string; pw_hash: string; nama: string; initials: string; role: string; jabatan: string }) || null;
+}
+
+/**
+ * The logged-in teacher, verified from the session cookie.
+ *
+ * Server Functions are reachable by direct POST, so the `x-user-*` headers that
+ * proxy.ts injects for pages do not protect them — every mutation must call this.
+ */
+export async function currentTeacher(): Promise<TeacherJWTPayload | null> {
+  const token = (await cookies()).get(TEACHER_COOKIE)?.value;
+  return token ? verifyTeacherToken(token) : null;
+}
+
+export async function requireTeacher(): Promise<TeacherJWTPayload> {
+  const user = await currentTeacher();
+  if (!user) throw new Error('Tidak terautentikasi');
+  return user;
 }

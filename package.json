@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:seed": "tsx db/seed.ts"
+    "db:seed": "tsx db/seed.ts",
+    "rpp:check": "tsx lib/rpp.check.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
+    "@turbodocx/html-to-docx": "^1.22.2",
     "bcryptjs": "^3.0.3",
     "jose": "^6.2.3",
     "next": "16.2.6",

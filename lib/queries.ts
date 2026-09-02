@@ -1,4 +1,5 @@
 import { sql } from './db';
+import type { Rpp } from './rpp';
 import type { Student, Mapel, CP, Jadwal, Kehadiran, AIInsight, Activity, HeatmapRow, CatatanSiswa } from './types';
 
 export async function getStudents(): Promise<Student[]> {
@@ -127,4 +128,53 @@ export async function getHeatmap(): Promise<HeatmapRow[]> {
       return { cp: cp.kode, value: v };
     }),
   }));
+}
+
+// ─── RPP / Modul Ajar ──────────────────────────────────────────────────────
+
+export type RppRow = {
+  id: string; user_id: string; judul: string; mapel: string; kelas: string;
+  content: Rpp; created_at: string; updated_at: string;
+};
+
+export type RppSummary = Omit<RppRow, 'content' | 'user_id'> & { pertemuan_terisi: number; pertemuan_total: number };
+
+export async function getRppList(userId: string): Promise<RppSummary[]> {
+  return (await sql`
+    SELECT id, judul, mapel, kelas, created_at, updated_at,
+           jsonb_array_length(content->'pertemuan')                                          AS pertemuan_total,
+           (SELECT COUNT(*) FROM jsonb_array_elements(content->'pertemuan') p
+             WHERE jsonb_array_length(p->'langkah') > 0)::int                                AS pertemuan_terisi
+    FROM rpp WHERE user_id = ${userId}
+    ORDER BY updated_at DESC
+  `) as RppSummary[];
+}
+
+export async function getRpp(id: string, userId: string): Promise<RppRow | null> {
+  const rows = (await sql`SELECT * FROM rpp WHERE id = ${id} AND user_id = ${userId}`) as RppRow[];
+  return rows[0] || null;
+}
+
+export async function insertRpp(
+  userId: string,
+  meta: { judul: string; mapel: string; kelas: string },
+  content: Rpp,
+): Promise<string> {
+  const rows = await sql`
+    INSERT INTO rpp (user_id, judul, mapel, kelas, content)
+    VALUES (${userId}, ${meta.judul}, ${meta.mapel}, ${meta.kelas}, ${JSON.stringify(content)})
+    RETURNING id
+  `;
+  return rows[0].id as string;
+}
+
+export async function updateRppContent(id: string, userId: string, content: Rpp): Promise<void> {
+  await sql`
+    UPDATE rpp SET content = ${JSON.stringify(content)}, judul = ${content.identitas.judul}, updated_at = now()
+    WHERE id = ${id} AND user_id = ${userId}
+  `;
+}
+
+export async function deleteRppRow(id: string, userId: string): Promise<void> {
+  await sql`DELETE FROM rpp WHERE id = ${id} AND user_id = ${userId}`;
 }

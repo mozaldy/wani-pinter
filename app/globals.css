@@ -363,3 +363,13 @@ input, select, textarea { font-family: inherit; }
 .muted { color: var(--color-ink-3); }
 .tiny { font-size: 11px; }
 .small { font-size: 12px; }
+
+@keyframes rppSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+
+@media print {
+  aside, header, .no-print { display: none !important; }
+  body { background: white; }
+  main { padding: 0 !important; }
+  .rpp-sheet { padding: 0 !important; border: 0 !important; border-radius: 0 !important; }
+  .card, .tbl { break-inside: avoid; }
+}

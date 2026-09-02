@@ -1,4 +1,5 @@
 allowBuilds:
+  '@turbodocx/html-to-docx': false  # postinstall only prints a promo message
   esbuild: true
   sharp: true
   unrs-resolver: true

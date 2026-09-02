@@ -12,6 +12,7 @@ const NAV: { id: string; href: string; icon: IconName; label: string; badge?: nu
   { id: 'penilaian', href: '/penilaian', icon: 'edit', label: 'Penilaian', group: 'Operasional' },
   { id: 'bank', href: '/bank', icon: 'folder', label: 'Bank Soal', group: 'Operasional' },
   { id: 'catatan', href: '/catatan', icon: 'fileText', label: 'Catatan Siswa', group: 'Operasional' },
+  { id: 'rpp', href: '/rpp', icon: 'layers', label: 'RPP / Modul Ajar', group: 'Operasional' },
   { id: 'admin', href: '/admin', icon: 'db', label: 'Master Data', group: 'Administrasi' },
   { id: 'kurikulum', href: '/kurikulum', icon: 'layers', label: 'Kurikulum', group: 'Administrasi' },
 ];
