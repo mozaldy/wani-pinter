@@ -86,10 +86,10 @@ function Reader({ kind, value }: { kind: SectionKind; value: Value }) {
     return (
       <div style={{ overflowX: 'auto' }}>
         <table className="tbl">
-          <thead><tr><th style={{ width: 90 }}>Pertemuan</th><th>Tujuan</th><th>Aktivitas</th></tr></thead>
+          <thead><tr><th style={{ width: 90 }}>Pertemuan</th><th>Tujuan</th><th>Aktivitas</th><th style={{ width: 130 }}>Alokasi Waktu</th></tr></thead>
           <tbody>
             {rows.map(r => (
-              <tr key={r.no}><td>{r.no}</td><td>{r.tujuan}</td><td>{r.aktivitas}</td></tr>
+              <tr key={r.no}><td>{r.no}</td><td>{r.tujuan}</td><td>{r.aktivitas}</td><td>{r.alokasi}</td></tr>
             ))}
           </tbody>
         </table>
@@ -122,12 +122,15 @@ function Editor({ kind, draft, onChange }: { kind: SectionKind; draft: Value; on
             <div className="field" style={{ flex: 1, marginBottom: 0 }}>
               <input value={r.aktivitas} placeholder="Aktivitas" onChange={e => set(i, { aktivitas: e.target.value })} />
             </div>
+            <div className="field" style={{ width: 140, marginBottom: 0 }}>
+              <input value={r.alokasi ?? ''} placeholder="2 x 35 menit" onChange={e => set(i, { alokasi: e.target.value })} />
+            </div>
             <button className="btn btn-ghost small" title="Hapus baris"
               onClick={() => onChange(rows.filter((_, j) => j !== i).map((r2, j) => ({ ...r2, no: j + 1 })))}>&times;</button>
           </div>
         ))}
         <button className="btn btn-outline small" style={{ alignSelf: 'flex-start' }}
-          onClick={() => onChange([...rows, { no: rows.length + 1, tujuan: '', aktivitas: '' }])}>
+          onClick={() => onChange([...rows, { no: rows.length + 1, tujuan: '', aktivitas: '', alokasi: '' }])}>
           + Tambah pertemuan
         </button>
         <div className="tiny muted">Menghapus atau menambah baris menyesuaikan daftar pertemuan di bawah.</div>

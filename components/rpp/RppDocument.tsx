@@ -113,14 +113,14 @@ export function RppDocument({ rpp }: { rpp: Rpp }) {
       <Section title="Identifikasi Materi"><p style={P}>{rpp.identifikasiMateri}</p></Section>
       <Section title="Dimensi Profil Lulusan"><p style={P}>{rpp.dimensiProfilLulusan.join(', ')}</p></Section>
       <Section title="Tujuan Pembelajaran"><p style={P}>{rpp.tujuanPembelajaran}</p></Section>
-      <Section title="Indikator Ketercapaian Tujuan Pembelajaran"><Bullets items={rpp.indikator} ordered /></Section>
+      <Section title="Kriteria Ketercapaian Tujuan Pembelajaran (Kriteria Sukses)"><Bullets items={rpp.indikator} ordered /></Section>
       <Section title="Praktik Pedagogis"><p style={P}>{rpp.praktikPedagogis}</p></Section>
       <Section title="Lingkungan Pembelajaran"><p style={P}>{rpp.lingkunganPembelajaran}</p></Section>
       <Section title="Kemitraan Pembelajaran"><p style={P}>{rpp.kemitraanPembelajaran}</p></Section>
       <Section title="Pemanfaatan Digital"><p style={P}>{rpp.pemanfaatanDigital}</p></Section>
 
       <p style={{ fontSize: 13, fontWeight: 700, textAlign: 'center', margin: '18px 0 8px' }}>
-        Rute Pembelajaran ({rpp.rutePertemuan.length} Pertemuan)
+        Alur Belajar ({rpp.rutePertemuan.length} Pertemuan)
       </p>
       <table style={TABLE}>
         <tbody>
@@ -128,12 +128,14 @@ export function RppDocument({ rpp }: { rpp: Rpp }) {
             <th style={{ ...TH, width: 90 }}>Pertemuan</th>
             <th style={TH}>Tujuan per Pertemuan</th>
             <th style={TH}>Aktivitas</th>
+            <th style={{ ...TH, width: 120 }}>Alokasi Waktu</th>
           </tr>
           {rpp.rutePertemuan.map(r => (
             <tr key={r.no}>
               <td style={{ ...TD, textAlign: 'center' }}>{r.no}</td>
               <td style={TD}>{r.tujuan}</td>
               <td style={TD}>{r.aktivitas}</td>
+              <td style={TD}>{r.alokasi}</td>
             </tr>
           ))}
         </tbody>
@@ -146,8 +148,11 @@ export function RppDocument({ rpp }: { rpp: Rpp }) {
         </>
       )}
 
-      <p style={{ fontSize: 13, fontWeight: 700, margin: '18px 0 6px' }}>Asesmen</p>
+      <p style={{ fontSize: 13, fontWeight: 700, margin: '18px 0 6px' }}>Asesmen Sumatif</p>
       <p style={P}>{rpp.asesmenSumatif}</p>
+
+      <p style={{ fontSize: 13, fontWeight: 700, margin: '18px 0 6px' }}>Rencana Tindak Lanjut</p>
+      <Bullets items={rpp.rencanaTindakLanjut ?? []} />
 
       <p style={{ fontSize: 13, fontWeight: 700, margin: '18px 0 6px' }}>Daftar Pustaka</p>
       <Bullets items={rpp.daftarPustaka} />

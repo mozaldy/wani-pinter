@@ -33,6 +33,10 @@ async function main() {
   assert.equal(skeleton.rutePertemuan.length, JUMLAH, 'jumlah rute pertemuan tidak sesuai permintaan');
   assert.deepEqual(skeleton.rutePertemuan.map(r => r.no), [1, 2, 3, 4], 'penomoran rute tidak berurutan');
   assert.ok(skeleton.indikator.length >= 3, 'indikator kurang dari 3');
+  // Butir instrumen 11: alur belajar harus memuat alokasi waktu tiap pertemuan.
+  assert.ok(skeleton.rutePertemuan.every(r => nonEmpty(r.alokasi)), 'ada pertemuan tanpa alokasi waktu');
+  // Butir instrumen 13.4: rencana tindak lanjut wajib ada.
+  assert.ok(skeleton.rencanaTindakLanjut.length >= 2, 'rencana tindak lanjut kurang dari 2 butir');
   assert.equal(emptyPertemuan(skeleton.rutePertemuan).length, JUMLAH);
 
   const rpp: Rpp = { ...skeleton, pertemuan: emptyPertemuan(skeleton.rutePertemuan) };
@@ -43,6 +47,8 @@ async function main() {
   assert.ok(p.asesmen, 'asesmen formatif tidak dihasilkan');
   assert.ok(p.asesmen!.rubrik.length >= 2, 'rubrik kurang dari 2 aspek');
   assert.ok(nonEmpty(p.media), 'media kosong');
+  assert.ok(p.prinsip.length > 0, 'prinsip pembelajaran tidak ditulis eksplisit');
+  assert.ok(nonEmpty(p.pengalamanBelajar), 'pengalaman belajar kosong');
 
   console.log('3/3 refine satu bagian…');
   const { value } = await generateJson<{ value: string[] }>(
