@@ -201,6 +201,7 @@ input, select, textarea { font-family: inherit; }
   font-size: 13.5px; color: var(--color-ink); outline: 0;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
+.field select { cursor: pointer; }
 .field input:focus, .field select:focus, .field textarea:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 15%, transparent);
