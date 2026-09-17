@@ -86,7 +86,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
                     flex: 1, padding: 12, background: 'rgba(255,255,255,0.06)', borderRadius: 10,
                     borderLeft: `3px solid ${st.k === 'hadir' ? '#10B981' : st.k === 'izin' ? '#FCD34D' : st.k === 'sakit' ? '#F59E0B' : '#EF4444'}`,
                   }}>
-                    <div style={{ fontSize: 11, opacity: 0.7, textTransform: 'uppercase', letterSpacing: 0.06, fontWeight: 700 }}>{st.k}</div>
+                    <div style={{ fontSize: 11, opacity: 0.7, textTransform: 'uppercase', letterSpacing: 0.06, fontWeight: 700 }}>{dict.modals.modeKelas.kehadiran[st.k]}</div>
                     <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 600 }}>{st.n}</div>
                   </div>
                 ))}
@@ -112,7 +112,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.nama.split(' ').slice(0, 2).join(' ')}</div>
-                        <div style={{ fontSize: 10, opacity: 0.6, textTransform: 'uppercase', letterSpacing: 0.04, fontWeight: 700 }}>{status}</div>
+                        <div style={{ fontSize: 10, opacity: 0.6, textTransform: 'uppercase', letterSpacing: 0.04, fontWeight: 700 }}>{status ? dict.modals.modeKelas.kehadiran[status as keyof typeof dict.modals.modeKelas.kehadiran] : ''}</div>
                       </div>
                     </button>
                   );

@@ -693,6 +693,12 @@ export const en: Dictionary = {
         observasi: 'Observation',
         pacing: 'Pacing & Objectives',
       },
+      kehadiran: {
+        hadir: 'Present',
+        izin: 'Excused',
+        sakit: 'Sick',
+        alpa: 'Absent',
+      },
       tagSiswaCepat: 'Quick student tags',
       observasiEmpty: 'No observations yet. Note interesting classroom moments — AI will auto-tag them to students & learning outcomes.',
       rppRencana: 'LESSON PLAN · System of Linear Equations · Meeting 3',

@@ -691,6 +691,12 @@ export const id = {
         observasi: 'Observasi',
         pacing: 'Tempo & TP',
       },
+      kehadiran: {
+        hadir: 'hadir',
+        izin: 'izin',
+        sakit: 'sakit',
+        alpa: 'alpa',
+      },
       tagSiswaCepat: 'Tag siswa cepat',
       observasiEmpty: 'Belum ada observasi. Catat momen menarik di kelas — AI akan tag otomatis ke siswa & CP.',
       rppRencana: 'RPP RENCANA · Sistem Persamaan Linear · Pertemuan 3',
