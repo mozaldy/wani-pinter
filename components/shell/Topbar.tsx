@@ -1,9 +1,12 @@
 'use client';
 import { Icon } from '@/components/Icon';
 import { useModals } from '@/components/modals/ModalProvider';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export function Topbar() {
   const { openLive, openAI } = useModals();
+  const { dict } = useI18n();
   return (
     <header style={{
       display: 'flex', alignItems: 'center', gap: 16,
@@ -15,17 +18,18 @@ export function Topbar() {
     }}>
       <div className="search" style={{ flex: 1, maxWidth: 360, marginLeft: 'auto' }}>
         <Icon name="search" size={14} />
-        <input placeholder="Cari siswa, kelas, CP, tugas..." />
+        <input placeholder={dict.topbar.searchPlaceholder} />
         <span className="kbd">⌘K</span>
       </div>
+      <LanguageSwitcher />
       <button className="btn btn-primary" onClick={openLive} style={{ background: '#EF4444' }}>
         <span style={{ width: 8, height: 8, borderRadius: 50, background: 'white', animation: 'blink 1.5s infinite' }} />
-        Mode Kelas
+        {dict.topbar.classMode}
       </button>
-      <button className="icon-btn" onClick={openAI} title="Asisten AI">
+      <button className="icon-btn" onClick={openAI} title={dict.topbar.aiAssistant}>
         <Icon name="sparkle" size={16} />
       </button>
-      <button className="icon-btn">
+      <button className="icon-btn" aria-label={dict.topbar.notifications}>
         <Icon name="bell" size={16} />
         <span className="dot" />
       </button>

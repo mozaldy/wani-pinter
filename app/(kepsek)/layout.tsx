@@ -1,13 +1,14 @@
 import { headers } from 'next/headers';
 import { KepsekSidebar } from '@/components/shell/KepsekSidebar';
+import { getDictionary } from '@/lib/i18n/server';
 
 export default async function KepsekLayout({ children }: { children: React.ReactNode }) {
-  const hdrs = await headers();
+  const [hdrs, dict] = await Promise.all([headers(), getDictionary()]);
 
   const user = {
-    nama: hdrs.get('x-user-nama') || 'Kepala Sekolah',
+    nama: hdrs.get('x-user-nama') || dict.kepsekNav.defaultRole,
     initials: hdrs.get('x-user-initials') || 'KS',
-    jabatan: hdrs.get('x-user-jabatan') || 'Kepala Sekolah',
+    jabatan: hdrs.get('x-user-jabatan') || dict.kepsekNav.defaultRole,
   };
 
   return (

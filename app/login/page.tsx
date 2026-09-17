@@ -2,54 +2,40 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/Icon';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
-const ROLES = [
-  { id: 'guru' as const, label: 'Guru', icon: 'users' as const },
-  { id: 'kepsek' as const, label: 'Kepsek', icon: 'star' as const },
-  { id: 'ortu' as const, label: 'Orang Tua', icon: 'parents' as const },
+type Role = 'guru' | 'kepsek' | 'ortu';
+
+const ROLES: { id: Role; icon: 'users' | 'star' | 'parents' }[] = [
+  { id: 'guru', icon: 'users' },
+  { id: 'kepsek', icon: 'star' },
+  { id: 'ortu', icon: 'parents' },
 ];
 
-const CONTENT = {
-  guru: {
-    heading: 'Selamat datang kembali',
-    sub: 'Masuk untuk melanjutkan ke dasbor pembelajaran Anda.',
-    emailLabel: 'Email atau NIP',
-    emailDefault: 'sari.rahmawati@sdn1keputran.sch.id',
-    pwDefault: 'passwordpass',
-    cta: 'Masuk ke dasbor',
-    rightHeading: 'Setiap data adalah cerita seorang anak.',
-    rightSub: 'Platform yang membantu guru Indonesia mengubah catatan harian menjadi keputusan pembelajaran yang lebih bijak — terhubung dengan Dapodik, Kurikulum Merdeka, dan rutinitas Anda.',
-  },
-  kepsek: {
-    heading: 'Selamat datang kembali',
-    sub: 'Masuk untuk melihat ringkasan sekolah Anda.',
-    emailLabel: 'Email atau NIP',
-    emailDefault: '',
-    pwDefault: '',
-    cta: 'Masuk ke dasbor',
-    rightHeading: 'Pantau mutu pembelajaran seluruh kelas.',
-    rightSub: 'Lihat data agregat kelas, tren kehadiran, dan capaian kurikulum lintas guru — semua dalam satu tampilan eksekutif.',
-  },
-  ortu: {
-    heading: 'Pantau perkembangan anak',
-    sub: 'Masuk sebagai Orang Tua / Wali untuk melihat laporan belajar anak Anda.',
-    emailLabel: 'Email',
-    emailDefault: '',
-    pwDefault: '',
-    cta: 'Masuk ke portal orang tua',
-    rightHeading: 'Terhubung dengan perjalanan belajar anak Anda.',
-    rightSub: 'Lihat nilai, kehadiran, progres kurikulum, dan catatan dari guru — semua dalam satu tempat.',
-  },
+const DEFAULTS: Record<Role, { email: string; password: string }> = {
+  guru: { email: 'sari.rahmawati@sdn1keputran.sch.id', password: 'passwordpass' },
+  kepsek: { email: '', password: '' },
+  ortu: { email: '', password: '' },
 };
 
+const PARENT_FEATURES: { id: 'nilai' | 'kehadiran' | 'capaian' | 'catatan'; icon: 'star' | 'activity' | 'target' | 'book' }[] = [
+  { id: 'nilai', icon: 'star' },
+  { id: 'kehadiran', icon: 'activity' },
+  { id: 'capaian', icon: 'target' },
+  { id: 'catatan', icon: 'book' },
+];
+
 function LoginContent() {
+  const { dict } = useI18n();
   const searchParams = useSearchParams();
   const hasError = searchParams.get('error') === '1';
-  const [role, setRole] = useState<'guru' | 'kepsek' | 'ortu'>('guru');
+  const [role, setRole] = useState<Role>('guru');
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const c = CONTENT[role];
+  const c = dict.auth.roles[role];
+  const d = DEFAULTS[role];
   const isOrtu = role === 'ortu';
 
   return (
@@ -60,6 +46,9 @@ function LoginContent() {
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 20 }}>wani·pinter</div>
             <div style={{ fontSize: 11, color: 'var(--color-ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>SDN 1 Keputran Surabaya</div>
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
+            <LanguageSwitcher />
           </div>
         </div>
 
@@ -77,7 +66,7 @@ function LoginContent() {
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
               }}>
                 <Icon name={r.icon} size={18} />
-                {r.label}
+                {dict.auth.roleLabels[r.id]}
               </button>
             ))}
           </div>
@@ -93,22 +82,22 @@ function LoginContent() {
                 </div>
               </div>
               <div className="field">
-                <label className="field-label">Kata sandi</label>
+                <label className="field-label">{dict.auth.passwordLabel}</label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Icon name="settings" size={16} style={{ position: 'absolute', left: 12, color: 'var(--color-ink-4)', pointerEvents: 'none' }} />
                   <input name="password" type={showPw ? 'text' : 'password'} required style={{ width: '100%', paddingLeft: 38, paddingRight: 60 }} placeholder="••••••••" />
                   <button type="button" onClick={() => setShowPw(p => !p)} style={{ position: 'absolute', right: 8, padding: '4px 8px', fontSize: 11, color: 'var(--color-ink-3)', borderRadius: 6 }}>
-                    {showPw ? 'Sembunyi' : 'Lihat'}
+                    {showPw ? dict.auth.hidePassword : dict.auth.showPassword}
                   </button>
                 </div>
               </div>
               {hasError && (
                 <div style={{ fontSize: 12.5, color: 'var(--color-bad)', marginBottom: 12 }}>
-                  Email atau kata sandi salah. Coba lagi.
+                  {dict.auth.invalidCredentials}
                 </div>
               )}
               <button type="submit" className="btn btn-primary btn-block" disabled={loading} style={{ marginTop: 8 }}>
-                {loading ? 'Memuat...' : c.cta}
+                {loading ? dict.common.loading : c.cta}
               </button>
             </form>
           ) : (
@@ -117,30 +106,30 @@ function LoginContent() {
                 <label className="field-label">{c.emailLabel}</label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Icon name="message" size={16} style={{ position: 'absolute', left: 12, color: 'var(--color-ink-4)', pointerEvents: 'none' }} />
-                  <input name="email" type="email" required style={{ width: '100%', paddingLeft: 38 }} defaultValue={c.emailDefault} />
+                  <input name="email" type="email" required style={{ width: '100%', paddingLeft: 38 }} defaultValue={d.email} />
                 </div>
               </div>
               <div className="field">
-                <label className="field-label">Kata sandi</label>
+                <label className="field-label">{dict.auth.passwordLabel}</label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Icon name="settings" size={16} style={{ position: 'absolute', left: 12, color: 'var(--color-ink-4)', pointerEvents: 'none' }} />
-                  <input name="password" type={showPw ? 'text' : 'password'} required style={{ width: '100%', paddingLeft: 38, paddingRight: 60 }} defaultValue={c.pwDefault} />
+                  <input name="password" type={showPw ? 'text' : 'password'} required style={{ width: '100%', paddingLeft: 38, paddingRight: 60 }} defaultValue={d.password} />
                   <button type="button" onClick={() => setShowPw(p => !p)} style={{ position: 'absolute', right: 8, padding: '4px 8px', fontSize: 11, color: 'var(--color-ink-3)', borderRadius: 6 }}>
-                    {showPw ? 'Sembunyi' : 'Lihat'}
+                    {showPw ? dict.auth.hidePassword : dict.auth.showPassword}
                   </button>
                 </div>
               </div>
               {hasError && (
                 <div style={{ fontSize: 12.5, color: 'var(--color-bad)', marginBottom: 12 }}>
-                  Email atau kata sandi salah. Coba lagi.
+                  {dict.auth.invalidCredentials}
                 </div>
               )}
               <div className="flex justify-between items-center" style={{ margin: '12px 0 20px', fontSize: 12.5 }}>
-                <label className="flex gap-1 small items-center"><input type="checkbox" defaultChecked /> Ingat saya</label>
-                <a href="#" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>Lupa kata sandi?</a>
+                <label className="flex gap-1 small items-center"><input type="checkbox" defaultChecked /> {dict.auth.rememberMe}</label>
+                <a href="#" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>{dict.auth.forgotPassword}</a>
               </div>
               <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-                {loading ? 'Memuat...' : c.cta}
+                {loading ? dict.common.loading : c.cta}
               </button>
             </form>
           )}
@@ -149,7 +138,7 @@ function LoginContent() {
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px', color: 'var(--color-ink-4)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                 <span style={{ flex: 1, height: 1, background: 'var(--color-line)' }} />
-                atau lanjutkan dengan
+                {dict.auth.orContinueWith}
                 <span style={{ flex: 1, height: 1, background: 'var(--color-line)' }} />
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -160,7 +149,7 @@ function LoginContent() {
           )}
 
           <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--color-ink-3)', marginTop: 28 }}>
-            Belum punya akun? Hubungi <strong>admin sekolah Anda</strong>.<br />
+            {dict.auth.noAccount} <strong>{dict.auth.contactAdmin}</strong>.<br />
             <span style={{ marginTop: 8, display: 'inline-block' }}>© 2026 WANI-PINTER · v3.4.0</span>
           </div>
         </div>
@@ -181,7 +170,7 @@ function LoginContent() {
               fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 24,
             }}>
               <Icon name="sparkle" size={12} />
-              Wani AI · Diperbarui April 2026
+              {dict.auth.aiUpdatedBadge}
             </div>
           )}
           <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 38, lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 20px' }}>
@@ -195,22 +184,20 @@ function LoginContent() {
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
           {isOrtu ? (
             <>
-              {[
-                { icon: 'star' as const, label: 'Nilai & Rerata', desc: 'Pantau hasil belajar per mata pelajaran' },
-                { icon: 'activity' as const, label: 'Kehadiran', desc: 'Rekap kehadiran semester berjalan' },
-                { icon: 'target' as const, label: 'Capaian Pembelajaran', desc: 'Progres penguasaan CP Kurikulum Merdeka' },
-                { icon: 'book' as const, label: 'Catatan Guru', desc: 'Pesan dan observasi langsung dari wali kelas' },
-              ].map(f => (
-                <div key={f.label} style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 12, padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center' }}>
-                  <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(255,255,255,0.2)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
-                    <Icon name={f.icon} size={17} />
+              {PARENT_FEATURES.map(f => {
+                const t = dict.auth.parentFeatures[f.id];
+                return (
+                  <div key={f.id} style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 12, padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center' }}>
+                    <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(255,255,255,0.2)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                      <Icon name={f.icon} size={17} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 13 }}>{t.label}</div>
+                      <div style={{ fontSize: 12, opacity: 0.8 }}>{t.desc}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 13 }}>{f.label}</div>
-                    <div style={{ fontSize: 12, opacity: 0.8 }}>{f.desc}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </>
           ) : (
             <>
@@ -219,7 +206,7 @@ function LoginContent() {
                   <Icon name="sparkle" size={18} />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Wani AI menemukan pola</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>{dict.auth.aiInsightTitle}</div>
                   <div style={{ fontSize: 12, opacity: 0.85, lineHeight: 1.5 }}>
                     "3 siswa di kelas VIII-A menunjukkan penurunan konsisten pada Sistem Persamaan Linear. Pertimbangkan sesi peer-learning."
                   </div>

@@ -5,11 +5,14 @@ import { Icon } from '@/components/Icon';
 import { StudentAvatar } from '@/components/ui';
 import { getParentStudentIds, getStudentForParent } from '@/lib/queries';
 import type { Student } from '@/lib/types';
+import { getDictionary } from '@/lib/i18n/server';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export default async function ParentLayout({ children }: { children: ReactNode }) {
+  const dict = await getDictionary();
   const hdrs = await headers();
   const parentId = hdrs.get('x-parent-id');
-  const parentNama = hdrs.get('x-parent-nama') || 'Orang Tua';
+  const parentNama = hdrs.get('x-parent-nama') || dict.parent.shell.defaultName;
 
   if (!parentId) redirect('/orang-tua/login');
 
@@ -40,16 +43,17 @@ export default async function ParentLayout({ children }: { children: ReactNode }
           }}>w</div>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 15, lineHeight: 1 }}>wani·pinter</div>
-            <div style={{ fontSize: 10, color: 'var(--color-ink-3)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Portal Orang Tua</div>
+            <div style={{ fontSize: 10, color: 'var(--color-ink-3)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{dict.parent.shell.portalLabel}</div>
           </div>
         </div>
 
         <div className="flex gap-3 items-center">
           <span style={{ fontSize: 13, color: 'var(--color-ink-2)', fontWeight: 500 }}>{parentNama}</span>
+          <LanguageSwitcher />
           <form action="/orang-tua/api/logout" method="post">
             <button type="submit" className="btn btn-ghost" style={{ fontSize: 12, padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 4 }}>
               <Icon name="settings" size={13} />
-              Keluar
+              {dict.common.logout}
             </button>
           </form>
         </div>
@@ -87,9 +91,9 @@ export default async function ParentLayout({ children }: { children: ReactNode }
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           <div className="card" style={{ maxWidth: 400, textAlign: 'center', padding: 32 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>📋</div>
-            <div className="card-title" style={{ marginBottom: 8 }}>Akun belum terhubung</div>
+            <div className="card-title" style={{ marginBottom: 8 }}>{dict.parent.shell.emptyTitle}</div>
             <p style={{ fontSize: 14, color: 'var(--color-ink-3)', lineHeight: 1.6 }}>
-              Akun Anda belum terhubung ke data siswa. Hubungi admin sekolah untuk menautkan akun Anda.
+              {dict.parent.shell.emptyBody}
             </p>
           </div>
         </main>

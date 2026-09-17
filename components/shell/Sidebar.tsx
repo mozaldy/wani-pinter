@@ -2,24 +2,30 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Icon, type IconName } from '@/components/Icon';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
 
 type SidebarUser = { nama: string; initials: string; jabatan: string };
 
-const NAV: { id: string; href: string; icon: IconName; label: string; badge?: number; group: string }[] = [
-  { id: 'dashboard', href: '/dashboard', icon: 'home', label: 'Beranda', group: 'Utama' },
-  { id: 'analytics', href: '/analytics', icon: 'chart', label: 'Analitik', badge: 3, group: 'Utama' },
-  { id: 'jurnal', href: '/jurnal', icon: 'clipboard', label: 'Jurnal Harian', group: 'Operasional' },
-  { id: 'penilaian', href: '/penilaian', icon: 'edit', label: 'Penilaian', group: 'Operasional' },
-  { id: 'bank', href: '/bank', icon: 'folder', label: 'Bank Soal', group: 'Operasional' },
-  { id: 'catatan', href: '/catatan', icon: 'fileText', label: 'Catatan Siswa', group: 'Operasional' },
-  { id: 'rpp', href: '/rpp', icon: 'layers', label: 'RPP / Modul Ajar', group: 'Operasional' },
-  { id: 'admin', href: '/admin', icon: 'db', label: 'Master Data', group: 'Administrasi' },
-  { id: 'kurikulum', href: '/kurikulum', icon: 'layers', label: 'Kurikulum', group: 'Administrasi' },
+type NavId = Exclude<keyof Dictionary['nav'], 'groups'>;
+type NavGroup = keyof Dictionary['nav']['groups'];
+
+const NAV: { id: NavId; href: string; icon: IconName; badge?: number; group: NavGroup }[] = [
+  { id: 'dashboard', href: '/dashboard', icon: 'home', group: 'utama' },
+  { id: 'analytics', href: '/analytics', icon: 'chart', badge: 3, group: 'utama' },
+  { id: 'jurnal', href: '/jurnal', icon: 'clipboard', group: 'operasional' },
+  { id: 'penilaian', href: '/penilaian', icon: 'edit', group: 'operasional' },
+  { id: 'bank', href: '/bank', icon: 'folder', group: 'operasional' },
+  { id: 'catatan', href: '/catatan', icon: 'fileText', group: 'operasional' },
+  { id: 'rpp', href: '/rpp', icon: 'layers', group: 'operasional' },
+  { id: 'admin', href: '/admin', icon: 'db', group: 'administrasi' },
+  { id: 'kurikulum', href: '/kurikulum', icon: 'layers', group: 'administrasi' },
 ];
 
 export function Sidebar({ user }: { user: SidebarUser }) {
   const pathname = usePathname();
-  let lastGroup = '';
+  const { dict } = useI18n();
+  let lastGroup: NavGroup | '' = '';
   return (
     <aside style={{
       width: 260, background: 'var(--color-surface)',
@@ -48,10 +54,10 @@ export function Sidebar({ user }: { user: SidebarUser }) {
         const active = pathname === n.href || pathname.startsWith(n.href + '/');
         return (
           <div key={n.id}>
-            {showGroup && <div className="nav-group-label">{n.group}</div>}
+            {showGroup && <div className="nav-group-label">{dict.nav.groups[n.group]}</div>}
             <Link href={n.href} className={`nav-item ${active ? 'active' : ''}`}>
               <Icon name={n.icon} />
-              <span>{n.label}</span>
+              <span>{dict.nav[n.id]}</span>
               {n.badge && <span className="nav-badge">{n.badge}</span>}
             </Link>
           </div>
@@ -70,13 +76,13 @@ export function Sidebar({ user }: { user: SidebarUser }) {
             <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--color-ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.nama}</div>
             <div style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>{user.jabatan}</div>
           </div>
-          <Link href="/settings" className="icon-btn" style={{ width: 30, height: 30 }}>
+          <Link href="/settings" className="icon-btn" title={dict.common.settings} style={{ width: 30, height: 30 }}>
             <Icon name="settings" size={14} />
           </Link>
         </div>
         <form action="/api/auth/logout" method="post">
           <button type="submit" className="btn btn-ghost" style={{ width: '100%', fontSize: 12, justifyContent: 'center', padding: '6px 0' }}>
-            Keluar
+            {dict.common.logout}
           </button>
         </form>
       </div>

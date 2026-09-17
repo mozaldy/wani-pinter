@@ -2,19 +2,26 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Icon, type IconName } from '@/components/Icon';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import type { Dictionary } from '@/lib/i18n/dictionaries';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 type SidebarUser = { nama: string; initials: string; jabatan: string };
 
-const NAV: { id: string; href: string; icon: IconName; label: string; group: string }[] = [
-  { id: 'dashboard', href: '/kepsek/dashboard', icon: 'home', label: 'Beranda', group: 'Utama' },
-  { id: 'guru', href: '/kepsek/guru', icon: 'star', label: 'Guru', group: 'Utama' },
-  { id: 'siswa', href: '/kepsek/siswa', icon: 'users', label: 'Data Siswa', group: 'Utama' },
-  { id: 'laporan', href: '/kepsek/laporan', icon: 'chart', label: 'Laporan', group: 'Administrasi' },
+type NavId = Exclude<keyof Dictionary['kepsekNav'], 'groups' | 'defaultRole'>;
+type NavGroup = keyof Dictionary['kepsekNav']['groups'];
+
+const NAV: { id: NavId; href: string; icon: IconName; group: NavGroup }[] = [
+  { id: 'dashboard', href: '/kepsek/dashboard', icon: 'home', group: 'utama' },
+  { id: 'guru', href: '/kepsek/guru', icon: 'star', group: 'utama' },
+  { id: 'siswa', href: '/kepsek/siswa', icon: 'users', group: 'utama' },
+  { id: 'laporan', href: '/kepsek/laporan', icon: 'chart', group: 'administrasi' },
 ];
 
 export function KepsekSidebar({ user }: { user: SidebarUser }) {
   const pathname = usePathname();
-  let lastGroup = '';
+  const { dict } = useI18n();
+  let lastGroup: NavGroup | '' = '';
   return (
     <aside style={{
       width: 260, background: 'var(--color-surface)',
@@ -43,10 +50,10 @@ export function KepsekSidebar({ user }: { user: SidebarUser }) {
         const active = pathname === n.href || pathname.startsWith(n.href + '/');
         return (
           <div key={n.id}>
-            {showGroup && <div className="nav-group-label">{n.group}</div>}
+            {showGroup && <div className="nav-group-label">{dict.kepsekNav.groups[n.group]}</div>}
             <Link href={n.href} className={`nav-item ${active ? 'active' : ''}`}>
               <Icon name={n.icon} />
-              <span>{n.label}</span>
+              <span>{dict.kepsekNav[n.id]}</span>
             </Link>
           </div>
         );
@@ -65,9 +72,10 @@ export function KepsekSidebar({ user }: { user: SidebarUser }) {
             <div style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>{user.jabatan}</div>
           </div>
         </div>
+        <LanguageSwitcher />
         <form action="/api/auth/logout" method="post">
           <button type="submit" className="btn btn-ghost" style={{ width: '100%', fontSize: 12, justifyContent: 'center', padding: '6px 0' }}>
-            Keluar
+            {dict.common.logout}
           </button>
         </form>
       </div>
