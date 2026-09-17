@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { I18nProvider } from "@/lib/i18n/I18nProvider";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -18,15 +20,19 @@ const mono = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
-export const metadata: Metadata = {
-  title: "WANI-PINTER · Platform Data Sekolah",
-  description: "Platform data sekolah untuk guru Indonesia",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.meta.title, description: dict.meta.description };
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
   return (
-    <html lang="id" className={`${jakarta.variable} ${fraunces.variable} ${mono.variable}`}>
-      <body>{children}</body>
+    <html lang={locale} className={`${jakarta.variable} ${fraunces.variable} ${mono.variable}`}>
+      <body>
+        <I18nProvider locale={locale} dict={dict}>{children}</I18nProvider>
+      </body>
     </html>
   );
 }
