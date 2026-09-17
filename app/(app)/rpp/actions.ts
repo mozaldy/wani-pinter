@@ -34,6 +34,7 @@ export async function createRpp(_prev: string | null, formData: FormData): Promi
     topik: String(formData.get('topik') || '').trim(),
     alokasi: String(formData.get('alokasi') || '').trim(),
     kondisiKelas: String(formData.get('kondisiKelas') || '').trim(),
+    tujuanPembelajaran: String(formData.get('tujuanPembelajaran') || '').trim(),
     jumlahPertemuan: jumlah,
   };
   if (!input.mapel || !input.topik) return 'Mata pelajaran dan topik wajib diisi';
@@ -41,6 +42,8 @@ export async function createRpp(_prev: string | null, formData: FormData): Promi
   let id: string;
   try {
     const skeleton = await generateJson<Omit<Rpp, 'pertemuan'>>(skeletonPrompt(input), SKELETON_SCHEMA);
+    // The teacher's TP is authoritative — never trust the model to copy it verbatim.
+    if (input.tujuanPembelajaran) skeleton.tujuanPembelajaran = input.tujuanPembelajaran;
     const content: Rpp = { ...skeleton, pertemuan: emptyPertemuan(skeleton.rutePertemuan) };
     id = await insertRpp(user.userId, {
       judul: content.identitas.judul,

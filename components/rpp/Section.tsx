@@ -7,9 +7,9 @@ import type { RuteRow, SectionKind } from '@/lib/rpp';
 
 type Value = string | string[] | RuteRow[];
 
-export function Section({ id, sectionKey, label, kind, hint, value }: {
+export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
   id: string; sectionKey: string; label: string;
-  kind: SectionKind; hint?: string; value: Value;
+  kind: SectionKind; hint?: string; ordered?: boolean; value: Value;
 }) {
   const { pushToast } = useModals();
   const [mode, setMode] = useState<'read' | 'edit' | 'refine'>('read');
@@ -49,7 +49,7 @@ export function Section({ id, sectionKey, label, kind, hint, value }: {
 
       {mode === 'edit'
         ? <Editor kind={kind} draft={draft} onChange={setDraft} />
-        : <Reader kind={kind} value={value} />}
+        : <Reader kind={kind} ordered={ordered} value={value} />}
 
       {mode === 'edit' && (
         <div className="flex gap-2" style={{ marginTop: 12 }}>
@@ -80,7 +80,7 @@ export function Section({ id, sectionKey, label, kind, hint, value }: {
 
 // ─── read / edit views per kind ────────────────────────────────────────────
 
-function Reader({ kind, value }: { kind: SectionKind; value: Value }) {
+function Reader({ kind, ordered, value }: { kind: SectionKind; ordered?: boolean; value: Value }) {
   if (kind === 'table') {
     const rows = value as RuteRow[];
     return (
@@ -97,10 +97,12 @@ function Reader({ kind, value }: { kind: SectionKind; value: Value }) {
     );
   }
   if (kind === 'list') {
+    // Match RppDocument: numbered only where the printed document numbers too.
+    const List = ordered ? 'ol' : 'ul';
     return (
-      <ol style={{ margin: '0 0 0 18px', fontSize: 13, lineHeight: 1.7, color: 'var(--color-ink-2)' }}>
+      <List style={{ margin: '0 0 0 18px', listStyleType: ordered ? 'decimal' : 'disc', fontSize: 13, lineHeight: 1.7, color: 'var(--color-ink-2)' }}>
         {(value as string[]).map((t, i) => <li key={i}>{t}</li>)}
-      </ol>
+      </List>
     );
   }
   return <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'var(--color-ink-2)', margin: 0, textAlign: 'justify' }}>{value as string}</p>;

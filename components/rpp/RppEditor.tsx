@@ -8,7 +8,8 @@ export function RppEditor({ id, rpp }: { id: string; rpp: Rpp }) {
     <>
       {SECTIONS.map(s => (
         <Section key={s.key} id={id} sectionKey={s.key} label={s.label} kind={s.kind}
-          hint={'hint' in s ? s.hint : undefined} value={rpp[s.key]} />
+          hint={'hint' in s ? s.hint : undefined} ordered={'ordered' in s && s.ordered}
+          value={rpp[s.key]} />
       ))}
 
       <h2 className="h-display" style={{ fontSize: 18, margin: '28px 0 12px' }}>

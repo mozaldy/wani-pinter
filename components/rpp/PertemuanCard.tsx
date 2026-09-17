@@ -68,7 +68,7 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
             </div>
           ) : (
             <>
-              <ol style={{ margin: '0 0 0 18px', fontSize: 13, lineHeight: 1.7, color: 'var(--color-ink-2)' }}>
+              <ol style={{ margin: '0 0 0 18px', listStyleType: 'decimal', fontSize: 13, lineHeight: 1.7, color: 'var(--color-ink-2)' }}>
                 {p.langkah.map((l, i) => <li key={i} style={{ marginBottom: 4 }}>{l}</li>)}
               </ol>
               <button className="btn btn-ghost small" style={{ alignSelf: 'flex-start' }}
@@ -86,7 +86,7 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
               <div className="tiny muted" style={{ marginBottom: 6 }}>
                 {p.asesmen.teknik} — {p.asesmen.tujuan}
               </div>
-              <ul style={{ margin: '0 0 0 16px', fontSize: 12, lineHeight: 1.6 }}>
+              <ul style={{ margin: '0 0 0 16px', listStyleType: 'disc', fontSize: 12, lineHeight: 1.6 }}>
                 {p.asesmen.rubrik.map((r, i) => <li key={i}>{r}</li>)}
               </ul>
             </div>

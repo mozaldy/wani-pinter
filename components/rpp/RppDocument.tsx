@@ -25,8 +25,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Bullets({ items, ordered }: { items: string[]; ordered?: boolean }) {
   const List = ordered ? 'ol' : 'ul';
+  // listStyleType is explicit: Tailwind's preflight sets `list-style: none` on ol/ul.
   return (
-    <List style={{ margin: '0 0 0 18px', padding: 0, fontSize: 12, lineHeight: 1.6 }}>
+    <List style={{ margin: '0 0 0 18px', padding: 0, fontSize: 12, lineHeight: 1.6, listStyleType: ordered ? 'decimal' : 'disc' }}>
       {items.map((t, i) => <li key={i} style={{ marginBottom: 3 }}>{t}</li>)}
     </List>
   );

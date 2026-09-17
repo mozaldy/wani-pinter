@@ -48,6 +48,11 @@ async function main() {
   assert.ok(p.asesmen!.rubrik.length >= 2, 'rubrik kurang dari 2 aspek');
   assert.ok(nonEmpty(p.media), 'media kosong');
   assert.ok(p.prinsip.length > 0, 'prinsip pembelajaran tidak ditulis eksplisit');
+  assert.ok(p.prinsip.length <= 2, `prinsip ${p.prinsip.length}, maksimal 2 per pertemuan`);
+  // Ulasan guru: langkah tidak boleh diawali label sintaks seperti "Orientasi murid pada masalah: ...".
+  // "Guru bertanya: …" is fine; a colon-terminated prefix without an active subject is a label.
+  const berlabel = p.langkah.filter(l => /^(?!Guru|Murid|Setiap|Kelompok|Pendidik)[^.:]{5,70}:\s/.test(l));
+  assert.equal(berlabel.length, 0, `langkah masih diawali label sintaks: ${berlabel[0]}`);
   assert.ok(nonEmpty(p.pengalamanBelajar), 'pengalaman belajar kosong');
 
   console.log('3/3 refine satu bagian…');

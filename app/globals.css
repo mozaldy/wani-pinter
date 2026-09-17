@@ -368,9 +368,15 @@ input, select, textarea { font-family: inherit; }
 @keyframes rppSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
 
 @media print {
+  @page { size: A4; margin: 20mm; }
   aside, header, .no-print { display: none !important; }
   body { background: white; }
   main { padding: 0 !important; }
+  /* Hiding the sidebar drops the grid item but keeps its 260px track — the page
+     content would print squeezed into that column. Flatten the shell instead. */
+  .app-shell { display: block !important; min-height: 0 !important; }
+  .app-content { padding: 0 !important; max-width: none !important; }
   .rpp-sheet { padding: 0 !important; border: 0 !important; border-radius: 0 !important; }
+  .rpp-sheet > div { max-width: none !important; }
   .card, .tbl { break-inside: avoid; }
 }

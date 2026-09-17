@@ -49,6 +49,7 @@ export type RppInput = {
   mapel: string; fase: string; kelas: string; semester: string;
   satuan: string; topik: string; jumlahPertemuan: number;
   alokasi: string; kondisiKelas: string;
+  tujuanPembelajaran?: string;  // TP the teacher already has; AI proposes one when empty
 };
 
 // ─── Gemini response schemas ───────────────────────────────────────────────
@@ -114,7 +115,7 @@ export const PERTEMUAN_SCHEMA = {
     no: { type: 'INTEGER' },
     judul: STR,
     pengalamanBelajar: STR,
-    prinsip: STR_LIST,
+    prinsip: { type: 'ARRAY', items: STR, minItems: 1, maxItems: 2 },
     media: STR,
     langkah: STR_LIST,
     asesmen: ASESMEN_SCHEMA,
@@ -127,14 +128,14 @@ export const PERTEMUAN_SCHEMA = {
 
 export type SectionKind = 'text' | 'list' | 'table';
 
-export type SectionDef = { key: SectionKey; label: string; kind: SectionKind; hint?: string };
+export type SectionDef = { key: SectionKey; label: string; kind: SectionKind; hint?: string; ordered?: boolean };
 
 export const SECTIONS = [
   { key: 'identifikasiMurid', label: 'Identifikasi Murid', kind: 'text' },
   { key: 'identifikasiMateri', label: 'Identifikasi Materi', kind: 'text' },
   { key: 'dimensiProfilLulusan', label: 'Dimensi Profil Lulusan', kind: 'list' },
   { key: 'tujuanPembelajaran', label: 'Tujuan Pembelajaran', kind: 'text' },
-  { key: 'indikator', label: 'Kriteria Ketercapaian Tujuan Pembelajaran (Kriteria Sukses)', kind: 'list' },
+  { key: 'indikator', label: 'Kriteria Ketercapaian Tujuan Pembelajaran (Kriteria Sukses)', kind: 'list', ordered: true },
   { key: 'praktikPedagogis', label: 'Kerangka Pembelajaran — Praktik Pedagogis', kind: 'text' },
   { key: 'lingkunganPembelajaran', label: 'Kerangka Pembelajaran — Lingkungan Pembelajaran', kind: 'text' },
   { key: 'kemitraanPembelajaran', label: 'Kerangka Pembelajaran — Kemitraan Pembelajaran', kind: 'text' },
@@ -183,7 +184,7 @@ Modul ini akan dinilai dengan Instrumen Penelaahan Perencanaan Pembelajaran Berb
 
 /** Context every pertemuan needs so its langkah stay coherent with the skeleton. */
 function kerangka(rpp: Rpp) {
-  return `Praktik Pedagogis (sintaksnya wajib tampak di langkah): ${rpp.praktikPedagogis}
+  return `Praktik Pedagogis (sintaksnya wajib tampak lewat urutan kegiatan di langkah): ${rpp.praktikPedagogis}
 Pemanfaatan Digital (wajib benar-benar dipakai di langkah): ${rpp.pemanfaatanDigital}
 Lingkungan Pembelajaran: ${rpp.lingkunganPembelajaran}
 Kemitraan Pembelajaran: ${rpp.kemitraanPembelajaran}
@@ -197,6 +198,7 @@ Fase: ${i.fase}
 Kelas: ${i.kelas}
 Semester: ${i.semester}
 Topik/Materi: ${i.topik}
+Tujuan Pembelajaran dari guru: ${i.tujuanPembelajaran || 'tidak disebutkan'}
 Jumlah pertemuan: ${i.jumlahPertemuan}
 Alokasi waktu: ${i.alokasi}
 Kondisi kelas: ${i.kondisiKelas || 'tidak disebutkan, asumsikan kelas reguler'}`;
@@ -213,7 +215,9 @@ Panduan isi:
 - identifikasiMurid: satu paragraf berbasis data yang menyebut perkiraan jumlah murid pada tiap tingkat kemampuan akademis, kondisi non-akademis (minat, kebiasaan, latar belakang), serta sebaran tipe belajar (visual, auditori, kinestetik) di kelas ini, berdasarkan kondisi kelas di atas.
 - identifikasiMateri: satu paragraf berisi rangkuman singkat materi, kedalaman konseptual, prosedural, dan aplikatifnya, kemampuan dan pengetahuan prasyarat, serta miskonsepsi umum yang perlu diantisipasi.
 - dimensiProfilLulusan: 2 sampai 4 dimensi saja, sejumlah yang benar-benar dapat digarap dalam ${i.jumlahPertemuan} pertemuan dan tampak pada langkah pembelajaran nanti.
-- tujuanPembelajaran: tepat satu tujuan pembelajaran yang selaras dengan ATP fase ${i.fase}, terukur, dalam satu kalimat.
+- tujuanPembelajaran: ${i.tujuanPembelajaran
+    ? 'salin persis Tujuan Pembelajaran dari guru di atas tanpa mengubah kata-katanya. Tujuan ini adalah acuan mutlak: identifikasi materi, indikator, rute pertemuan, dan asesmen wajib diturunkan darinya.'
+    : `tepat satu tujuan pembelajaran yang selaras dengan ATP fase ${i.fase} dan topik di atas, terukur, dalam satu kalimat.`}
 - indikator: 3 sampai 5 kriteria ketercapaian yang merupakan uraian (breakdown) dari tujuan tersebut, teramati dan dapat diukur.
 - praktikPedagogis: satu paragraf yang menyebut nama model, metode, atau teknik pembelajaran yang dipilih, lalu merinci sintaks atau tahapannya secara berurutan, karena tahapan itu wajib tampak pada langkah-langkah pembelajaran.
 - lingkunganPembelajaran: satu paragraf deskriptif yang mencakup budaya belajar yang dibangun, penataan lingkungan fisik kelas, dan lingkungan virtual bila dipakai.
@@ -245,8 +249,10 @@ Panduan isi:
 - no harus ${no}.
 - judul: nama aktivitas pertemuan ini.
 - pengalamanBelajar: pilih hanya pengalaman belajar yang wajar untuk pertemuan ini. Tidak perlu memaksakan Memahami, Mengaplikasi, dan Merefleksi hadir semua dalam satu pertemuan.
-- prinsip: 1 sampai 3 prinsip yang benar-benar terlihat pada langkah pembelajaran pertemuan ini.
-- langkah: 8 sampai 15 langkah pembelajaran berurutan dan sangat konkret yang mengikuti sintaks atau tahapan praktik pedagogis di atas secara berurutan, dan muat dalam alokasi ${rute?.alokasi ?? rpp.identitas.alokasi}. Tulis sebagai kalimat utuh yang menyebut apa yang dilakukan murid dan pendidik, termasuk pertanyaan pemantik yang diucapkan, media yang dipegang, pemakaian media digital yang telah disebut, dan kegiatan refleksi di langkah terakhir. Sebut nama tahapan praktik pedagogis di awal langkah yang bersangkutan. Jangan menomori sendiri, cukup satu langkah per elemen.
+- prinsip: pilih 1 atau paling banyak 2 prinsip yang paling dominan pada kegiatan pertemuan ini, jangan ketiganya. Contoh: eksplorasi atau penyelidikan menonjolkan Bermakna, permainan atau gamifikasi menonjolkan Menggembirakan, refleksi dan pengelolaan diri menonjolkan Berkesadaran. Prinsip yang dipilih harus jelas terlihat pada langkah.
+- langkah: 8 sampai 15 langkah pembelajaran berurutan dan sangat konkret yang mengikuti sintaks atau tahapan praktik pedagogis di atas secara berurutan, dan muat dalam alokasi ${rute?.alokasi ?? rpp.identitas.alokasi}.
+  Gaya bahasa: tiap langkah adalah kalimat utuh yang mengalir dan terasa ditulis guru berpengalaman, bukan daftar mekanis. Awali setiap langkah dengan subjek aktif yang jelas, yaitu "Guru" atau "Murid" (atau "Setiap kelompok"), diikuti kata kerja, misalnya "Murid menganalisis permasalahan kontekstual, yaitu ..." atau "Guru menjelaskan cara ...". Sertakan pertanyaan pemantik yang diucapkan, media yang dipegang, pemakaian media digital yang telah disebut, dan kegiatan refleksi di langkah terakhir.
+  Larangan: jangan menuliskan nama tahapan sintaks sebagai label atau awalan kalimat (misalnya "Orientasi murid pada masalah: ..."); tahapan cukup tampak dari kegiatannya. Jangan memakai titik dua sebagai pemisah label. Jangan menomori sendiri, cukup satu langkah per elemen.
 - media: alat dan bahan konkret yang mudah didapat di sekolah Indonesia, termasuk media digital yang dipakai di langkah.
 - asesmen: asesmen formatif untuk pertemuan ini. tujuan menyebut indikator mana yang diukur. rubrik berisi 3 sampai 4 aspek yang diamati dan sejalan dengan indikator tersebut. tindakLanjut berisi tindak lanjut untuk kategori mampu dan belum.`;
 }

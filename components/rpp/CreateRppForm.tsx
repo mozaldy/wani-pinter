@@ -168,6 +168,15 @@ function Fieldset({ mapel, mapelDefault }: { mapel: string[]; mapelDefault: stri
         </div>
 
         <div className="col-span-12 field">
+          <label className="field-label">
+            Tujuan Pembelajaran (TP) <span className="muted">(opsional — isi jika sudah memiliki TP dari sekolah/dinas)</span>
+          </label>
+          <textarea name="tujuanPembelajaran" rows={2}
+            placeholder="Murid mampu menyelesaikan masalah penjumlahan dan pengurangan bilangan cacah sampai 20 menggunakan benda konkret." />
+          <span className="tiny muted">Jika dikosongkan, Wani AI menyarankan TP berdasarkan topik.</span>
+        </div>
+
+        <div className="col-span-12 field">
           <label className="field-label">Alokasi waktu</label>
           <input name="alokasi" required defaultValue={DEFAULTS.alokasi} />
         </div>
