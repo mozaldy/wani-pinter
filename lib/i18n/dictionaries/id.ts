@@ -10,7 +10,7 @@ export const id = {
     short: { id: 'ID', en: 'EN' },
   },
   enums: {
-    risiko: { rendah: 'Rendah', sedang: 'Sedang', tinggi: 'Tinggi' },
+    risiko: { rendah: 'rendah', sedang: 'sedang', tinggi: 'tinggi' },
     status: { selesai: 'Selesai', aktif: 'Aktif', mendatang: 'Mendatang' },
     kategori: { positif: 'Positif', perhatian: 'Perhatian', akademik: 'Akademik', sosial: 'Sosial' },
     jk: { L: 'Laki-laki', P: 'Perempuan' },
@@ -172,6 +172,7 @@ export const id = {
         X: 'Kelas X (10)',
         XI: 'Kelas XI (11)', XII: 'Kelas XII (12)',
       },
+      semesterOptions: { Ganjil: 'Ganjil', Genap: 'Genap' },
     },
     editor: {
       backToList: '← Semua modul ajar',

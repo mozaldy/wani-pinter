@@ -174,6 +174,7 @@ export const en: Dictionary = {
         X: 'Grade X (10)',
         XI: 'Grade XI (11)', XII: 'Grade XII (12)',
       },
+      semesterOptions: { Ganjil: 'Odd', Genap: 'Even' },
     },
     editor: {
       backToList: '← All lesson plans',

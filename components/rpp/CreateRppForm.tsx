@@ -157,8 +157,8 @@ function Fieldset({ mapel, mapelDefault, dict }: { mapel: string[]; mapelDefault
         <div className="col-span-3 field">
           <label className="field-label">{dict.rpp.create.semesterLabel}</label>
           <select name="semester" required defaultValue={DEFAULTS.semester}>
-            <option value="Ganjil">Ganjil</option>
-            <option value="Genap">Genap</option>
+            <option value="Ganjil">{dict.rpp.create.semesterOptions.Ganjil}</option>
+            <option value="Genap">{dict.rpp.create.semesterOptions.Genap}</option>
           </select>
         </div>
         <div className="col-span-3 field">
