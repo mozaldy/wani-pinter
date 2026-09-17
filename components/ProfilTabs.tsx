@@ -3,15 +3,17 @@ import { useState } from 'react';
 import { Icon, type IconName } from '@/components/Icon';
 import { Pill } from '@/components/ui';
 import { useModals } from '@/components/modals/ModalProvider';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { interpolate } from '@/lib/i18n/format';
 import type { Student, CP } from '@/lib/types';
 
 const SUBJECTS = [
-  { key: 'cp_matematika', label: 'Matematika', color: '#4F46E5' },
-  { key: 'cp_ipa', label: 'IPA Terpadu', color: '#10B981' },
-  { key: 'cp_ips', label: 'IPS Terpadu', color: '#F59E0B' },
-  { key: 'cp_bind', label: 'B. Indonesia', color: '#EF4444' },
-  { key: 'cp_bing', label: 'B. Inggris', color: '#06B6D4' },
-  { key: 'cp_pjok', label: 'PJOK', color: '#EC4899' },
+  { key: 'cp_matematika', color: '#4F46E5' },
+  { key: 'cp_ipa', color: '#10B981' },
+  { key: 'cp_ips', color: '#F59E0B' },
+  { key: 'cp_bind', color: '#EF4444' },
+  { key: 'cp_bing', color: '#06B6D4' },
+  { key: 'cp_pjok', color: '#EC4899' },
 ] as const;
 
 const ANEK = [
@@ -22,17 +24,17 @@ const ANEK = [
 ];
 
 const KIND_COLOR = { akademik: '#4F46E5', sosial: '#06B6D4', perhatian: '#F59E0B', positif: '#10B981' };
-const KIND_LABEL = { akademik: 'Akademik', sosial: 'Sosial', perhatian: 'Perhatian', positif: 'Positif' };
 
-const TABS: { id: string; label: string; icon: IconName; count?: number }[] = [
-  { id: 'akademik', label: 'Akademik', icon: 'chart' },
-  { id: 'anekdotal', label: 'Catatan Anekdotal', icon: 'fileText', count: 4 },
-  { id: 'portofolio', label: 'Portofolio Karya', icon: 'folder', count: 12 },
-  { id: 'komunikasi', label: 'Komunikasi Wali', icon: 'message', count: 7 },
-  { id: 'rapor', label: 'Rapor Naratif', icon: 'star' },
+const TABS: { id: 'akademik' | 'anekdotal' | 'portofolio' | 'komunikasi' | 'rapor'; icon: IconName; count?: number }[] = [
+  { id: 'akademik', icon: 'chart' },
+  { id: 'anekdotal', icon: 'fileText', count: 4 },
+  { id: 'portofolio', icon: 'folder', count: 12 },
+  { id: 'komunikasi', icon: 'message', count: 7 },
+  { id: 'rapor', icon: 'star' },
 ];
 
 export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
+  const { dict } = useI18n();
   const [tab, setTab] = useState('akademik');
   const { openRapor } = useModals();
   const trenSemester = [62, 65, 68, 64, 70, 72, 68, 65, 63, 66, 70, student.rerata];
@@ -51,7 +53,7 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
               display: 'flex', alignItems: 'center', gap: 8,
             }}>
             <Icon name={t.icon} size={14} />
-            {t.label}
+            {dict.profil.tabs[t.id]}
             {t.count && <span style={{ background: tab === t.id ? 'var(--color-primary-soft)' : 'var(--color-surface-2)', color: tab === t.id ? 'var(--color-primary)' : 'var(--color-ink-3)', padding: '1px 7px', borderRadius: 999, fontSize: 11 }}>{t.count}</span>}
           </button>
         ))}
@@ -62,8 +64,8 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
           <div className="col-span-8 flex flex-col gap-4">
             <div className="card">
               <div className="card-title">
-                <h3>Tren rerata · 12 minggu terakhir</h3>
-                <Pill kind="bad" dot>Tren menurun</Pill>
+                <h3>{dict.profil.trenTitle}</h3>
+                <Pill kind="bad" dot>{dict.profil.trenMenurun}</Pill>
               </div>
               <div style={{ position: 'relative', height: 220, padding: '8px 0' }}>
                 <svg viewBox="0 0 600 200" preserveAspectRatio="none" style={{ width: '100%', height: 200 }}>
@@ -93,7 +95,7 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
             </div>
 
             <div className="card">
-              <div className="card-title"><h3>Penguasaan Capaian Pembelajaran</h3></div>
+              <div className="card-title"><h3>{dict.profil.penguasaanCpTitle}</h3></div>
               <div className="flex flex-col gap-3">
                 {cps.slice(0, 5).map((cp, i) => {
                   const v = [85, 72, 64, 38, 22][i];
@@ -121,7 +123,7 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
 
           <div className="col-span-4 flex flex-col gap-4">
             <div className="card">
-              <div className="card-title"><h3>Per mata pelajaran</h3></div>
+              <div className="card-title"><h3>{dict.profil.perMapelTitle}</h3></div>
               <div className="flex flex-col gap-3">
                 {SUBJECTS.map(sub => {
                   const v = student[sub.key];
@@ -129,7 +131,7 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
                     <div key={sub.key} className="flex gap-3 items-center">
                       <span style={{ width: 8, height: 32, borderRadius: 4, background: sub.color, flexShrink: 0 }} />
                       <div style={{ flex: 1 }}>
-                        <div className="small" style={{ fontWeight: 600 }}>{sub.label}</div>
+                        <div className="small" style={{ fontWeight: 600 }}>{dict.profil.subjects[sub.key]}</div>
                         <div className="tiny muted">Pak Andi · 4× pertemuan/minggu</div>
                       </div>
                       <div className="h-display" style={{ fontSize: 20, fontWeight: 600, color: v >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{v}</div>
@@ -139,13 +141,13 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
               </div>
             </div>
             <div className="card">
-              <div className="card-title"><h3>Prediksi semester</h3><Pill kind="primary" dot>AI</Pill></div>
+              <div className="card-title"><h3>{dict.profil.prediksiTitle}</h3><Pill kind="primary" dot>AI</Pill></div>
               <div style={{ padding: 16, background: 'var(--color-bad-soft)', borderRadius: 10, marginBottom: 12 }}>
-                <div className="tiny" style={{ fontWeight: 700, color: 'var(--color-bad)', textTransform: 'uppercase', letterSpacing: 0.06 }}>Risiko tidak tuntas</div>
+                <div className="tiny" style={{ fontWeight: 700, color: 'var(--color-bad)', textTransform: 'uppercase', letterSpacing: 0.06 }}>{dict.profil.risikoTidakTuntas}</div>
                 <div className="h-display" style={{ fontSize: 26, fontWeight: 600, color: 'var(--color-bad)', margin: '4px 0' }}>72%</div>
-                <div className="tiny muted">Berdasarkan tren 6 minggu, kehadiran, dan pola formatif</div>
+                <div className="tiny muted">{dict.profil.prediksiFoot}</div>
               </div>
-              <div className="tiny muted">Tanpa intervensi, prediksi rerata semester: <strong style={{ color: 'var(--color-bad)' }}>62</strong>. Dengan intervensi yang direkomendasikan AI: <strong style={{ color: 'var(--color-good)' }}>74-78</strong>.</div>
+              <div className="tiny muted">{dict.profil.predBefore}<strong style={{ color: 'var(--color-bad)' }}>62</strong>{dict.profil.predAfter}<strong style={{ color: 'var(--color-good)' }}>74-78</strong>.</div>
             </div>
           </div>
         </div>
@@ -154,15 +156,15 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
       {tab === 'anekdotal' && (
         <div className="card">
           <div className="card-title">
-            <h3>Catatan anekdotal · {ANEK.length} dari semester ini</h3>
-            <button className="btn btn-primary"><Icon name="plus" size={13} /> Tambah catatan</button>
+            <h3>{interpolate(dict.profil.anekdotalTitle, { count: ANEK.length })}</h3>
+            <button className="btn btn-primary"><Icon name="plus" size={13} /> {dict.profil.tambahCatatan}</button>
           </div>
           <div className="timeline">
             {ANEK.map((a, i) => (
               <div key={i} className="timeline-item">
                 <div className="timeline-time" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span>{a.date}</span>
-                  <span className="pill" style={{ background: `${KIND_COLOR[a.kind]}15`, color: KIND_COLOR[a.kind] }}>{KIND_LABEL[a.kind]}</span>
+                  <span className="pill" style={{ background: `${KIND_COLOR[a.kind]}15`, color: KIND_COLOR[a.kind] }}>{dict.enums.kategori[a.kind]}</span>
                 </div>
                 <div className="timeline-title">{a.title}</div>
                 <div className="timeline-desc">{a.body}</div>
@@ -175,12 +177,12 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
       {tab === 'portofolio' && (
         <div className="card">
           <div className="card-title">
-            <h3>Portofolio karya · 12 dokumen</h3>
+            <h3>{dict.profil.portofolioTitle}</h3>
             <div className="seg">
-              <button className="seg-btn active">Semua</button>
-              <button className="seg-btn">Tugas</button>
-              <button className="seg-btn">P5</button>
-              <button className="seg-btn">Refleksi</button>
+              <button className="seg-btn active">{dict.profil.segSemua}</button>
+              <button className="seg-btn">{dict.profil.segTugas}</button>
+              <button className="seg-btn">{dict.profil.segP5}</button>
+              <button className="seg-btn">{dict.profil.segRefleksi}</button>
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
@@ -211,7 +213,7 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
 
       {tab === 'komunikasi' && (
         <div className="card">
-          <div className="card-title"><h3>Riwayat komunikasi dengan {student.ortu}</h3><button className="btn btn-primary"><Icon name="plus" size={13} /> Pesan baru</button></div>
+          <div className="card-title"><h3>{interpolate(dict.profil.komunikasiTitle, { ortu: student.ortu })}</h3><button className="btn btn-primary"><Icon name="plus" size={13} /> {dict.profil.pesanBaru}</button></div>
           <div className="flex flex-col gap-3">
             {[
               { from: 'wali', date: '23 Apr 2026 · 19.30', body: 'Bu, terima kasih informasinya. Memang ada masalah keluarga yg sedang kami selesaikan. Akan saya pastikan anak hadir besok.' },
@@ -246,11 +248,11 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
       {tab === 'rapor' && (
         <div className="card" style={{ textAlign: 'center', padding: 60 }}>
           <Icon name="star" size={40} style={{ color: 'var(--color-primary)', marginBottom: 12 }} />
-          <h2 className="h-display" style={{ fontWeight: 500, fontSize: 22 }}>Rapor naratif Kurikulum Merdeka</h2>
+          <h2 className="h-display" style={{ fontWeight: 500, fontSize: 22 }}>{dict.profil.raporEmptyTitle}</h2>
           <div className="muted mb-4" style={{ maxWidth: 480, margin: '0 auto 20px' }}>
-            Wani AI akan menyusun deskripsi naratif per CP berdasarkan data 6 bulan terakhir.
+            {dict.profil.raporEmptyDesc}
           </div>
-          <button className="btn btn-primary" onClick={() => openRapor(student)}><Icon name="sparkle" size={14} /> Buat rapor naratif</button>
+          <button className="btn btn-primary" onClick={() => openRapor(student)}><Icon name="sparkle" size={14} /> {dict.profil.buatRaporNaratif}</button>
         </div>
       )}
     </>

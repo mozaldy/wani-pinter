@@ -3,11 +3,14 @@ import { useEffect, useState } from 'react';
 import { Modal } from './Modal';
 import { Icon } from '@/components/Icon';
 import { Pill, StudentAvatar } from '@/components/ui';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { interpolate } from '@/lib/i18n/format';
 import type { Student } from '@/lib/types';
 
 export function QuickInputModal({ open, onClose, onSubmit, students }: {
   open: boolean; onClose: () => void; onSubmit: () => void; students: Student[];
 }) {
+  const { dict } = useI18n();
   const [step, setStep] = useState(0);
   const [topic, setTopic] = useState('Sistem Persamaan Linear Dua Variabel');
   const [hadir, setHadir] = useState<Record<string, string>>({});
@@ -34,16 +37,16 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
 
   return (
     <Modal open={open} onClose={onClose} wide
-      title="Jurnal Mengajar — VIII-B · Matematika"
-      sub="Pertemuan ke-3 · Senin, 27 April 2026 · 08.20–09.40"
+      title={dict.modals.quickInput.title}
+      sub={dict.modals.quickInput.sub}
       footer={
         <>
-          <button className="btn btn-ghost" onClick={onClose}>Batal</button>
-          {step > 0 && <button className="btn btn-outline" onClick={() => setStep(step - 1)}>Kembali</button>}
+          <button className="btn btn-ghost" onClick={onClose}>{dict.modals.quickInput.batal}</button>
+          {step > 0 && <button className="btn btn-outline" onClick={() => setStep(step - 1)}>{dict.modals.quickInput.kembali}</button>}
           {step < 2 ? (
-            <button className="btn btn-primary" onClick={() => setStep(step + 1)}>Lanjut <Icon name="arrowR" size={13} /></button>
+            <button className="btn btn-primary" onClick={() => setStep(step + 1)}>{dict.modals.quickInput.lanjut} <Icon name="arrowR" size={13} /></button>
           ) : (
-            <button className="btn btn-primary" onClick={onSubmit}><Icon name="check" size={13} /> Simpan jurnal</button>
+            <button className="btn btn-primary" onClick={onSubmit}><Icon name="check" size={13} /> {dict.modals.quickInput.simpanJurnal}</button>
           )}
         </>
       }>
@@ -51,24 +54,24 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
         <div className={`step ${step >= 0 ? (step > 0 ? 'done' : 'active') : ''}`} />
         <div className={`step ${step >= 1 ? (step > 1 ? 'done' : 'active') : ''}`} />
         <div className={`step ${step >= 2 ? 'active' : ''}`} />
-        <span className="tiny muted" style={{ marginLeft: 8 }}>Langkah {step + 1} dari 3</span>
+        <span className="tiny muted" style={{ marginLeft: 8 }}>{interpolate(dict.modals.quickInput.langkahOf, { step: step + 1 })}</span>
       </div>
 
       {step === 0 && (
         <>
           <div className="field">
-            <label className="field-label">Topik / Tujuan Pembelajaran</label>
+            <label className="field-label">{dict.modals.quickInput.topikLabel}</label>
             <input value={topic} onChange={e => setTopic(e.target.value)} />
-            <div className="tiny muted">Terhubung ke <strong>CP-MTK-8.2</strong> — tap untuk ubah</div>
+            <div className="tiny muted">{dict.modals.quickInput.terhubungBefore}<strong>CP-MTK-8.2</strong>{dict.modals.quickInput.terhubungAfter}</div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="field">
-              <label className="field-label">Metode</label>
-              <select><option>Diskusi kelompok</option><option>Ekspositori</option><option>Inquiry</option></select>
+              <label className="field-label">{dict.modals.quickInput.metodeLabel}</label>
+              <select><option>{dict.modals.quickInput.metodeDiskusi}</option><option>{dict.modals.quickInput.metodeEkspositori}</option><option>{dict.modals.quickInput.metodeInquiry}</option></select>
             </div>
             <div className="field">
-              <label className="field-label">Media</label>
-              <select><option>Slide + papan tulis</option><option>Quizizz</option><option>Video</option></select>
+              <label className="field-label">{dict.modals.quickInput.mediaLabel}</label>
+              <select><option>{dict.modals.quickInput.mediaSlide}</option><option>{dict.modals.quickInput.mediaQuizizz}</option><option>{dict.modals.quickInput.mediaVideo}</option></select>
             </div>
           </div>
         </>
@@ -77,10 +80,10 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
       {step === 1 && (
         <>
           <div className="flex justify-between items-center mb-3">
-            <div className="small" style={{ fontWeight: 600 }}>Presensi · {totalHadir}/{students.length} hadir</div>
+            <div className="small" style={{ fontWeight: 600 }}>{interpolate(dict.modals.quickInput.presensiCount, { hadir: totalHadir, total: students.length })}</div>
             <button className="btn btn-ghost small" onClick={() => {
               const h: Record<string, string> = {}; students.forEach(s => h[s.id] = 'hadir'); setHadir(h);
-            }}>Tandai semua hadir</button>
+            }}>{dict.modals.quickInput.tandaiSemuaHadir}</button>
           </div>
           <div style={{ maxHeight: 280, overflow: 'auto', border: '1px solid var(--color-line)', borderRadius: 10 }}>
             {students.map(s => (
@@ -109,12 +112,12 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
       {step === 2 && (
         <>
           <div className="field">
-            <label className="field-label">Catatan & refleksi pembelajaran</label>
+            <label className="field-label">{dict.modals.quickInput.catatanReflektifLabel}</label>
             <div style={{ position: 'relative' }}>
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
-                placeholder="Tulis atau gunakan voice-to-text..."
+                placeholder={dict.modals.quickInput.notesPlaceholder}
                 rows={5}
                 style={{ width: '100%', resize: 'vertical', paddingRight: 50 }} />
               <button onClick={toggleVoice} style={{
@@ -126,15 +129,15 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
                 <Icon name="mic" size={16} />
               </button>
             </div>
-            {recording && <div className="tiny" style={{ color: 'var(--color-bad)', fontWeight: 600, marginTop: 4 }}>● Merekam... ketuk lagi untuk berhenti</div>}
+            {recording && <div className="tiny" style={{ color: 'var(--color-bad)', fontWeight: 600, marginTop: 4 }}>{dict.modals.quickInput.merekamHint}</div>}
           </div>
           <div className="ai-card">
             <div className="ai-badge">
               <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-              AI menyarankan
+              {dict.modals.quickInput.aiMenyarankan}
             </div>
             <div className="ai-text small flex gap-2 flex-wrap items-center">
-              Tag otomatis: <Pill kind="primary">diskusi-kelompok</Pill> <Pill kind="primary">CP-MTK-8.2</Pill> <Pill kind="warn">tindak-lanjut: Rendra</Pill>
+              {dict.modals.quickInput.tagOtomatis} <Pill kind="primary">diskusi-kelompok</Pill> <Pill kind="primary">CP-MTK-8.2</Pill> <Pill kind="warn">tindak-lanjut: Rendra</Pill>
             </div>
           </div>
         </>

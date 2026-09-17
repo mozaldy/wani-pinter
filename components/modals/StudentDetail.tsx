@@ -2,35 +2,38 @@
 import { Modal } from './Modal';
 import { Pill, StudentAvatar, Sparkline, Donut } from '@/components/ui';
 import { Icon } from '@/components/Icon';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { interpolate } from '@/lib/i18n/format';
 import type { Student } from '@/lib/types';
 
-const SUBJECTS: { key: keyof Student; label: string }[] = [
-  { key: 'cp_matematika', label: 'Matematika' },
-  { key: 'cp_ipa', label: 'IPA' },
-  { key: 'cp_ips', label: 'IPS' },
-  { key: 'cp_bind', label: 'B. Indonesia' },
-  { key: 'cp_bing', label: 'B. Inggris' },
-  { key: 'cp_pjok', label: 'PJOK' },
+const SUBJECTS: { key: 'cp_matematika' | 'cp_ipa' | 'cp_ips' | 'cp_bind' | 'cp_bing' | 'cp_pjok' }[] = [
+  { key: 'cp_matematika' },
+  { key: 'cp_ipa' },
+  { key: 'cp_ips' },
+  { key: 'cp_bind' },
+  { key: 'cp_bing' },
+  { key: 'cp_pjok' },
 ];
 
 export function StudentDetail({ student, onClose }: { student: Student | null; onClose: () => void }) {
+  const { dict } = useI18n();
   if (!student) return null;
   const first = student.nama.split(' ')[0];
   return (
     <Modal open={!!student} onClose={onClose} wide
       title={student.nama}
-      sub={`${student.nis} · ${student.kelas} · ${student.jk === 'L' ? 'Laki-laki' : 'Perempuan'}`}>
+      sub={`${student.nis} · ${student.kelas} · ${dict.enums.jk[student.jk]}`}>
       <div className="flex gap-4 items-start mb-5">
         <StudentAvatar student={student} size={64} />
         <div style={{ flex: 1 }}>
           <div className="flex gap-2 mb-2">
             <Pill kind={student.risiko === 'rendah' ? 'good' : student.risiko === 'sedang' ? 'warn' : 'bad'} dot>
-              Risiko {student.risiko}
+              {interpolate(dict.siswa.risikoLabel, { risiko: dict.enums.risiko[student.risiko] })}
             </Pill>
-            <Pill kind="primary">Rerata {student.rerata}</Pill>
-            <Pill kind="ink">Hadir {student.kehadiran}%</Pill>
+            <Pill kind="primary">{interpolate(dict.modals.studentDetail.rerataLabel, { rerata: student.rerata })}</Pill>
+            <Pill kind="ink">{interpolate(dict.modals.studentDetail.hadirLabel, { kehadiran: student.kehadiran })}</Pill>
           </div>
-          <div className="tiny muted">Wali: {student.ortu}</div>
+          <div className="tiny muted">{dict.siswa.waliLabel} {student.ortu}</div>
           <div className="tiny muted">{student.alamat}</div>
         </div>
         <Donut value={student.rerata} size={80} />
@@ -39,7 +42,7 @@ export function StudentDetail({ student, onClose }: { student: Student | null; o
       <div className="ai-card mb-4">
         <div className="ai-badge">
           <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-          Wani AI · Ringkasan 360°
+          {dict.modals.studentDetail.aiBadge}
         </div>
         <div className="ai-text">
           {student.risiko === 'tinggi' ? (
@@ -57,7 +60,7 @@ export function StudentDetail({ student, onClose }: { student: Student | null; o
           const v = student[s.key] as number;
           return (
             <div key={s.key} style={{ padding: 12, border: '1px solid var(--color-line)', borderRadius: 10 }}>
-              <div className="tiny muted" style={{ fontWeight: 600 }}>{s.label}</div>
+              <div className="tiny muted" style={{ fontWeight: 600 }}>{dict.modals.studentDetail.subjects[s.key]}</div>
               <div className="flex justify-between items-center" style={{ marginTop: 4 }}>
                 <span className="h-display" style={{ fontSize: 22, fontWeight: 600, color: v >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{v}</span>
                 <div style={{ width: 60 }}>

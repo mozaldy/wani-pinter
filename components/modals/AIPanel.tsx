@@ -1,13 +1,15 @@
 'use client';
 import { Modal } from './Modal';
+import { useI18n } from '@/lib/i18n/I18nProvider';
 import type { AIInsight } from '@/lib/types';
 
 export function AIPanel({ open, onClose, insights }: { open: boolean; onClose: () => void; insights: AIInsight[] }) {
+  const { dict } = useI18n();
   return (
     <Modal open={open} onClose={onClose} wide
-      title="Wani AI · Ringkasan kelas"
-      sub="Berdasarkan data 6 minggu terakhir · diperbarui 5 menit lalu"
-      footer={<button className="btn btn-primary" onClick={onClose}>Tutup</button>}>
+      title={dict.modals.aiPanel.title}
+      sub={dict.modals.aiPanel.sub}
+      footer={<button className="btn btn-primary" onClick={onClose}>{dict.modals.aiPanel.tutup}</button>}>
       <div className="flex flex-col gap-3">
         {insights.map(ins => (
           <div key={ins.id} style={{

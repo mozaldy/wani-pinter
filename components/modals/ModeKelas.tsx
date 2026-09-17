@@ -1,11 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Icon } from '@/components/Icon';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { interpolate } from '@/lib/i18n/format';
 import type { Student } from '@/lib/types';
 
 type Obs = { id: number; text: string; studentId?: string; time: string };
 
 export function ModeKelas({ open, onClose, students }: { open: boolean; onClose: () => void; students: Student[] }) {
+  const { dict } = useI18n();
   const [tab, setTab] = useState<'presensi' | 'observasi' | 'pacing'>('presensi');
   const [hadir, setHadir] = useState<Record<string, string>>({});
   const [observasi, setObservasi] = useState<Obs[]>([]);
@@ -44,19 +47,19 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
       <header style={{ padding: '16px 28px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 16 }}>
         <div style={{ width: 12, height: 12, borderRadius: 50, background: '#EF4444', animation: 'blink 1.5s infinite' }} />
         <div>
-          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18 }}>Mode Kelas Aktif · VIII-B Matematika</div>
-          <div style={{ fontSize: 12, opacity: 0.6 }}>Sistem Persamaan Linear Dua Variabel · R-203</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18 }}>{dict.modals.modeKelas.headerTitle}</div>
+          <div style={{ fontSize: 12, opacity: 0.6 }}>{dict.modals.modeKelas.headerSub}</div>
         </div>
         <div style={{ flex: 1 }} />
         <div style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.08)', borderRadius: 10, fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600 }}>{fmt(timer)} / 80:00</div>
-        <button style={{ padding: '8px 14px', background: '#EF4444', color: 'white', borderRadius: 10, fontWeight: 600 }} onClick={onClose}>Akhiri sesi</button>
+        <button style={{ padding: '8px 14px', background: '#EF4444', color: 'white', borderRadius: 10, fontWeight: 600 }} onClick={onClose}>{dict.modals.modeKelas.akhiriSesi}</button>
       </header>
 
       <div style={{ padding: '0 28px', display: 'flex', gap: 4, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         {([
-          { id: 'presensi' as const, label: 'Presensi', icon: 'users' as const, count: `${totalHadir}/${students.length}` as string | number | undefined },
-          { id: 'observasi' as const, label: 'Observasi', icon: 'eye' as const, count: observasi.length as string | number | undefined },
-          { id: 'pacing' as const, label: 'Tempo & TP', icon: 'target' as const, count: undefined as string | number | undefined },
+          { id: 'presensi' as const, label: dict.modals.modeKelas.tabs.presensi, icon: 'users' as const, count: `${totalHadir}/${students.length}` as string | number | undefined },
+          { id: 'observasi' as const, label: dict.modals.modeKelas.tabs.observasi, icon: 'eye' as const, count: observasi.length as string | number | undefined },
+          { id: 'pacing' as const, label: dict.modals.modeKelas.tabs.pacing, icon: 'target' as const, count: undefined as string | number | undefined },
         ]).map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
             style={{
@@ -121,7 +124,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
           {tab === 'observasi' && (
             <>
               <div style={{ marginBottom: 16, padding: 14, background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.3)', borderRadius: 10 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.06, color: '#67E8F9', marginBottom: 8 }}>Tag siswa cepat</div>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.06, color: '#67E8F9', marginBottom: 8 }}>{dict.modals.modeKelas.tagSiswaCepat}</div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {students.slice(0, 6).map(s => (
                     <button key={s.id} onClick={() => addObs(`${s.nama.split(' ')[0]} berkontribusi`, s.id)}
@@ -136,7 +139,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
                 {observasi.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: 40, opacity: 0.5 }}>
                     <Icon name="eye" size={32} style={{ marginBottom: 8 }} />
-                    <div className="small">Belum ada observasi. Catat momen menarik di kelas — AI akan tag otomatis ke siswa & CP.</div>
+                    <div className="small">{dict.modals.modeKelas.observasiEmpty}</div>
                   </div>
                 ) : observasi.map(o => {
                   const s = students.find(x => x.id === o.studentId);
@@ -155,14 +158,14 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
           {tab === 'pacing' && (
             <div>
               <div style={{ background: 'rgba(255,255,255,0.05)', padding: 16, borderRadius: 12, marginBottom: 16 }}>
-                <div className="small" style={{ opacity: 0.7, marginBottom: 8 }}>RPP RENCANA · Sistem Persamaan Linear · Pertemuan 3</div>
+                <div className="small" style={{ opacity: 0.7, marginBottom: 8 }}>{dict.modals.modeKelas.rppRencana}</div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   {[
-                    { l: 'Apersepsi', d: 10, done: true, active: false },
-                    { l: 'Eksplorasi', d: 20, done: true, active: false },
-                    { l: 'Diskusi', d: 25, done: false, active: true },
-                    { l: 'Latihan', d: 15, done: false, active: false },
-                    { l: 'Refleksi', d: 10, done: false, active: false },
+                    { l: 'apersepsi' as const, d: 10, done: true, active: false },
+                    { l: 'eksplorasi' as const, d: 20, done: true, active: false },
+                    { l: 'diskusi' as const, d: 25, done: false, active: true },
+                    { l: 'latihan' as const, d: 15, done: false, active: false },
+                    { l: 'refleksi' as const, d: 10, done: false, active: false },
                   ].map((p, i) => (
                     <div key={i} style={{
                       flex: p.d, padding: '10px 8px', borderRadius: 8,
@@ -170,15 +173,15 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
                       border: p.active ? '2px solid #67E8F9' : '1px solid rgba(255,255,255,0.1)',
                       color: 'white', fontSize: 11, fontWeight: 600, textAlign: 'center',
                     }}>
-                      <div>{p.l}</div>
-                      <div style={{ fontSize: 9, opacity: 0.7, marginTop: 2 }}>{p.d} mnt</div>
+                      <div>{dict.modals.modeKelas.fase[p.l]}</div>
+                      <div style={{ fontSize: 9, opacity: 0.7, marginTop: 2 }}>{interpolate(dict.modals.modeKelas.durasiMnt, { d: p.d })}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div style={{ background: 'rgba(255,255,255,0.05)', padding: 16, borderRadius: 12 }}>
-                <div className="small" style={{ opacity: 0.7, marginBottom: 8 }}>TUJUAN PEMBELAJARAN HARI INI</div>
+                <div className="small" style={{ opacity: 0.7, marginBottom: 8 }}>{dict.modals.modeKelas.tujuanHariIni}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {[
                     { l: 'Siswa dapat menyusun model SPLDV dari masalah kontekstual', done: true },
@@ -197,14 +200,14 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
         </div>
 
         <aside style={{ borderLeft: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.2)', padding: 20, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, marginBottom: 4 }}>Tangkap cepat</div>
-          <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 16 }}>Catat momen kelas dalam &lt; 5 detik</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, marginBottom: 4 }}>{dict.modals.modeKelas.tangkapCepat}</div>
+          <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 16 }}>{dict.modals.modeKelas.catatMomenHint}</div>
 
           <textarea
             value={obsInput}
             onChange={e => setObsInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && e.metaKey) addObs(obsInput); }}
-            placeholder="ketik observasi... ⌘+Enter simpan"
+            placeholder={dict.modals.modeKelas.obsPlaceholder}
             rows={4}
             style={{
               padding: 12, borderRadius: 10,
@@ -219,27 +222,27 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
               background: recording ? '#EF4444' : 'rgba(255,255,255,0.06)',
               color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 12, fontWeight: 600,
             }}>
-              <Icon name="mic" size={14} /> {recording ? 'Merekam...' : 'Voice'}
+              <Icon name="mic" size={14} /> {recording ? dict.modals.modeKelas.merekamDots : dict.modals.modeKelas.voice}
             </button>
-            <button onClick={() => addObs(obsInput)} style={{ flex: 1, padding: 10, borderRadius: 10, background: '#06B6D4', color: 'white', fontSize: 12, fontWeight: 600 }}>Simpan</button>
+            <button onClick={() => addObs(obsInput)} style={{ flex: 1, padding: 10, borderRadius: 10, background: '#06B6D4', color: 'white', fontSize: 12, fontWeight: 600 }}>{dict.modals.modeKelas.simpan}</button>
           </div>
 
-          <div style={{ fontSize: 11, opacity: 0.5, textTransform: 'uppercase', letterSpacing: 0.08, fontWeight: 700, marginBottom: 8 }}>Pintasan</div>
+          <div style={{ fontSize: 11, opacity: 0.5, textTransform: 'uppercase', letterSpacing: 0.08, fontWeight: 700, marginBottom: 8 }}>{dict.modals.modeKelas.pintasan}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {[
-              '🎯 Tandai TP-2 selesai',
-              '✋ Bagikan link Quizizz',
-              '⏰ Mulai timer kelompok 10 mnt',
-              '📸 Foto papan tulis',
-              '🚪 Catat keluar masuk siswa',
-            ].map((l, i) => (
+            {([
+              dict.modals.modeKelas.shortcuts.tandaiTp,
+              dict.modals.modeKelas.shortcuts.bagikanQuizizz,
+              dict.modals.modeKelas.shortcuts.mulaiTimer,
+              dict.modals.modeKelas.shortcuts.fotoPapan,
+              dict.modals.modeKelas.shortcuts.catatKeluarMasuk,
+            ]).map((l, i) => (
               <button key={i} style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', color: 'white', fontSize: 12, textAlign: 'left' }}>{l}</button>
             ))}
           </div>
 
           <div style={{ marginTop: 'auto', padding: 12, background: 'rgba(6,182,212,0.1)', borderRadius: 10, border: '1px solid rgba(6,182,212,0.3)' }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#67E8F9', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.06 }}>Wani AI</div>
-            <div style={{ fontSize: 12, lineHeight: 1.5 }}>Bagas dan Rendra terdeteksi pasif 8 menit terakhir. Pertimbangkan tanya langsung atau pindah ke kerja kelompok.</div>
+            <div style={{ fontSize: 12, lineHeight: 1.5 }}>{dict.modals.modeKelas.aiInsight}</div>
           </div>
         </aside>
       </div>

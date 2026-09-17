@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { Icon } from '@/components/Icon';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { interpolate } from '@/lib/i18n/format';
 import type { CP } from '@/lib/types';
 
 const TPS_8_2 = [
@@ -12,6 +14,7 @@ const TPS_8_2 = [
 ];
 
 export function KurikulumExpander({ cps }: { cps: CP[] }) {
+  const { dict } = useI18n();
   const [expanded, setExpanded] = useState<string | null>('CP-MTK-8.2');
 
   return (
@@ -20,7 +23,7 @@ export function KurikulumExpander({ cps }: { cps: CP[] }) {
         const isExp = expanded === cp.kode;
         const tpList = cp.kode === 'CP-MTK-8.2' ? TPS_8_2 : Array.from({ length: cp.tp_count }).map((_, i) => ({
           kode: `TP-${i + 1}`,
-          nama: `Tujuan pembelajaran ke-${i + 1}`,
+          nama: interpolate(dict.kurikulum.tpDefaultLabel, { n: i + 1 }),
           mastered: Math.max(0, cp.mastered + (Math.sin(i) * 15) | 0),
           tugas: ((i % 3) + 1),
         }));
@@ -36,7 +39,7 @@ export function KurikulumExpander({ cps }: { cps: CP[] }) {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--color-primary)' }}>{cp.kode}</span>
               <span style={{ fontWeight: 600, fontSize: 13.5 }}>{cp.nama}</span>
               <span style={{ textAlign: 'right', fontWeight: 700, fontSize: 13, color: cp.mastered >= 80 ? 'var(--color-good)' : cp.mastered >= 50 ? 'var(--color-warn)' : 'var(--color-bad)' }}>{cp.mastered}%</span>
-              <span className="tiny muted">{cp.tp_count} TP</span>
+              <span className="tiny muted">{interpolate(dict.kurikulum.tpCount, { count: cp.tp_count })}</span>
             </button>
             {isExp && (
               <div style={{ padding: '4px 14px 14px', background: 'var(--color-surface-2)' }}>
@@ -51,7 +54,7 @@ export function KurikulumExpander({ cps }: { cps: CP[] }) {
                       <div className="bar-fill" style={{ width: `${tp.mastered}%` }} />
                     </div>
                     <div className="tiny muted" style={{ textAlign: 'right' }}>
-                      {tp.tugas} tugas · {tp.mastered}%
+                      {interpolate(dict.kurikulum.tugasMastered, { count: tp.tugas, percent: tp.mastered })}
                     </div>
                   </div>
                 ))}

@@ -2,9 +2,12 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { StudentAvatar, Pill } from '@/components/ui';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { interpolate } from '@/lib/i18n/format';
 import type { CP, HeatmapRow } from '@/lib/types';
 
 export function HeatmapClient({ cps, rows }: { cps: CP[]; rows: HeatmapRow[] }) {
+  const { dict } = useI18n();
   const [selected, setSelected] = useState<{ row: HeatmapRow; cellIndex: number } | null>(null);
   const cps8 = cps.slice(0, 8);
   return (
@@ -53,7 +56,7 @@ export function HeatmapClient({ cps, rows }: { cps: CP[]; rows: HeatmapRow[] }) 
             <div className="tiny muted">{cps8[selected.cellIndex].kode} · {cps8[selected.cellIndex].nama}</div>
           </div>
           <Pill kind={selected.row.cells[selected.cellIndex].value >= 4 ? 'good' : selected.row.cells[selected.cellIndex].value >= 2 ? 'warn' : 'bad'}>
-            Skor {selected.row.cells[selected.cellIndex].value}/5
+            {interpolate(dict.heatmap.skor, { value: selected.row.cells[selected.cellIndex].value })}
           </Pill>
         </div>
       )}
