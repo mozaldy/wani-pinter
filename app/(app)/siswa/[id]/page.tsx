@@ -4,11 +4,14 @@ import { Pill } from '@/components/ui';
 import { ProfilTabs } from '@/components/ProfilTabs';
 import { ProfilHeaderActions, BackLink } from '@/components/ProfilHeader';
 import { getStudent, getCPList } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 export default async function ProfilPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [student, cps] = await Promise.all([getStudent(id), getCPList()]);
   if (!student) notFound();
+  const dict = await getDictionary();
   const initials = student.nama.split(' ').slice(0, 2).map(x => x[0]).join('');
 
   return (
@@ -25,16 +28,16 @@ export default async function ProfilPage({ params }: { params: Promise<{ id: str
           </div>
           <div style={{ flex: 1 }}>
             <div className="flex gap-2 mb-2">
-              <Pill kind={student.risiko === 'rendah' ? 'good' : student.risiko === 'sedang' ? 'warn' : 'bad'} dot>Risiko {student.risiko}</Pill>
+              <Pill kind={student.risiko === 'rendah' ? 'good' : student.risiko === 'sedang' ? 'warn' : 'bad'} dot>{interpolate(dict.siswa.risikoLabel, { risiko: dict.enums.risiko[student.risiko] })}</Pill>
               <Pill kind="primary">{student.kelas}</Pill>
-              <Pill kind="ink">NIS {student.nis}</Pill>
+              <Pill kind="ink">{interpolate(dict.siswa.nisLabel, { nis: student.nis })}</Pill>
             </div>
             <h1 className="h-display" style={{ margin: '4px 0', fontSize: 30 }}>{student.nama}</h1>
             <div className="muted small">
-              {student.jk === 'L' ? 'Laki-laki' : 'Perempuan'} · 14 tahun · {student.alamat}
+              {dict.enums.jk[student.jk]} · {interpolate(dict.siswa.tahun, { umur: 14 })} · {student.alamat}
             </div>
             <div className="flex gap-4 small" style={{ marginTop: 12 }}>
-              <span><strong>Wali:</strong> {student.ortu}</span>
+              <span><strong>{dict.siswa.waliLabel}</strong> {student.ortu}</span>
               <span className="muted">·</span>
               <span><Icon name="message" size={12} /> +62 813-2456-7891</span>
             </div>
@@ -44,25 +47,25 @@ export default async function ProfilPage({ params }: { params: Promise<{ id: str
 
         <div className="grid grid-cols-12" style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid var(--color-line)' }}>
           <div className="col-span-3">
-            <div className="tiny muted" style={{ fontWeight: 600 }}>RERATA NILAI</div>
+            <div className="tiny muted" style={{ fontWeight: 600 }}>{dict.siswa.rerataNilai}</div>
             <div className="flex gap-2 items-baseline" style={{ marginTop: 4 }}>
               <span className="h-display" style={{ fontSize: 36, fontWeight: 600, color: student.rerata >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{student.rerata}</span>
               <span className="muted small">/100</span>
             </div>
-            <div className="tiny" style={{ color: 'var(--color-bad)', marginTop: 2 }}>▼ 7 dari semester lalu</div>
+            <div className="tiny" style={{ color: 'var(--color-bad)', marginTop: 2 }}>{dict.siswa.dariSemesterLalu}</div>
           </div>
           <div className="col-span-3">
-            <div className="tiny muted" style={{ fontWeight: 600 }}>KEHADIRAN</div>
+            <div className="tiny muted" style={{ fontWeight: 600 }}>{dict.siswa.kehadiranLabel}</div>
             <div className="h-display" style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>{student.kehadiran}%</div>
-            <div className="tiny muted" style={{ marginTop: 2 }}>76 hadir · 4 sakit · 4 alpa</div>
+            <div className="tiny muted" style={{ marginTop: 2 }}>{dict.siswa.kehadiranDetail}</div>
           </div>
           <div className="col-span-3">
-            <div className="tiny muted" style={{ fontWeight: 600 }}>CP TUNTAS</div>
+            <div className="tiny muted" style={{ fontWeight: 600 }}>{dict.siswa.cpTuntasLabel}</div>
             <div className="h-display" style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>3<span className="muted" style={{ fontSize: 18 }}>/8</span></div>
-            <div className="tiny muted" style={{ marginTop: 2 }}>5 belum tuntas · target Juni</div>
+            <div className="tiny muted" style={{ marginTop: 2 }}>{dict.siswa.cpTuntasDetail}</div>
           </div>
           <div className="col-span-3">
-            <div className="tiny muted" style={{ fontWeight: 600 }}>PROFIL PELAJAR PANCASILA</div>
+            <div className="tiny muted" style={{ fontWeight: 600 }}>{dict.siswa.p5Label}</div>
             <div className="flex gap-1" style={{ marginTop: 6 }}>
               {['BB', 'MB', 'BSH', 'SB'].map((l, i) => (
                 <div key={l} style={{
@@ -72,7 +75,7 @@ export default async function ProfilPage({ params }: { params: Promise<{ id: str
                 }}>{l}</div>
               ))}
             </div>
-            <div className="tiny muted" style={{ marginTop: 4 }}>Mulai Berkembang (rata-rata 6 dimensi)</div>
+            <div className="tiny muted" style={{ marginTop: 4 }}>{dict.siswa.p5Detail}</div>
           </div>
         </div>
       </div>
@@ -80,7 +83,7 @@ export default async function ProfilPage({ params }: { params: Promise<{ id: str
       <div className="ai-card mb-4">
         <div className="ai-badge">
           <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-          Wani AI · Sintesis 360°
+          {dict.siswa.aiSintesisBadge}
         </div>
         <div className="ai-text">
           <strong>{student.nama.split(' ')[0]}</strong> menunjukkan pola <strong>penurunan akademik</strong> bersamaan dengan masalah keluarga. Kekuatan: <strong>empati sosial tinggi</strong>. Kelemahan: <strong>konsep abstrak Matematika</strong>. Rekomendasi: (1) sesi konseling wali, (2) peer-learning dengan Siti, (3) tutor sebaya bagi Rendra.

@@ -1,6 +1,8 @@
 import { Icon } from '@/components/Icon';
 import { Pill, StatCard, StudentAvatar } from '@/components/ui';
 import { getStudents } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 const TPS = [
   'TP-1: Konsep dasar',
@@ -16,6 +18,7 @@ function colorFor(v: number) {
 
 export default async function PenilaianPage() {
   const students = await getStudents();
+  const dict = await getDictionary();
   const grades = students.slice(0, 10).map(s => ({
     student: s,
     nilai: TPS.map((_, i) => {
@@ -28,34 +31,34 @@ export default async function PenilaianPage() {
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>Penilaian</h1>
+          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.penilaian.title}</h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-            Matematika · VIII-A · CP-MTK-8.2 Sistem Persamaan Linear · 5 TP
+            {dict.penilaian.subtitle}
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-outline"><Icon name="upload" size={14} /> Impor Quizizz</button>
-          <button className="btn btn-outline"><Icon name="download" size={14} /> Ekspor</button>
-          <button className="btn btn-primary"><Icon name="plus" size={14} /> Penilaian baru</button>
+          <button className="btn btn-outline"><Icon name="upload" size={14} /> {dict.penilaian.imporQuizizz}</button>
+          <button className="btn btn-outline"><Icon name="download" size={14} /> {dict.penilaian.ekspor}</button>
+          <button className="btn btn-primary"><Icon name="plus" size={14} /> {dict.penilaian.penilaianBaru}</button>
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label="Rerata kelas" value="78.4" foot="KKM 75 · naik 3.2" trend="up" icon="target" accent="#4F46E5" /></div>
-        <div className="col-span-3"><StatCard label="Tuntas KKM" value="84%" foot="27 dari 32 siswa" icon="check" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label="Belum tuntas" value="5" foot="perlu remedial" icon="alert" accent="#F59E0B" /></div>
-        <div className="col-span-3"><StatCard label="Tugas tertunda" value="2" foot="deadline minggu ini" icon="clipboard" accent="#EF4444" /></div>
+        <div className="col-span-3"><StatCard label={dict.penilaian.statRerataKelas} value="78.4" foot={dict.penilaian.statRerataKelasFoot} trend="up" icon="target" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.penilaian.statTuntasKkm} value="84%" foot={dict.penilaian.statTuntasKkmFoot} icon="check" accent="#10B981" /></div>
+        <div className="col-span-3"><StatCard label={dict.penilaian.statBelumTuntas} value="5" foot={dict.penilaian.statBelumTuntasFoot} icon="alert" accent="#F59E0B" /></div>
+        <div className="col-span-3"><StatCard label={dict.penilaian.statTugasTertunda} value="2" foot={dict.penilaian.statTugasTertundaFoot} icon="clipboard" accent="#EF4444" /></div>
       </div>
 
       <div className="card mb-4">
         <div className="card-title">
           <div className="seg">
-            <button className="seg-btn active">Formatif</button>
-            <button className="seg-btn">Sumatif</button>
-            <button className="seg-btn">Sikap (P5)</button>
+            <button className="seg-btn active">{dict.penilaian.tabFormatif}</button>
+            <button className="seg-btn">{dict.penilaian.tabSumatif}</button>
+            <button className="seg-btn">{dict.penilaian.tabSikap}</button>
           </div>
           <div className="flex gap-2 items-center">
-            <span className="tiny muted">Skala 0–100 · KKM 75</span>
+            <span className="tiny muted">{dict.penilaian.skalaHint}</span>
             <button className="btn btn-ghost"><Icon name="filter" size={14} /></button>
           </div>
         </div>
@@ -64,15 +67,15 @@ export default async function PenilaianPage() {
           <table className="tbl" style={{ minWidth: 800 }}>
             <thead>
               <tr>
-                <th style={{ width: 240 }}>Siswa</th>
+                <th style={{ width: 240 }}>{dict.penilaian.colSiswa}</th>
                 {TPS.map((tp, i) => (
                   <th key={i} style={{ minWidth: 110, textAlign: 'center' }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>TP-{i + 1}</div>
                     <div className="tiny" style={{ fontSize: 9, fontWeight: 500, textTransform: 'none', letterSpacing: 0, color: 'var(--color-ink-4)', marginTop: 2 }}>{tp.split(': ')[1]}</div>
                   </th>
                 ))}
-                <th style={{ minWidth: 80, textAlign: 'center' }}>Rerata</th>
-                <th style={{ minWidth: 80, textAlign: 'center' }}>Status</th>
+                <th style={{ minWidth: 80, textAlign: 'center' }}>{dict.penilaian.colRerata}</th>
+                <th style={{ minWidth: 80, textAlign: 'center' }}>{dict.penilaian.colStatus}</th>
               </tr>
             </thead>
             <tbody>
@@ -102,7 +105,7 @@ export default async function PenilaianPage() {
                       <span className="h-display" style={{ fontSize: 18, fontWeight: 600, color: colorFor(avg) }}>{avg}</span>
                     </td>
                     <td style={{ textAlign: 'center' }}>
-                      <Pill kind={avg >= 75 ? 'good' : 'bad'} dot>{avg >= 75 ? 'Tuntas' : 'Remedial'}</Pill>
+                      <Pill kind={avg >= 75 ? 'good' : 'bad'} dot>{avg >= 75 ? dict.penilaian.tuntas : dict.penilaian.remedial}</Pill>
                     </td>
                   </tr>
                 );
@@ -116,8 +119,8 @@ export default async function PenilaianPage() {
         <div className="col-span-6">
           <div className="card">
             <div className="card-title">
-              <h3>Distribusi nilai</h3>
-              <span className="sub">10 siswa · 5 TP</span>
+              <h3>{dict.penilaian.distribusiNilaiTitle}</h3>
+              <span className="sub">{dict.penilaian.distribusiNilaiSub}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 160, padding: '8px 0' }}>
               {[
@@ -142,10 +145,10 @@ export default async function PenilaianPage() {
           <div className="ai-card">
             <div className="ai-badge">
               <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-              Saran rubrik AI
+              {dict.penilaian.saranRubrikBadge}
             </div>
             <div className="ai-text">
-              <strong>TP-3 (Substitusi)</strong> menjadi titik kesulitan dengan rerata 67. Saya menyarankan rubrik 3-tingkat dengan fokus pada langkah-langkah eksplisit:
+              <strong>TP-3 (Substitusi)</strong> {interpolate(dict.penilaian.saranRubrikBody, { rerata: 67 })}
             </div>
             <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
               {[

@@ -2,35 +2,38 @@ import { Icon } from '@/components/Icon';
 import { StatCard } from '@/components/ui';
 import { KurikulumExpander } from '@/components/KurikulumExpander';
 import { getCPList } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 export default async function KurikulumPage() {
   const cps = await getCPList();
+  const dict = await getDictionary();
   return (
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>Kurikulum</h1>
+          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.kurikulum.title}</h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-            Kurikulum Merdeka · Fase D (Kelas VII–IX) · Matematika · 2025/2026
+            {dict.kurikulum.subtitle}
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-outline"><Icon name="download" size={14} /> Unduh ATP</button>
-          <button className="btn btn-primary"><Icon name="edit" size={14} /> Edit ATP</button>
+          <button className="btn btn-outline"><Icon name="download" size={14} /> {dict.kurikulum.unduhAtp}</button>
+          <button className="btn btn-primary"><Icon name="edit" size={14} /> {dict.kurikulum.editAtp}</button>
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label="Total CP" value="8" foot="Fase D · Matematika" icon="layers" accent="#4F46E5" /></div>
-        <div className="col-span-3"><StatCard label="Total TP" value="34" foot="rerata 4.2 per CP" icon="target" accent="#06B6D4" /></div>
-        <div className="col-span-3"><StatCard label="Tuntas" value="58%" foot="dari target 80% sem-2" icon="check" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label="Estimasi selesai" value="14 Jun" foot="berdasarkan tren" icon="calendar" accent="#F59E0B" /></div>
+        <div className="col-span-3"><StatCard label={dict.kurikulum.statTotalCp} value="8" foot={dict.kurikulum.statTotalCpFoot} icon="layers" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.kurikulum.statTotalTp} value="34" foot={dict.kurikulum.statTotalTpFoot} icon="target" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.kurikulum.statTuntas} value="58%" foot={dict.kurikulum.statTuntasFoot} icon="check" accent="#10B981" /></div>
+        <div className="col-span-3"><StatCard label={dict.kurikulum.statEstimasiSelesai} value="14 Jun" foot={dict.kurikulum.statEstimasiSelesaiFoot} icon="calendar" accent="#F59E0B" /></div>
       </div>
 
       <div className="card mb-4">
         <div className="card-title">
-          <h3>Roadmap semester · Alur Tujuan Pembelajaran</h3>
-          <span className="sub">Drag untuk mengubah urutan</span>
+          <h3>{dict.kurikulum.roadmapTitle}</h3>
+          <span className="sub">{dict.kurikulum.roadmapHint}</span>
         </div>
         <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
           <div style={{ display: 'flex', gap: 12, minWidth: 'max-content', position: 'relative' }}>
@@ -46,7 +49,7 @@ export default async function KurikulumPage() {
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--color-ink-3)', marginBottom: 4 }}>{cp.kode}</div>
                   <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 8, lineHeight: 1.3 }}>{cp.nama}</div>
                   <div className="flex justify-between tiny muted mb-2">
-                    <span>{cp.tp_count} TP</span>
+                    <span>{interpolate(dict.kurikulum.tpCount, { count: cp.tp_count })}</span>
                     <span style={{ fontWeight: 700, color: cp.mastered >= 80 ? 'var(--color-good)' : cp.mastered >= 50 ? 'var(--color-warn)' : 'var(--color-bad)' }}>
                       {cp.mastered}%
                     </span>
@@ -64,7 +67,7 @@ export default async function KurikulumPage() {
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-7">
           <div className="card">
-            <div className="card-title"><h3>Detail CP & Tujuan Pembelajaran</h3></div>
+            <div className="card-title"><h3>{dict.kurikulum.detailCpTitle}</h3></div>
             <KurikulumExpander cps={cps} />
           </div>
         </div>
@@ -73,21 +76,21 @@ export default async function KurikulumPage() {
           <div className="ai-card">
             <div className="ai-badge">
               <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-              Saran penyesuaian ATP
+              {dict.kurikulum.saranAtpBadge}
             </div>
             <div className="ai-text">
               Berdasarkan kemajuan kelas, saya menyarankan <strong>memindahkan CP-MTK-8.7 (Statistika)</strong> sebelum CP-MTK-8.6 — siswa lebih siap dengan konsep konkret data nyata sekolah dibanding bangun ruang abstrak. Estimasi penyelesaian membaik 9 hari.
             </div>
             <div className="flex gap-2" style={{ marginTop: 12 }}>
-              <button className="btn btn-primary"><Icon name="check" size={13} /> Terapkan saran</button>
-              <button className="btn btn-ghost">Lihat dampak</button>
+              <button className="btn btn-primary"><Icon name="check" size={13} /> {dict.kurikulum.terapkanSaran}</button>
+              <button className="btn btn-ghost">{dict.kurikulum.lihatDampak}</button>
             </div>
           </div>
 
           <div className="card">
             <div className="card-title">
-              <h3>Dimensi P5</h3>
-              <span className="sub">Profil Pelajar Pancasila</span>
+              <h3>{dict.kurikulum.p5Title}</h3>
+              <span className="sub">{dict.kurikulum.p5Sub}</span>
             </div>
             <div className="flex flex-col gap-3">
               {[

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Icon, type IconName } from '@/components/Icon';
 import { Pill, StatCard, StudentAvatar } from '@/components/ui';
 import { getStudents } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 const NOTES = [
   { id: 1, sId: 'S002', tgl: '27 Apr', kategori: 'positif' as const, icon: 'star' as IconName, text: 'Kontribusi luar biasa dalam diskusi kelompok hari ini. Membantu Bagas memahami konsep eliminasi dengan analogi yang kreatif.', tags: ['kepemimpinan', 'kolaborasi'] },
@@ -21,40 +23,41 @@ const KATEGORI_COLOR = {
 
 export default async function CatatanPage() {
   const students = await getStudents();
+  const dict = await getDictionary();
   const find = (id: string) => students.find(s => s.id === id);
 
   return (
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>Catatan Siswa</h1>
+          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.catatan.title}</h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-            Observasi anekdotal · 47 catatan bulan ini · 6 perlu tindak lanjut
+            {dict.catatan.subtitle}
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-outline"><Icon name="mic" size={14} /> Voice note</button>
-          <button className="btn btn-primary"><Icon name="plus" size={14} /> Catatan baru</button>
+          <button className="btn btn-outline"><Icon name="mic" size={14} /> {dict.catatan.voiceNote}</button>
+          <button className="btn btn-primary"><Icon name="plus" size={14} /> {dict.catatan.catatanBaru}</button>
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label="Catatan positif" value="28" foot="60% dari total" icon="star" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label="Perlu perhatian" value="6" foot="3 menunggu tindak lanjut" icon="alert" accent="#EF4444" /></div>
-        <div className="col-span-3"><StatCard label="Catatan akademik" value="9" foot="terhubung ke CP" icon="book" accent="#4F46E5" /></div>
-        <div className="col-span-3"><StatCard label="Voice notes" value="14" foot="auto-transkripsi" icon="mic" accent="#F59E0B" /></div>
+        <div className="col-span-3"><StatCard label={dict.catatan.statPositif} value="28" foot={dict.catatan.statPositifFoot} icon="star" accent="#10B981" /></div>
+        <div className="col-span-3"><StatCard label={dict.catatan.statPerhatian} value="6" foot={dict.catatan.statPerhatianFoot} icon="alert" accent="#EF4444" /></div>
+        <div className="col-span-3"><StatCard label={dict.catatan.statAkademik} value="9" foot={dict.catatan.statAkademikFoot} icon="book" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.catatan.statVoiceNotes} value="14" foot={dict.catatan.statVoiceNotesFoot} icon="mic" accent="#F59E0B" /></div>
       </div>
 
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-8">
           <div className="card">
             <div className="card-title">
-              <h3>Linimasa catatan</h3>
+              <h3>{dict.catatan.linimasaTitle}</h3>
               <div className="seg">
-                <button className="seg-btn active">Semua</button>
-                <button className="seg-btn">Positif</button>
-                <button className="seg-btn">Perhatian</button>
-                <button className="seg-btn">Akademik</button>
+                <button className="seg-btn active">{dict.catatan.semua}</button>
+                <button className="seg-btn">{dict.enums.kategori.positif}</button>
+                <button className="seg-btn">{dict.enums.kategori.perhatian}</button>
+                <button className="seg-btn">{dict.enums.kategori.akademik}</button>
               </div>
             </div>
             <div className="flex flex-col gap-3">
@@ -72,11 +75,11 @@ export default async function CatatanPage() {
                         <StudentAvatar student={s} size={32} />
                         <div>
                           <div style={{ fontWeight: 600, fontSize: 13.5 }}>{s.nama}</div>
-                          <div className="tiny muted">{s.kelas} · {n.tgl} 2026</div>
+                          <div className="tiny muted">{s.kelas} · {interpolate(dict.catatan.tanggalTahun, { tgl: n.tgl })}</div>
                         </div>
                       </Link>
                       <span style={{ fontSize: 11, fontWeight: 700, color: c.text, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        <Icon name={n.icon} size={12} style={{ verticalAlign: 'middle' }} /> {n.kategori}
+                        <Icon name={n.icon} size={12} style={{ verticalAlign: 'middle' }} /> {dict.enums.kategori[n.kategori]}
                       </span>
                     </div>
                     <div style={{ fontSize: 13.5, lineHeight: 1.55, color: 'var(--color-ink-2)' }}>{n.text}</div>
@@ -96,7 +99,7 @@ export default async function CatatanPage() {
           <div className="ai-card">
             <div className="ai-badge">
               <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-              Sintesis AI
+              {dict.catatan.sintesisBadge}
             </div>
             <div className="ai-text">
               Dari 47 catatan bulan ini, pola yang muncul: <strong>Siti Nurhaliza</strong> tampil sebagai pemimpin kelompok alami, dan <strong>3 siswa</strong> butuh bantuan diferensiasi dengan media konkret untuk konsep abstrak.
@@ -105,7 +108,7 @@ export default async function CatatanPage() {
 
           <div className="card">
             <div className="card-title">
-              <h3>Tindak lanjut tertunda</h3>
+              <h3>{dict.catatan.tindakLanjutTitle}</h3>
               <Pill kind="bad" dot>3</Pill>
             </div>
             <div className="flex flex-col gap-2">
@@ -123,7 +126,7 @@ export default async function CatatanPage() {
                       <div className="small" style={{ fontWeight: 600 }}>{s.nama.split(' ')[0]}</div>
                       <div className="tiny muted">{t.action}</div>
                     </div>
-                    {t.urgent && <Pill kind="bad" dot>Hari ini</Pill>}
+                    {t.urgent && <Pill kind="bad" dot>{dict.catatan.hariIni}</Pill>}
                   </div>
                 );
               })}

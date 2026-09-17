@@ -3,6 +3,8 @@ import { Icon, type IconName } from '@/components/Icon';
 import { Pill, StatCard, Sparkline, StudentAvatar } from '@/components/ui';
 import { HeatmapClient } from '@/components/HeatmapClient';
 import { getStudents, getCPList, getMapel, getHeatmap } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 const KELAS_LIST = ['VII-A', 'VII-B', 'VIII-A', 'VIII-B', 'IX-A'];
 
@@ -10,6 +12,7 @@ export default async function AnalyticsPage() {
   const [students, cps, mapel, heatmap] = await Promise.all([
     getStudents(), getCPList(), getMapel(), getHeatmap(),
   ]);
+  const dict = await getDictionary();
 
   const mapelKeyMap: Record<string, keyof typeof students[0]> = {
     MTK: 'cp_matematika', IPA: 'cp_ipa', IPS: 'cp_ips',
@@ -20,9 +23,9 @@ export default async function AnalyticsPage() {
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>Analitik Pembelajaran</h1>
+          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.analytics.title}</h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-            Profil 360° · Gap analysis baseline → aktual → target · Prediksi risiko
+            {dict.analytics.subtitle}
           </div>
         </div>
         <div className="flex gap-2 items-center">
@@ -31,25 +34,25 @@ export default async function AnalyticsPage() {
               <button key={k} className={`seg-btn ${k === 'VIII-A' ? 'active' : ''}`}>{k}</button>
             ))}
           </div>
-          <button className="btn btn-outline"><Icon name="download" size={14} /> Ekspor</button>
+          <button className="btn btn-outline"><Icon name="download" size={14} /> {dict.analytics.ekspor}</button>
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label="Tuntas Capaian (CP)" value="58%" foot="dari 8 CP semester ini" trend="up" icon="target" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label="Gap Belajar Terbesar" value="Statistika" foot="hanya 22% tuntas TP-3" icon="alert" accent="#F59E0B" /></div>
-        <div className="col-span-3"><StatCard label="Siswa Berisiko Tinggi" value="3" foot="prediksi tidak tuntas semester" icon="flame" accent="#EF4444" /></div>
-        <div className="col-span-3"><StatCard label="Skor Diferensiasi" value="A−" foot="strategi Anda efektif" trend="up" icon="star" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.analytics.statCpTuntas} value="58%" foot={dict.analytics.statCpTuntasFoot} trend="up" icon="target" accent="#10B981" /></div>
+        <div className="col-span-3"><StatCard label={dict.analytics.statGapTerbesar} value="Statistika" foot={dict.analytics.statGapTerbesarFoot} icon="alert" accent="#F59E0B" /></div>
+        <div className="col-span-3"><StatCard label={dict.analytics.statBerisikoTinggi} value="3" foot={dict.analytics.statBerisikoTinggiFoot} icon="flame" accent="#EF4444" /></div>
+        <div className="col-span-3"><StatCard label={dict.analytics.statDiferensiasi} value="A−" foot={dict.analytics.statDiferensiasiFoot} trend="up" icon="star" accent="#4F46E5" /></div>
       </div>
 
       <div className="card mb-4">
         <div className="card-title">
           <div>
-            <h3>Heatmap Penguasaan CP · VIII-A</h3>
-            <div className="muted small" style={{ marginTop: 2 }}>Hover sel untuk detail · Skala 0 (belum dinilai) → 5 (mahir)</div>
+            <h3>{dict.analytics.heatmapTitle}</h3>
+            <div className="muted small" style={{ marginTop: 2 }}>{dict.analytics.heatmapHint}</div>
           </div>
           <div className="flex gap-1 tiny muted items-center">
-            <span>Skala:</span>
+            <span>{dict.analytics.heatmapScale}</span>
             {[0, 1, 2, 3, 4, 5].map(v => (
               <div key={v} className={`heat-${v}`} style={{ width: 18, height: 18, borderRadius: 3, fontSize: 9, display: 'grid', placeItems: 'center', fontWeight: 700 }}>{v}</div>
             ))}
@@ -62,15 +65,15 @@ export default async function AnalyticsPage() {
         <div className="col-span-7">
           <div className="card">
             <div className="card-title">
-              <h3>Gap Analysis · Penguasaan vs Target</h3>
-              <span className="sub">Target tuntas: 80% per CP</span>
+              <h3>{dict.analytics.gapAnalysisTitle}</h3>
+              <span className="sub">{dict.analytics.gapAnalysisSub}</span>
             </div>
             <div className="flex flex-col gap-1">
               {cps.map(cp => (
                 <div key={cp.kode} className="bar-row">
                   <div>
                     <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--color-ink)' }}>{cp.nama}</div>
-                    <div className="tiny muted">{cp.kode} · {cp.tp_count} TP</div>
+                    <div className="tiny muted">{cp.kode} · {interpolate(dict.analytics.tpCount, { count: cp.tp_count })}</div>
                   </div>
                   <div className="bar-track" style={{ position: 'relative' }}>
                     <div className="bar-fill" style={{
@@ -79,7 +82,7 @@ export default async function AnalyticsPage() {
                         : cp.mastered >= 50 ? 'linear-gradient(90deg, #F59E0B, #FCD34D)'
                         : 'linear-gradient(90deg, #EF4444, #F87171)',
                     }} />
-                    <div title="Target 80%" style={{ position: 'absolute', left: '80%', top: -3, bottom: -3, width: 2, background: 'var(--color-ink-3)', borderRadius: 1 }} />
+                    <div title={dict.analytics.targetTitle} style={{ position: 'absolute', left: '80%', top: -3, bottom: -3, width: 2, background: 'var(--color-ink-3)', borderRadius: 1 }} />
                   </div>
                   <div style={{ textAlign: 'right', fontWeight: 700, fontSize: 13, color: cp.mastered >= 80 ? 'var(--color-good)' : cp.mastered >= 50 ? 'var(--color-warn)' : 'var(--color-bad)' }}>
                     {cp.mastered}%
@@ -106,7 +109,7 @@ export default async function AnalyticsPage() {
                 <span className="ai-glyph" style={{ background: ins.type === 'risk' ? 'var(--color-bad)' : ins.type === 'win' ? 'var(--color-good)' : 'var(--color-warn)' }}>
                   <Icon name={ins.type === 'risk' ? 'alert' : ins.type === 'win' ? 'star' : 'sparkle'} size={10} />
                 </span>
-                {ins.type === 'risk' ? 'Peringatan' : ins.type === 'win' ? 'Pencapaian' : 'Rekomendasi'}
+                {ins.type === 'risk' ? dict.analytics.insightBadge.risk : ins.type === 'win' ? dict.analytics.insightBadge.win : dict.analytics.insightBadge.gap}
               </div>
               <div style={{ fontWeight: 600, fontSize: 13.5, color: 'var(--color-ink)', marginBottom: 6 }}>{ins.title}</div>
               <div className="ai-text" style={{ fontSize: 12.5, color: 'var(--color-ink-2)' }}>{ins.body}</div>
@@ -122,8 +125,8 @@ export default async function AnalyticsPage() {
         <div className="col-span-7">
           <div className="card">
             <div className="card-title">
-              <h3>Profil mata pelajaran · Rerata kelas VIII-A</h3>
-              <button className="btn btn-ghost small">Detail</button>
+              <h3>{dict.analytics.mapelProfilTitle}</h3>
+              <button className="btn btn-ghost small">{dict.analytics.detail}</button>
             </div>
             <div className="grid grid-cols-3 gap-4">
               {mapel.map(m => {
@@ -156,8 +159,8 @@ export default async function AnalyticsPage() {
         <div className="col-span-5">
           <div className="card">
             <div className="card-title">
-              <h3>Prediksi risiko semester</h3>
-              <span className="sub">Berdasarkan tren 6 minggu</span>
+              <h3>{dict.analytics.prediksiRisikoTitle}</h3>
+              <span className="sub">{dict.analytics.prediksiRisikoSub}</span>
             </div>
             <div className="flex flex-col gap-3">
               {students.filter(s => s.risiko !== 'rendah').map(s => (
@@ -168,12 +171,12 @@ export default async function AnalyticsPage() {
                   <StudentAvatar student={s} size={36} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 600, fontSize: 13.5 }}>{s.nama}</div>
-                    <div className="tiny muted">Rerata {s.rerata} · Hadir {s.kehadiran}%</div>
+                    <div className="tiny muted">{interpolate(dict.analytics.rerataHadir, { rerata: s.rerata, kehadiran: s.kehadiran })}</div>
                   </div>
                   <div style={{ width: 80 }}>
                     <Sparkline data={[80, 76, 72, 68, 65, s.rerata]} color={s.risiko === 'tinggi' ? '#EF4444' : '#F59E0B'} />
                   </div>
-                  <Pill kind={s.risiko === 'tinggi' ? 'bad' : 'warn'} dot>{s.risiko}</Pill>
+                  <Pill kind={s.risiko === 'tinggi' ? 'bad' : 'warn'} dot>{dict.enums.risiko[s.risiko]}</Pill>
                 </Link>
               ))}
             </div>

@@ -1,6 +1,8 @@
 import { Icon } from '@/components/Icon';
 import { Pill, StatCard } from '@/components/ui';
 import { QuickInputButton } from '@/components/QuickInputButton';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 const JOURNALS = [
   { id: 1, tgl: '27 Apr 2026', hari: 'Senin', jam: '07.00–08.20', mapel: 'Matematika', kelas: 'VIII-A', topic: 'Sistem Persamaan Linear Dua Variabel · Pertemuan 3', metode: 'Diskusi kelompok', cp: 'CP-MTK-8.2', hadir: 30, total: 32, mood: 'good' as const, notes: 'Diskusi kelompok berjalan baik. Bagas mulai aktif bertanya. Perlu lebih banyak contoh kontekstual untuk konsep eliminasi.' },
@@ -11,41 +13,42 @@ const JOURNALS = [
 ];
 
 const MOOD_COLOR = { good: 'var(--color-good)', ok: 'var(--color-warn)', bad: 'var(--color-bad)' };
-const MOOD_LABEL = { good: 'Lancar', ok: 'Cukup', bad: 'Perlu evaluasi' };
 
-export default function JurnalPage() {
+export default async function JurnalPage() {
+  const dict = await getDictionary();
+  const MOOD_LABEL = dict.jurnal.moodLabel;
   return (
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>Jurnal Harian</h1>
+          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.jurnal.title}</h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-            Catatan KBM · 47 entri semester ini · 4 menunggu refleksi
+            {dict.jurnal.subtitle}
           </div>
         </div>
         <div className="flex gap-2">
           <div className="seg">
-            <button className="seg-btn active">Timeline</button>
-            <button className="seg-btn">Kalender</button>
+            <button className="seg-btn active">{dict.jurnal.timeline}</button>
+            <button className="seg-btn">{dict.jurnal.kalender}</button>
           </div>
-          <QuickInputButton primary><Icon name="plus" size={14} /> Jurnal baru</QuickInputButton>
+          <QuickInputButton primary><Icon name="plus" size={14} /> {dict.jurnal.jurnalBaru}</QuickInputButton>
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label="Entri minggu ini" value="12" foot="dari 14 jadwal" trend="up" icon="clipboard" accent="#4F46E5" /></div>
-        <div className="col-span-3"><StatCard label="Konsistensi" value="89%" foot="naik 12% bulan ini" trend="up" icon="target" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label="Refleksi tertulis" value="34" foot="dari 47 entri" icon="fileText" accent="#06B6D4" /></div>
-        <div className="col-span-3"><StatCard label="Catatan AI" value="8" foot="pola tindak lanjut" icon="sparkle" accent="#F59E0B" /></div>
+        <div className="col-span-3"><StatCard label={dict.jurnal.statEntriMinggu} value="12" foot={dict.jurnal.statEntriMingguFoot} trend="up" icon="clipboard" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.jurnal.statKonsistensi} value="89%" foot={dict.jurnal.statKonsistensiFoot} trend="up" icon="target" accent="#10B981" /></div>
+        <div className="col-span-3"><StatCard label={dict.jurnal.statRefleksi} value="34" foot={dict.jurnal.statRefleksiFoot} icon="fileText" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.jurnal.statCatatanAi} value="8" foot={dict.jurnal.statCatatanAiFoot} icon="sparkle" accent="#F59E0B" /></div>
       </div>
 
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-8">
           <div className="card">
             <div className="card-title">
-              <h3>Entri terbaru</h3>
+              <h3>{dict.jurnal.entriTerbaru}</h3>
               <div className="seg">
-                <button className="seg-btn active">Semua</button>
+                <button className="seg-btn active">{dict.jurnal.semua}</button>
                 <button className="seg-btn">VIII-A</button>
                 <button className="seg-btn">VIII-B</button>
                 <button className="seg-btn">IX-A</button>
@@ -72,7 +75,7 @@ export default function JurnalPage() {
                     <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>{j.topic}</div>
                     <div className="small muted" style={{ marginBottom: 8 }}>{j.notes}</div>
                     <div className="flex gap-3 tiny muted">
-                      <span><Icon name="users" size={12} style={{ verticalAlign: 'middle' }} /> {j.hadir}/{j.total} hadir</span>
+                      <span><Icon name="users" size={12} style={{ verticalAlign: 'middle' }} /> {interpolate(dict.jurnal.hadirCount, { hadir: j.hadir, total: j.total })}</span>
                       <span><Icon name="layers" size={12} style={{ verticalAlign: 'middle' }} /> {j.metode}</span>
                       <span style={{ color: MOOD_COLOR[j.mood], fontWeight: 600 }}>● {MOOD_LABEL[j.mood]}</span>
                     </div>
@@ -87,7 +90,7 @@ export default function JurnalPage() {
           <div className="ai-card">
             <div className="ai-badge">
               <span className="ai-glyph"><Icon name="sparkle" size={11} /></span>
-              Pola dari jurnal Anda
+              {dict.jurnal.polaTitle}
             </div>
             <div className="ai-text">
               <strong>Diskusi kelompok</strong> menghasilkan tingkat kehadiran 4% lebih tinggi dan refleksi siswa yang lebih dalam dibandingkan ekspositori. Pertimbangkan untuk meningkatkan frekuensi metode ini di kelas VIII-B.
@@ -96,8 +99,8 @@ export default function JurnalPage() {
 
           <div className="card">
             <div className="card-title">
-              <h3>Distribusi metode</h3>
-              <span className="sub">30 hari</span>
+              <h3>{dict.jurnal.distribusiMetodeTitle}</h3>
+              <span className="sub">{dict.jurnal.distribusiMetode30Hari}</span>
             </div>
             <div className="flex flex-col gap-2">
               {[
