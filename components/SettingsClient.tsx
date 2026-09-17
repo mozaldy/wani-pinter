@@ -6,6 +6,7 @@ import { Pill } from '@/components/ui';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { locales } from '@/lib/i18n/config';
 import { setLocale } from '@/lib/i18n/actions';
+import { interpolate } from '@/lib/i18n/format';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 
 type TabId = keyof Dictionary['settings']['tabs'];
@@ -322,10 +323,10 @@ function IntegrasiTab() {
   );
 }
 
-const PLANS: { id: keyof Dictionary['settings']['tagihan']['plans']; price: string; cur: boolean }[] = [
-  { id: 'dasar', price: 'Gratis', cur: false },
-  { id: 'sekolah', price: 'Rp 12.000/siswa/bulan', cur: true },
-  { id: 'yayasan', price: 'Custom', cur: false },
+const PLANS: { id: keyof Dictionary['settings']['tagihan']['plans']; cur: boolean }[] = [
+  { id: 'dasar', cur: false },
+  { id: 'sekolah', cur: true },
+  { id: 'yayasan', cur: false },
 ];
 
 function TagihanTab() {
@@ -341,9 +342,9 @@ function TagihanTab() {
             <div style={{ fontWeight: 600, fontSize: 15 }}>SDN 1 Keputran Surabaya</div>
             <div className="tiny muted">NPSN: 20403108 · Akreditasi A · Surabaya, JATIM</div>
             <div className="flex gap-2" style={{ marginTop: 8 }}>
-              <Pill kind="primary">156 siswa</Pill>
-              <Pill kind="ink">24 guru</Pill>
-              <Pill kind="accent">6 kelas</Pill>
+              <Pill kind="primary">{interpolate(t.stats.students, { count: 156 })}</Pill>
+              <Pill kind="ink">{interpolate(t.stats.teachers, { count: 24 })}</Pill>
+              <Pill kind="accent">{interpolate(t.stats.classes, { count: 6 })}</Pill>
             </div>
           </div>
         </div>
@@ -355,6 +356,7 @@ function TagihanTab() {
           {PLANS.map(p => {
             const plan = t.plans[p.id];
             const features = Object.values(plan.features);
+            const price = interpolate(plan.price, { amount: 'Rp 12.000' });
             return (
               <div key={p.id} style={{
                 padding: 16, border: p.cur ? '2px solid var(--color-primary)' : '1px solid var(--color-line)',
@@ -362,7 +364,7 @@ function TagihanTab() {
               }}>
                 {p.cur && <div style={{ position: 'absolute', top: -10, left: 16, background: 'var(--color-primary)', color: 'white', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 999 }}>{t.currentPlanBadge}</div>}
                 <div className="h-display" style={{ fontSize: 18, fontWeight: 600 }}>{plan.name}</div>
-                <div className="small muted mb-3">{p.price}</div>
+                <div className="small muted mb-3">{price}</div>
                 <ul style={{ paddingLeft: 16, fontSize: 12.5, lineHeight: 1.8, color: 'var(--color-ink-2)' }}>
                   {features.map((x, i) => <li key={i}>{x}</li>)}
                 </ul>

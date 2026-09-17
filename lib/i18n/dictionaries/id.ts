@@ -221,15 +221,20 @@ export const id = {
     },
     tagihan: {
       schoolTitle: 'Sekolah',
+      stats: {
+        students: '{count} siswa',
+        teachers: '{count} guru',
+        classes: '{count} kelas',
+      },
       subscriptionTitle: 'Paket berlangganan',
       active: 'Aktif',
       currentPlanBadge: 'PAKET ANDA',
       contactSales: 'Hubungi sales',
       choosePlan: 'Pilih',
       plans: {
-        dasar: { name: 'Dasar', features: { oneClass: '1 kelas', journal: 'Jurnal & presensi', basicReport: 'Laporan dasar' } },
-        sekolah: { name: 'Sekolah', features: { allClasses: 'Semua kelas', aiSummary: 'Wani AI ringkasan', dapodikIntegration: 'Integrasi Dapodik', sharedBank: 'Bank soal kolaboratif' } },
-        yayasan: { name: 'Yayasan', features: { multiSchool: 'Multi-sekolah', supervisorDashboard: 'Dasbor pengawas', apiSso: 'API & SSO kustom', prioritySupport: 'Dukungan prioritas' } },
+        dasar: { name: 'Dasar', price: 'Gratis', features: { oneClass: '1 kelas', journal: 'Jurnal & presensi', basicReport: 'Laporan dasar' } },
+        sekolah: { name: 'Sekolah', price: '{amount}/siswa/bulan', features: { allClasses: 'Semua kelas', aiSummary: 'Wani AI ringkasan', dapodikIntegration: 'Integrasi Dapodik', sharedBank: 'Bank soal kolaboratif' } },
+        yayasan: { name: 'Yayasan', price: 'Custom', features: { multiSchool: 'Multi-sekolah', supervisorDashboard: 'Dasbor pengawas', apiSso: 'API & SSO kustom', prioritySupport: 'Dukungan prioritas' } },
       },
     },
   },

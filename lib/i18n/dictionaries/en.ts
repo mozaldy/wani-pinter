@@ -223,15 +223,20 @@ export const en: Dictionary = {
     },
     tagihan: {
       schoolTitle: 'School',
+      stats: {
+        students: '{count} students',
+        teachers: '{count} teachers',
+        classes: '{count} classes',
+      },
       subscriptionTitle: 'Subscription plan',
       active: 'Active',
       currentPlanBadge: 'YOUR PLAN',
       contactSales: 'Contact sales',
       choosePlan: 'Choose',
       plans: {
-        dasar: { name: 'Basic', features: { oneClass: '1 class', journal: 'Journal & attendance', basicReport: 'Basic reports' } },
-        sekolah: { name: 'School', features: { allClasses: 'All classes', aiSummary: 'Wani AI summaries', dapodikIntegration: 'Dapodik integration', sharedBank: 'Collaborative question bank' } },
-        yayasan: { name: 'Foundation', features: { multiSchool: 'Multi-school', supervisorDashboard: 'Supervisor dashboard', apiSso: 'Custom API & SSO', prioritySupport: 'Priority support' } },
+        dasar: { name: 'Basic', price: 'Free', features: { oneClass: '1 class', journal: 'Journal & attendance', basicReport: 'Basic reports' } },
+        sekolah: { name: 'School', price: '{amount}/student/month', features: { allClasses: 'All classes', aiSummary: 'Wani AI summaries', dapodikIntegration: 'Dapodik integration', sharedBank: 'Collaborative question bank' } },
+        yayasan: { name: 'Foundation', price: 'Custom', features: { multiSchool: 'Multi-school', supervisorDashboard: 'Supervisor dashboard', apiSso: 'Custom API & SSO', prioritySupport: 'Priority support' } },
       },
     },
   },
