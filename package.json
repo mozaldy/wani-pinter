@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx db/seed.ts",
-    "rpp:check": "tsx lib/rpp.check.ts"
+    "rpp:check": "tsx lib/rpp.check.ts",
+    "i18n:check": "tsx lib/i18n/i18n.check.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
