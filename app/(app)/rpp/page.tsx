@@ -4,17 +4,21 @@ import { getRppList, getMapel } from '@/lib/queries';
 import { CreateRppForm } from '@/components/rpp/CreateRppForm';
 import { Pill } from '@/components/ui';
 import { Icon } from '@/components/Icon';
+import { getDictionary, getLocale } from '@/lib/i18n/server';
+import { interpolate, formatDate } from '@/lib/i18n/format';
 
 export default async function RppPage() {
   const user = await requireTeacher();
   const [list, mapel] = await Promise.all([getRppList(user.userId), getMapel()]);
+  const dict = await getDictionary();
+  const locale = await getLocale();
 
   return (
     <div className="screen-enter">
       <div className="mb-6">
-        <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>RPP / Modul Ajar</h1>
+        <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.rpp.list.title}</h1>
         <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-          Kerangka Pembelajaran Mendalam · Kemendikdasmen
+          {dict.rpp.list.subtitle}
         </div>
       </div>
 
@@ -26,13 +30,13 @@ export default async function RppPage() {
         <div className="col-span-5">
           <div className="card">
             <div className="card-title">
-              <h3>Tersimpan</h3>
-              <span className="sub">{list.length} modul</span>
+              <h3>{dict.rpp.list.savedTitle}</h3>
+              <span className="sub">{interpolate(dict.rpp.list.savedCount, { count: list.length })}</span>
             </div>
 
             {list.length === 0 ? (
               <div className="muted small" style={{ padding: '24px 0', textAlign: 'center' }}>
-                Belum ada modul ajar. Isi formulir di samping untuk membuat yang pertama.
+                {dict.rpp.list.emptyState}
               </div>
             ) : (
               <div className="flex flex-col gap-2">
@@ -43,7 +47,11 @@ export default async function RppPage() {
                       <div style={{ minWidth: 0 }}>
                         <div style={{ fontWeight: 600, fontSize: 13.5 }}>{r.judul}</div>
                         <div className="tiny muted" style={{ marginTop: 3 }}>
-                          {r.mapel} · Kelas {r.kelas} · diubah {new Date(r.updated_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                          {interpolate(dict.rpp.list.meta, {
+                            mapel: r.mapel,
+                            kelas: r.kelas,
+                            date: formatDate(r.updated_at, locale, { day: 'numeric', month: 'short' }),
+                          })}
                         </div>
                       </div>
                       <Pill kind={r.pertemuan_terisi === r.pertemuan_total ? 'good' : 'warn'}>
@@ -57,11 +65,9 @@ export default async function RppPage() {
           </div>
 
           <div className="ai-card" style={{ marginTop: 16 }}>
-            <div className="ai-badge"><span className="ai-glyph"><Icon name="sparkle" size={11} /></span> Cara kerja</div>
+            <div className="ai-badge"><span className="ai-glyph"><Icon name="sparkle" size={11} /></span> {dict.rpp.list.howItWorks}</div>
             <div className="ai-text small">
-              AI menyusun kerangka lebih dulu — identifikasi murid, tujuan, indikator, dan rute pertemuan.
-              Langkah tiap pertemuan disusun belakangan, satu per satu, agar Anda bisa mengoreksi arah
-              sebelum isinya diperinci. Semua bagian dapat Anda ubah sendiri atau lewat perintah ke AI.
+              {dict.rpp.list.howItWorksBody}
             </div>
           </div>
         </div>
