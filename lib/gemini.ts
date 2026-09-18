@@ -1,4 +1,4 @@
-const MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
+const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 // Total wall-clock budget for one generation, retries included. A teacher is
@@ -18,7 +18,11 @@ export async function generateJson<T>(prompt: string, schema: object): Promise<T
 
   const body = JSON.stringify({
     contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: { responseMimeType: 'application/json', responseSchema: schema },
+    generationConfig: {
+      responseMimeType: 'application/json',
+      responseSchema: schema,
+      thinkingConfig: { thinkingLevel: 'high' },
+    },
   });
 
   const deadline = Date.now() + BUDGET_MS;
