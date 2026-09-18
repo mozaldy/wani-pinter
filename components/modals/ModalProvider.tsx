@@ -7,6 +7,7 @@ import { RaporGenerator } from './RaporGenerator';
 import { ModeKelas } from './ModeKelas';
 import { StudentDetail } from './StudentDetail';
 import { Toast } from './Toast';
+import { useI18n } from '@/lib/i18n/I18nProvider';
 
 type ToastItem = { id: number; msg: string; kind?: 'good' | 'warn' };
 
@@ -30,6 +31,7 @@ export function useModals() {
 }
 
 export function ModalProvider({ children, insights, students }: { children: ReactNode; insights: AIInsight[]; students: Student[] }) {
+  const { dict } = useI18n();
   const [inputOpen, setInputOpen] = useState(false);
   const [aiOpen, setAIOpen] = useState(false);
   const [raporStudent, setRaporStudent] = useState<Student | null>(null);
@@ -45,9 +47,9 @@ export function ModalProvider({ children, insights, students }: { children: Reac
 
   const handleSubmitInput = useCallback(() => {
     setInputOpen(false);
-    pushToast('Jurnal mengajar VIII-B tersimpan', 'good');
-    setTimeout(() => pushToast('Wani AI memperbarui ringkasan kelas', 'good'), 1200);
-  }, [pushToast]);
+    pushToast(dict.modals.quickInput.toastJurnalTersimpan, 'good');
+    setTimeout(() => pushToast(dict.modals.quickInput.toastRingkasanDiperbarui, 'good'), 1200);
+  }, [pushToast, dict]);
 
   return (
     <ModalContext.Provider value={{

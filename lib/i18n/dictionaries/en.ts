@@ -683,6 +683,8 @@ export const en: Dictionary = {
       merekamHint: '● Recording... tap again to stop',
       aiMenyarankan: 'AI suggests',
       tagOtomatis: 'Automatic tags:',
+      toastJurnalTersimpan: 'VIII-B teaching journal saved',
+      toastRingkasanDiperbarui: 'Wani AI updated the class summary',
     },
     modeKelas: {
       headerTitle: 'Classroom Mode Active · VIII-B Mathematics',

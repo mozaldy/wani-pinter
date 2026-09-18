@@ -681,6 +681,8 @@ export const id = {
       merekamHint: '● Merekam... ketuk lagi untuk berhenti',
       aiMenyarankan: 'AI menyarankan',
       tagOtomatis: 'Tag otomatis:',
+      toastJurnalTersimpan: 'Jurnal mengajar VIII-B tersimpan',
+      toastRingkasanDiperbarui: 'Wani AI memperbarui ringkasan kelas',
     },
     modeKelas: {
       headerTitle: 'Mode Kelas Aktif · VIII-B Matematika',
