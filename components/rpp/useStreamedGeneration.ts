@@ -34,6 +34,7 @@ export function useStreamedGeneration<T = Record<string, unknown>>() {
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buf = '';
+      let terminal = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -54,13 +55,24 @@ export function useStreamedGeneration<T = Record<string, unknown>>() {
             setPhase('streaming');
             setChars(evt.chars);
           } else if (evt.type === 'done') {
+            terminal = true;
             setPhase('done');
             setResult(evt as unknown as T);
           } else if (evt.type === 'error') {
+            terminal = true;
             setPhase('error');
             setError(evt.message);
           }
         }
+      }
+
+      // The stream ended without ever sending a 'done' or 'error' event —
+      // e.g. a serverless function's execution cap silently killed the
+      // connection mid-stream. Without this, `phase` would stay stuck at
+      // 'thinking'/'streaming' forever with no way for the UI to recover.
+      if (!terminal) {
+        setPhase('error');
+        setError('Koneksi berhenti sebelum selesai. Coba lagi.');
       }
     } catch (e) {
       setPhase('error');

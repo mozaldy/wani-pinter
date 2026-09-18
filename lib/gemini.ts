@@ -5,10 +5,14 @@ const STREAM_ENDPOINT = `${BASE}:streamGenerateContent?alt=sse`;
 
 // Total wall-clock budget for one generation, retries included. A teacher is
 // watching a spinner: better to fail with a clear message than to keep retrying
-// a service that is refusing us. With thinking-mode generation, responses can run
-// well past initial estimates, and streaming makes the wait visible; budget is set
-// generously to give generation time to complete.
-const BUDGET_MS = 180_000;
+// a service that is refusing us.
+//
+// Streaming gets a larger budget than a single non-streaming call: with
+// thinking-mode generation, the model can take a while before the first
+// output token, and the streaming UI keeps the wait visible to the teacher
+// the whole time, so it's worth waiting longer for it to complete.
+const BUDGET_MS = 90_000;
+const STREAM_BUDGET_MS = 180_000;
 
 const BUSY = new Set([429, 500, 503]);
 
@@ -23,12 +27,12 @@ function buildBody(prompt: string, schema: object): string {
   });
 }
 
-/** Opens `endpoint`, retrying while Gemini is busy, within `BUDGET_MS` total. */
-async function openWithRetry(endpoint: string, body: string): Promise<Response> {
+/** Opens `endpoint`, retrying while Gemini is busy, within `budgetMs` total. */
+async function openWithRetry(endpoint: string, body: string, budgetMs: number): Promise<Response> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error('GEMINI_API_KEY is not set');
 
-  const deadline = Date.now() + BUDGET_MS;
+  const deadline = Date.now() + budgetMs;
   let res: Response | undefined;
   let attempt = 0;
 
@@ -55,7 +59,7 @@ async function openWithRetry(endpoint: string, body: string): Promise<Response> 
     await new Promise(r => setTimeout(r, backoff));
   }
 
-  if (!res) throw new Error(`Layanan AI (${MODEL}) tidak merespons dalam ${BUDGET_MS / 1000} detik. Coba lagi.`);
+  if (!res) throw new Error(`Layanan AI (${MODEL}) tidak merespons dalam ${budgetMs / 1000} detik. Coba lagi.`);
 
   if (!res.ok) {
     const detail = (await res.text()).slice(0, 400);
@@ -73,7 +77,7 @@ async function openWithRetry(endpoint: string, body: string): Promise<Response> 
  * so the returned object is structurally guaranteed — no runtime validator needed.
  */
 export async function generateJson<T>(prompt: string, schema: object): Promise<T> {
-  const res = await openWithRetry(GENERATE_ENDPOINT, buildBody(prompt, schema));
+  const res = await openWithRetry(GENERATE_ENDPOINT, buildBody(prompt, schema), BUDGET_MS);
   const data = await res.json();
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error(`Gemini tidak mengembalikan isi (finishReason: ${data?.candidates?.[0]?.finishReason ?? 'unknown'})`);
@@ -87,7 +91,7 @@ export async function generateJson<T>(prompt: string, schema: object): Promise<T
  * detection) before parsing the final concatenated text.
  */
 export async function* streamJson(prompt: string, schema: object): AsyncGenerator<string> {
-  const res = await openWithRetry(STREAM_ENDPOINT, buildBody(prompt, schema));
+  const res = await openWithRetry(STREAM_ENDPOINT, buildBody(prompt, schema), STREAM_BUDGET_MS);
   const body = res.body;
   if (!body) throw new Error('Gemini tidak mengembalikan aliran data');
 
@@ -109,13 +113,17 @@ export async function* streamJson(prompt: string, schema: object): AsyncGenerato
           const payload = line.slice(5).trim();
           if (!payload) continue;
           const chunk = JSON.parse(payload);
+          // Only the first content part is read. Safe only because
+          // thinkingConfig never sets `includeThoughts` — if that's ever
+          // turned on, a "thought" part could appear before the answer part
+          // and this would need to pick the right part instead of [0].
           const text = chunk?.candidates?.[0]?.content?.parts?.[0]?.text;
           if (text) yield text;
         }
       }
     }
   } catch (e) {
-    if (e instanceof Error && e.name === 'AbortError') {
+    if (e instanceof Error && (e.name === 'AbortError' || e.name === 'TimeoutError')) {
       throw new Error(`Layanan AI (${MODEL}) berhenti merespons sebelum selesai. Coba lagi.`);
     }
     throw e;

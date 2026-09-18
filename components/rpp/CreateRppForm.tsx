@@ -87,7 +87,10 @@ export function CreateRppForm({ mapel, jabatan }: { mapel: string[]; jabatan: st
   const { start, phase, stages, error, result } = useStreamedGeneration<{ id: string }>();
   const mapelList = Array.from(new Set([...mapel, ...DEFAULT_MAPEL]));
   const mapelDefault = mapelList.find(m => jabatan.toLowerCase().includes(m.toLowerCase())) ?? mapelList[0] ?? '';
-  const pending = phase === 'thinking' || phase === 'streaming';
+  // Stay disabled through 'done' too — the useEffect below is still
+  // navigating (server render + DB fetch, not instant); re-enabling here
+  // would let a second click fire another insertRpp before the redirect lands.
+  const pending = phase === 'thinking' || phase === 'streaming' || phase === 'done';
 
   useEffect(() => {
     if (phase === 'done' && result?.id) router.push(`/rpp/${result.id}`);

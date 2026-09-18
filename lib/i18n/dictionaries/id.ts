@@ -347,6 +347,7 @@ export const id = {
     pertemuanTidakAda: 'Pertemuan {no} tidak ada dalam rute',
     bagianTidakDikenal: 'Bagian tidak dikenal: {key}',
     instruksiWajibDiisi: 'Tulis dulu perubahan yang Anda inginkan',
+    gagalMembacaHasilAi: 'Gagal membaca hasil dari AI. Coba lagi.',
   },
   dashboard: {
     greeting: 'Selamat pagi, Bu Sari ☀️',

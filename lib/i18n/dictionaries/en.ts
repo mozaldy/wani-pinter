@@ -349,6 +349,7 @@ export const en: Dictionary = {
     pertemuanTidakAda: 'Session {no} is not in the route',
     bagianTidakDikenal: 'Unknown section: {key}',
     instruksiWajibDiisi: 'Write the change you want first',
+    gagalMembacaHasilAi: 'Failed to read the AI result. Try again.',
   },
   dashboard: {
     greeting: 'Good morning, Bu Sari ☀️',

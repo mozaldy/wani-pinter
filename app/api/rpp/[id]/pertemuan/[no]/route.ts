@@ -12,6 +12,8 @@ type DoneEvent = { type: 'done'; pertemuan: Pertemuan };
 type ErrorEvent = { type: 'error'; message: string };
 type StreamEvent = ProgressEvent | DoneEvent | ErrorEvent;
 
+export const maxDuration = 200;
+
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string; no: string }> }) {
   const { id, no: noParam } = await params;
   const no = Number(noParam);
@@ -19,19 +21,33 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   const stream = new ReadableStream({
     async start(controller) {
-      const send = (event: StreamEvent) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+      const send = (event: StreamEvent) => {
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+        } catch {
+          // Client disconnected — the stream is already errored, nothing to do.
+        }
+      };
       const dict = await getDictionary();
 
       try {
         const { user, row } = await loadOwned(id);
         const content = row.content;
 
-        const deltas = streamJson(pertemuanPrompt(content, no), PERTEMUAN_SCHEMA);
-        const buf = await trackKeyProgress(deltas, PERTEMUAN_STAGE_KEYS, PERTEMUAN_STAGE_LABELS, send);
-        const hasil = JSON.parse(buf) as Pertemuan;
-
+        // Cheap check first — don't burn a paid thinkingLevel:'high' generation
+        // on a bad/NaN `no` that can never match.
         const i = content.pertemuan.findIndex(p => p.no === no);
         if (i === -1) throw new Error(interpolate(dict.errors.pertemuanTidakAda, { no }));
+
+        const deltas = streamJson(pertemuanPrompt(content, no), PERTEMUAN_SCHEMA);
+        const buf = await trackKeyProgress(deltas, PERTEMUAN_STAGE_KEYS, PERTEMUAN_STAGE_LABELS, send);
+        let hasil: Pertemuan;
+        try {
+          hasil = JSON.parse(buf) as Pertemuan;
+        } catch {
+          throw new Error(dict.errors.gagalMembacaHasilAi);
+        }
+
         content.pertemuan[i] = { ...hasil, no };
 
         await updateRppContent(id, user.userId, content);
@@ -40,12 +56,21 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       } catch (e) {
         send({ type: 'error', message: e instanceof Error ? e.message : dict.errors.gagalMenyusunModul });
       } finally {
-        controller.close();
+        try {
+          controller.close();
+        } catch {
+          // Client disconnected — the controller may already be closed/errored.
+        }
       }
     },
   });
 
   return new Response(stream, {
-    headers: { 'content-type': 'text/event-stream', 'cache-control': 'no-cache', connection: 'keep-alive' },
+    headers: {
+      'content-type': 'text/event-stream',
+      'cache-control': 'no-cache',
+      connection: 'keep-alive',
+      'X-Accel-Buffering': 'no',
+    },
   });
 }

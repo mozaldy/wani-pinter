@@ -108,6 +108,12 @@ Before the first key appears, the handler emits `{type:'thinking'}` once, so
 the client shows an honest indeterminate state for the (possibly long, given
 `thinkingLevel: 'high'`) silent period before output tokens start.
 
+Implementation note: instead of the server sending this explicit event, the
+client sets `phase='thinking'` synchronously in `start()`
+(`useStreamedGeneration.ts`) the moment generation is requested. This covers
+strictly more of the wait (including connection setup) and was judged a
+correct, equivalent way to satisfy the same intent.
+
 For refine (single `value` key), there's no sub-key to detect, so the handler
 instead emits `{type:'progress', chars: N}` on a throttle (e.g. every ~200ms
 or every N new characters) so the client can show a growing word/character

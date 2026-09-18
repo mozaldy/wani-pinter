@@ -12,13 +12,21 @@ type DoneEvent = { type: 'done'; key: SectionKey; value: unknown };
 type ErrorEvent = { type: 'error'; message: string };
 type StreamEvent = ProgressEvent | DoneEvent | ErrorEvent;
 
+export const maxDuration = 200;
+
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
     async start(controller) {
-      const send = (event: StreamEvent) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+      const send = (event: StreamEvent) => {
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+        } catch {
+          // Client disconnected — the stream is already errored, nothing to do.
+        }
+      };
       const dict = await getDictionary();
 
       try {
@@ -34,7 +42,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
         const deltas = streamJson(refinePrompt(content, key, content[key], instruction), sectionSchema(key));
         const buf = await trackCharProgress(deltas, send);
-        const { value } = JSON.parse(buf) as { value: Rpp[SectionKey] };
+        let value: Rpp[SectionKey];
+        try {
+          ({ value } = JSON.parse(buf) as { value: Rpp[SectionKey] });
+        } catch {
+          throw new Error(dict.errors.gagalMembacaHasilAi);
+        }
 
         const next = { ...content, [key]: value } as Rpp;
         if (key === 'rutePertemuan') {
@@ -48,12 +61,21 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       } catch (e) {
         send({ type: 'error', message: e instanceof Error ? e.message : dict.errors.gagalMenyusunModul });
       } finally {
-        controller.close();
+        try {
+          controller.close();
+        } catch {
+          // Client disconnected — the controller may already be closed/errored.
+        }
       }
     },
   });
 
   return new Response(stream, {
-    headers: { 'content-type': 'text/event-stream', 'cache-control': 'no-cache', connection: 'keep-alive' },
+    headers: {
+      'content-type': 'text/event-stream',
+      'cache-control': 'no-cache',
+      connection: 'keep-alive',
+      'X-Accel-Buffering': 'no',
+    },
   });
 }

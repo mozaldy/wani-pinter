@@ -365,8 +365,6 @@ input, select, textarea { font-family: inherit; }
 .tiny { font-size: 11px; }
 .small { font-size: 12px; }
 
-@keyframes rppSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
-
 @media print {
   @page { size: A4; margin: 20mm; }
   aside, header, .no-print { display: none !important; }
