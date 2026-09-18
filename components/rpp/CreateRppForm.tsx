@@ -1,8 +1,8 @@
 'use client';
-import { useActionState, useState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Icon } from '@/components/Icon';
-import { createRpp } from '@/app/(app)/rpp/actions';
+import { useStreamedGeneration } from './useStreamedGeneration';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { lookup } from '@/lib/i18n/format';
@@ -83,18 +83,41 @@ const FASE_OPTIONS = [
 
 export function CreateRppForm({ mapel, jabatan }: { mapel: string[]; jabatan: string }) {
   const { dict } = useI18n();
-  const [error, action] = useActionState(createRpp, null);
+  const router = useRouter();
+  const { start, phase, stages, error, result } = useStreamedGeneration<{ id: string }>();
   const mapelList = Array.from(new Set([...mapel, ...DEFAULT_MAPEL]));
   const mapelDefault = mapelList.find(m => jabatan.toLowerCase().includes(m.toLowerCase())) ?? mapelList[0] ?? '';
+  const pending = phase === 'thinking' || phase === 'streaming';
+
+  useEffect(() => {
+    if (phase === 'done' && result?.id) router.push(`/rpp/${result.id}`);
+  }, [phase, result, router]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    start('/api/rpp/generate', {
+      satuan: form.get('satuan'),
+      mapel: form.get('mapel'),
+      fase: form.get('fase'),
+      kelas: form.get('kelas'),
+      semester: form.get('semester'),
+      topik: form.get('topik'),
+      alokasi: form.get('alokasi'),
+      kondisiKelas: form.get('kondisiKelas'),
+      tujuanPembelajaran: form.get('tujuanPembelajaran'),
+      jumlahPertemuan: form.get('jumlahPertemuan'),
+    });
+  };
 
   return (
-    <form action={action} className="card">
+    <form className="card" onSubmit={handleSubmit}>
       <div className="card-title">
         <h3>{dict.rpp.create.title}</h3>
         <span className="sub">{dict.rpp.create.subtitle}</span>
       </div>
 
-      <Fieldset mapel={mapelList} mapelDefault={mapelDefault} dict={dict} />
+      <Fieldset mapel={mapelList} mapelDefault={mapelDefault} dict={dict} pending={pending} />
 
       {error && (
         <div className="small" style={{ marginTop: 12, padding: 10, borderRadius: 8, background: 'var(--color-bad-soft)', color: 'var(--color-bad)' }}>
@@ -102,13 +125,12 @@ export function CreateRppForm({ mapel, jabatan }: { mapel: string[]; jabatan: st
         </div>
       )}
 
-      <Submit />
+      <Submit pending={pending} stages={stages} dict={dict} />
     </form>
   );
 }
 
-function Fieldset({ mapel, mapelDefault, dict }: { mapel: string[]; mapelDefault: string; dict: Dictionary }) {
-  const { pending } = useFormStatus();
+function Fieldset({ mapel, mapelDefault, dict, pending }: { mapel: string[]; mapelDefault: string; dict: Dictionary; pending: boolean }) {
   const [fase, setFase] = useState('A');
   const [kelas, setKelas] = useState('I');
 
@@ -195,10 +217,7 @@ function Fieldset({ mapel, mapelDefault, dict }: { mapel: string[]; mapelDefault
   );
 }
 
-function Submit() {
-  const { dict } = useI18n();
-  const { pending } = useFormStatus();
-
+function Submit({ pending, stages, dict }: { pending: boolean; stages: { key: string; label: string }[]; dict: Dictionary }) {
   if (pending) {
     return (
       <div style={{ textAlign: 'center', padding: '28px 20px' }}>
@@ -212,9 +231,15 @@ function Submit() {
         </div>
         <div className="h-display" style={{ fontWeight: 500, marginBottom: 4 }}>{dict.rpp.create.loadingTitle}</div>
         <div className="muted small">{dict.rpp.create.loadingBody}</div>
-        <div style={{ maxWidth: 300, margin: '14px auto 0', height: 6, background: 'var(--color-surface-2)', borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ width: '40%', height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent))', animation: 'rppSlide 1.2s ease-in-out infinite' }} />
-        </div>
+        {stages.length > 0 && (
+          <ul style={{ listStyle: 'none', margin: '14px auto 0', maxWidth: 300, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 6, padding: 0 }}>
+            {stages.map(s => (
+              <li key={s.key} className="tiny" style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--color-ink-2)' }}>
+                <Icon name="check" size={12} /> {s.label}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }

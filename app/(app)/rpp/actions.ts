@@ -5,11 +5,11 @@ import { revalidatePath } from 'next/cache';
 import { requireTeacher } from '@/lib/auth';
 import { generateJson } from '@/lib/gemini';
 import {
-  SKELETON_SCHEMA, PERTEMUAN_SCHEMA, sectionSchema, isSectionKey,
-  skeletonPrompt, pertemuanPrompt, refinePrompt, emptyPertemuan,
-  type Rpp, type Pertemuan, type RppInput, type SectionKey,
+  PERTEMUAN_SCHEMA, sectionSchema, isSectionKey,
+  pertemuanPrompt, refinePrompt, emptyPertemuan,
+  type Rpp, type Pertemuan, type SectionKey,
 } from '@/lib/rpp';
-import { getRpp, insertRpp, updateRppContent, deleteRppRow } from '@/lib/queries';
+import { getRpp, updateRppContent, deleteRppRow } from '@/lib/queries';
 import { getDictionary } from '@/lib/i18n/server';
 import { interpolate } from '@/lib/i18n/format';
 
@@ -20,45 +20,6 @@ async function loadOwned(id: string) {
   const row = await getRpp(id, user.userId);
   if (!row) throw new Error((await getDictionary()).errors.rppNotFound);
   return { user, row };
-}
-
-/** Returns an error message, or redirects on success (useActionState). */
-export async function createRpp(_prev: string | null, formData: FormData): Promise<string | null> {
-  const user = await requireTeacher();
-  const dict = await getDictionary();
-
-  const jumlah = Math.min(20, Math.max(1, Number(formData.get('jumlahPertemuan')) || 1));
-  const input: RppInput = {
-    satuan: String(formData.get('satuan') || '').trim(),
-    mapel: String(formData.get('mapel') || '').trim(),
-    fase: String(formData.get('fase') || '').trim(),
-    kelas: String(formData.get('kelas') || '').trim(),
-    semester: String(formData.get('semester') || '').trim(),
-    topik: String(formData.get('topik') || '').trim(),
-    alokasi: String(formData.get('alokasi') || '').trim(),
-    kondisiKelas: String(formData.get('kondisiKelas') || '').trim(),
-    tujuanPembelajaran: String(formData.get('tujuanPembelajaran') || '').trim(),
-    jumlahPertemuan: jumlah,
-  };
-  if (!input.mapel || !input.topik) return dict.errors.mapelTopikRequired;
-
-  let id: string;
-  try {
-    const skeleton = await generateJson<Omit<Rpp, 'pertemuan'>>(skeletonPrompt(input), SKELETON_SCHEMA);
-    // The teacher's TP is authoritative — never trust the model to copy it verbatim.
-    if (input.tujuanPembelajaran) skeleton.tujuanPembelajaran = input.tujuanPembelajaran;
-    const content: Rpp = { ...skeleton, pertemuan: emptyPertemuan(skeleton.rutePertemuan) };
-    id = await insertRpp(user.userId, {
-      judul: content.identitas.judul,
-      mapel: content.identitas.mapel,
-      kelas: content.identitas.kelas,
-    }, content);
-  } catch (e) {
-    return e instanceof Error ? e.message : dict.errors.gagalMenyusunModul;
-  }
-
-  revalidatePath('/rpp');
-  redirect(`/rpp/${id}`);  // redirect() throws, so it must sit outside the try
 }
 
 export async function generatePertemuan(id: string, no: number) {
