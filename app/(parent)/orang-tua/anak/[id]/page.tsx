@@ -132,7 +132,7 @@ export default async function AnakPage({ params }: { params: Promise<{ id: strin
               <div key={c.id} className={`timeline-item ${c.kategori === 'perhatian' ? 'warn' : c.kategori === 'positif' ? 'good' : ''}`}>
                 <div className="timeline-time">{formatDate(c.tgl, locale, { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                 <div className="timeline-title" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-                  <Pill kind={KATEGORI_KIND[c.kategori]} style={{ fontSize: 10, padding: '1px 7px' }}>{c.kategori}</Pill>
+                  <Pill kind={KATEGORI_KIND[c.kategori]} style={{ fontSize: 10, padding: '1px 7px', textTransform: 'lowercase' }}>{dict.enums.kategori[c.kategori]}</Pill>
                 </div>
                 <div className="timeline-desc" style={{ marginTop: 4, lineHeight: 1.55 }}>{c.text}</div>
                 {c.tags.length > 0 && (
