@@ -123,6 +123,40 @@ export const PERTEMUAN_SCHEMA = {
   required: ['no', 'judul', 'pengalamanBelajar', 'prinsip', 'media', 'langkah', 'asesmen'],
 } as const;
 
+// ─── Streaming-progress key order ──────────────────────────────────────────
+// Mirrors the property order in SKELETON_SCHEMA / PERTEMUAN_SCHEMA above —
+// Gemini's structured JSON output emits keys in schema-declaration order, so
+// scanning for these markers in order gives a live checklist as they stream in.
+
+export const SKELETON_STAGE_LABELS: Record<string, string> = {
+  identitas: 'Identitas Modul',
+  identifikasiMurid: 'Identifikasi Murid',
+  identifikasiMateri: 'Identifikasi Materi',
+  dimensiProfilLulusan: 'Dimensi Profil Lulusan',
+  tujuanPembelajaran: 'Tujuan Pembelajaran',
+  indikator: 'Kriteria Ketercapaian Tujuan Pembelajaran',
+  praktikPedagogis: 'Praktik Pedagogis',
+  lingkunganPembelajaran: 'Lingkungan Pembelajaran',
+  kemitraanPembelajaran: 'Kemitraan Pembelajaran',
+  pemanfaatanDigital: 'Pemanfaatan Digital',
+  rutePertemuan: 'Alur Belajar',
+  asesmenSumatif: 'Asesmen Sumatif',
+  rencanaTindakLanjut: 'Rencana Tindak Lanjut',
+  daftarPustaka: 'Daftar Pustaka',
+};
+export const SKELETON_STAGE_KEYS = Object.keys(SKELETON_STAGE_LABELS);
+
+export const PERTEMUAN_STAGE_LABELS: Record<string, string> = {
+  no: 'Nomor Pertemuan',
+  judul: 'Judul Aktivitas',
+  pengalamanBelajar: 'Pengalaman Belajar',
+  prinsip: 'Prinsip Pembelajaran',
+  media: 'Media',
+  langkah: 'Langkah Pembelajaran',
+  asesmen: 'Asesmen Formatif',
+};
+export const PERTEMUAN_STAGE_KEYS = Object.keys(PERTEMUAN_STAGE_LABELS);
+
 // ─── Editable sections ─────────────────────────────────────────────────────
 // Drives the editor UI, the manual-save action and the refine action alike.
 
