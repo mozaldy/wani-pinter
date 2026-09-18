@@ -5,7 +5,7 @@ import { CreateRppForm } from '@/components/rpp/CreateRppForm';
 import { Pill } from '@/components/ui';
 import { Icon } from '@/components/Icon';
 import { getDictionary, getLocale } from '@/lib/i18n/server';
-import { interpolate, formatDate } from '@/lib/i18n/format';
+import { interpolate, formatDate, lookup } from '@/lib/i18n/format';
 
 export default async function RppPage() {
   const user = await requireTeacher();
@@ -48,7 +48,7 @@ export default async function RppPage() {
                         <div style={{ fontWeight: 600, fontSize: 13.5 }}>{r.judul}</div>
                         <div className="tiny muted" style={{ marginTop: 3 }}>
                           {interpolate(dict.rpp.list.meta, {
-                            mapel: r.mapel,
+                            mapel: lookup(dict.enums.mapel, r.mapel),
                             kelas: r.kelas,
                             date: formatDate(r.updated_at, locale, { day: 'numeric', month: 'short' }),
                           })}

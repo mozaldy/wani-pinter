@@ -7,7 +7,7 @@ import { Icon } from '@/components/Icon';
 import { Pill } from '@/components/ui';
 import { deleteRpp } from '../actions';
 import { getDictionary } from '@/lib/i18n/server';
-import { interpolate } from '@/lib/i18n/format';
+import { interpolate, lookup } from '@/lib/i18n/format';
 
 export default async function RppDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,7 +27,7 @@ export default async function RppDetailPage({ params }: { params: Promise<{ id: 
           <h1 className="h-display" style={{ margin: '4px 0 0', fontSize: 24 }}>{rpp.identitas.judul}</h1>
           <div className="muted small flex gap-2 items-center" style={{ marginTop: 6 }}>
             {interpolate(dict.rpp.editor.identitasLine, {
-              mapel: rpp.identitas.mapel, fase: rpp.identitas.fase,
+              mapel: lookup(dict.enums.mapel, rpp.identitas.mapel), fase: rpp.identitas.fase,
               kelas: rpp.identitas.kelas, alokasi: rpp.identitas.alokasi,
             })}
             <Pill kind={terisi === rpp.pertemuan.length ? 'good' : 'warn'}>
