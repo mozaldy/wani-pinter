@@ -5,8 +5,10 @@ const STREAM_ENDPOINT = `${BASE}:streamGenerateContent?alt=sse`;
 
 // Total wall-clock budget for one generation, retries included. A teacher is
 // watching a spinner: better to fail with a clear message than to keep retrying
-// a service that is refusing us. Measured calls run 3-5s, so this is ~20x slack.
-const BUDGET_MS = 90_000;
+// a service that is refusing us. With thinking-mode generation, responses can run
+// well past initial estimates, and streaming makes the wait visible; budget is set
+// generously to give generation time to complete.
+const BUDGET_MS = 180_000;
 
 const BUSY = new Set([429, 500, 503]);
 
@@ -93,22 +95,29 @@ export async function* streamJson(prompt: string, schema: object): AsyncGenerato
   const decoder = new TextDecoder();
   let buf = '';
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buf += decoder.decode(value, { stream: true });
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
 
-    const events = buf.split('\n\n');
-    buf = events.pop() ?? '';
-    for (const event of events) {
-      for (const line of event.split('\n')) {
-        if (!line.startsWith('data:')) continue;
-        const payload = line.slice(5).trim();
-        if (!payload) continue;
-        const chunk = JSON.parse(payload);
-        const text = chunk?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) yield text;
+      const events = buf.split('\n\n');
+      buf = events.pop() ?? '';
+      for (const event of events) {
+        for (const line of event.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          const payload = line.slice(5).trim();
+          if (!payload) continue;
+          const chunk = JSON.parse(payload);
+          const text = chunk?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) yield text;
+        }
       }
     }
+  } catch (e) {
+    if (e instanceof Error && e.name === 'AbortError') {
+      throw new Error(`Layanan AI (${MODEL}) berhenti merespons sebelum selesai. Coba lagi.`);
+    }
+    throw e;
   }
 }
