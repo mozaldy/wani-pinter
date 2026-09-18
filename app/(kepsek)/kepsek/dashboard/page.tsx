@@ -5,7 +5,7 @@ import { StatCard, StudentAvatar, Pill } from '@/components/ui';
 import { getStudents, getTeacherActivity, type TeacherActivity } from '@/lib/queries';
 import type { Student } from '@/lib/types';
 import { getDictionary } from '@/lib/i18n/server';
-import { interpolate, lookup } from '@/lib/i18n/format';
+import { interpolate } from '@/lib/i18n/format';
 
 function groupByKelas(students: Student[]) {
   const map = new Map<string, Student[]>();
@@ -176,7 +176,7 @@ export default async function KepsekDashboardPage() {
                   <td>{s.kelas}</td>
                   <td><strong style={{ color: s.rerata >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{s.rerata}</strong></td>
                   <td>{s.kehadiran}%</td>
-                  <td><Pill kind={s.risiko === 'tinggi' ? 'bad' : 'warn'} dot>{lookup(dict.enums.risiko, s.risiko)}</Pill></td>
+                  <td><Pill kind={s.risiko === 'tinggi' ? 'bad' : 'warn'} dot>{dict.enums.risiko[s.risiko]}</Pill></td>
                 </tr>
               ))}
             </tbody>

@@ -191,7 +191,7 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
                               <td>{s.kehadiran}%</td>
                               <td>
                                 <Pill kind={s.risiko === 'rendah' ? 'good' : s.risiko === 'sedang' ? 'warn' : 'bad'} dot>
-                                  {lookup(dict.enums.risiko, s.risiko)}
+                                  {dict.enums.risiko[s.risiko]}
                                 </Pill>
                               </td>
                             </tr>

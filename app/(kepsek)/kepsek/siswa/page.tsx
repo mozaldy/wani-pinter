@@ -1,7 +1,7 @@
 import { StudentAvatar, Pill } from '@/components/ui';
 import { getStudents } from '@/lib/queries';
 import { getDictionary } from '@/lib/i18n/server';
-import { interpolate, lookup } from '@/lib/i18n/format';
+import { interpolate } from '@/lib/i18n/format';
 
 export default async function KepsekSiswaPage() {
   const [students, dict] = await Promise.all([getStudents(), getDictionary()]);
@@ -39,7 +39,7 @@ export default async function KepsekSiswaPage() {
                 <td>{s.kelas}</td>
                 <td><strong style={{ color: s.rerata >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{s.rerata}</strong></td>
                 <td>{s.kehadiran}%</td>
-                <td><Pill kind={s.risiko === 'rendah' ? 'good' : s.risiko === 'sedang' ? 'warn' : 'bad'} dot>{lookup(dict.enums.risiko, s.risiko)}</Pill></td>
+                <td><Pill kind={s.risiko === 'rendah' ? 'good' : s.risiko === 'sedang' ? 'warn' : 'bad'} dot>{dict.enums.risiko[s.risiko]}</Pill></td>
               </tr>
             ))}
           </tbody>
