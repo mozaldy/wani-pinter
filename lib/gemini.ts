@@ -1,5 +1,7 @@
 const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
-const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+const BASE = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}`;
+const GENERATE_ENDPOINT = `${BASE}:generateContent`;
+const STREAM_ENDPOINT = `${BASE}:streamGenerateContent?alt=sse`;
 
 // Total wall-clock budget for one generation, retries included. A teacher is
 // watching a spinner: better to fail with a clear message than to keep retrying
@@ -8,15 +10,8 @@ const BUDGET_MS = 90_000;
 
 const BUSY = new Set([429, 500, 503]);
 
-/**
- * Ask Gemini for JSON matching `schema`. The schema is enforced during decoding,
- * so the returned object is structurally guaranteed — no runtime validator needed.
- */
-export async function generateJson<T>(prompt: string, schema: object): Promise<T> {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error('GEMINI_API_KEY is not set');
-
-  const body = JSON.stringify({
+function buildBody(prompt: string, schema: object): string {
+  return JSON.stringify({
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: {
       responseMimeType: 'application/json',
@@ -24,6 +19,12 @@ export async function generateJson<T>(prompt: string, schema: object): Promise<T
       thinkingConfig: { thinkingLevel: 'high' },
     },
   });
+}
+
+/** Opens `endpoint`, retrying while Gemini is busy, within `BUDGET_MS` total. */
+async function openWithRetry(endpoint: string, body: string): Promise<Response> {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error('GEMINI_API_KEY is not set');
 
   const deadline = Date.now() + BUDGET_MS;
   let res: Response | undefined;
@@ -34,7 +35,7 @@ export async function generateJson<T>(prompt: string, schema: object): Promise<T
   while (Date.now() < deadline) {
     const remaining = deadline - Date.now();
     try {
-      res = await fetch(ENDPOINT, {
+      res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
         body,
@@ -62,8 +63,52 @@ export async function generateJson<T>(prompt: string, schema: object): Promise<T
     throw new Error(`Gemini ${res.status}: ${detail}`);
   }
 
+  return res;
+}
+
+/**
+ * Ask Gemini for JSON matching `schema`. The schema is enforced during decoding,
+ * so the returned object is structurally guaranteed — no runtime validator needed.
+ */
+export async function generateJson<T>(prompt: string, schema: object): Promise<T> {
+  const res = await openWithRetry(GENERATE_ENDPOINT, buildBody(prompt, schema));
   const data = await res.json();
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error(`Gemini tidak mengembalikan isi (finishReason: ${data?.candidates?.[0]?.finishReason ?? 'unknown'})`);
   return JSON.parse(text) as T;
+}
+
+/**
+ * Same contract as `generateJson`, but yields raw text as it streams in
+ * instead of waiting for the full response. The caller accumulates the
+ * deltas and decides what to do with the partial buffer (e.g. progress
+ * detection) before parsing the final concatenated text.
+ */
+export async function* streamJson(prompt: string, schema: object): AsyncGenerator<string> {
+  const res = await openWithRetry(STREAM_ENDPOINT, buildBody(prompt, schema));
+  const body = res.body;
+  if (!body) throw new Error('Gemini tidak mengembalikan aliran data');
+
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+
+    const events = buf.split('\n\n');
+    buf = events.pop() ?? '';
+    for (const event of events) {
+      for (const line of event.split('\n')) {
+        if (!line.startsWith('data:')) continue;
+        const payload = line.slice(5).trim();
+        if (!payload) continue;
+        const chunk = JSON.parse(payload);
+        const text = chunk?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) yield text;
+      }
+    }
+  }
 }
