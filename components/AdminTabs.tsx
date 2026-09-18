@@ -60,7 +60,7 @@ export function AdminTabs({ students, cps, mapel }: { students: Student[]; cps: 
             <thead>
               <tr>
                 <th style={{ width: 32 }}><input type="checkbox" /></th>
-                <th>{dict.adminTabs.colSiswa}</th><th>{dict.adminTabs.colNis}</th><th>{dict.adminTabs.colKelas}</th><th>{dict.adminTabs.colJk}</th>
+                <th>{dict.common.colSiswa}</th><th>{dict.adminTabs.colNis}</th><th>{dict.common.colKelas}</th><th>{dict.adminTabs.colJk}</th>
                 <th>{dict.adminTabs.colOrtu}</th><th>{dict.adminTabs.colSumber}</th><th>{dict.adminTabs.colDiperbarui}</th><th></th>
               </tr>
             </thead>

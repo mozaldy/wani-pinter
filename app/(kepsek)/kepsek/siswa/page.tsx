@@ -21,7 +21,7 @@ export default async function KepsekSiswaPage() {
         <table className="tbl">
           <thead>
             <tr>
-              <th>{dict.kepsek.siswa.colSiswa}</th><th>{dict.kepsek.siswa.colKelas}</th><th>{dict.kepsek.siswa.colRerata}</th><th>{dict.kepsek.siswa.colKehadiran}</th><th>{dict.kepsek.siswa.colRisiko}</th>
+              <th>{dict.common.colSiswa}</th><th>{dict.common.colKelas}</th><th>{dict.common.colRerata}</th><th>{dict.common.colKehadiran}</th><th>{dict.common.colRisiko}</th>
             </tr>
           </thead>
           <tbody>

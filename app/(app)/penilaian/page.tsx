@@ -67,14 +67,14 @@ export default async function PenilaianPage() {
           <table className="tbl" style={{ minWidth: 800 }}>
             <thead>
               <tr>
-                <th style={{ width: 240 }}>{dict.penilaian.colSiswa}</th>
+                <th style={{ width: 240 }}>{dict.common.colSiswa}</th>
                 {TPS.map((tp, i) => (
                   <th key={i} style={{ minWidth: 110, textAlign: 'center' }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>TP-{i + 1}</div>
                     <div className="tiny" style={{ fontSize: 9, fontWeight: 500, textTransform: 'none', letterSpacing: 0, color: 'var(--color-ink-4)', marginTop: 2 }}>{tp.split(': ')[1]}</div>
                   </th>
                 ))}
-                <th style={{ minWidth: 80, textAlign: 'center' }}>{dict.penilaian.colRerata}</th>
+                <th style={{ minWidth: 80, textAlign: 'center' }}>{dict.common.colRerata}</th>
                 <th style={{ minWidth: 80, textAlign: 'center' }}>{dict.penilaian.colStatus}</th>
               </tr>
             </thead>

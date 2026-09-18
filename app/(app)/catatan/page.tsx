@@ -54,7 +54,7 @@ export default async function CatatanPage() {
             <div className="card-title">
               <h3>{dict.catatan.linimasaTitle}</h3>
               <div className="seg">
-                <button className="seg-btn active">{dict.catatan.semua}</button>
+                <button className="seg-btn active">{dict.common.semua}</button>
                 <button className="seg-btn">{dict.enums.kategori.positif}</button>
                 <button className="seg-btn">{dict.enums.kategori.perhatian}</button>
                 <button className="seg-btn">{dict.enums.kategori.akademik}</button>

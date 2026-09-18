@@ -42,11 +42,11 @@ export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
           {hint && mode === 'read' && <span className="sub" style={{ marginRight: 8 }}>{hint}</span>}
           <button className="btn btn-ghost small" disabled={pending}
             onClick={() => (mode === 'edit' ? setMode('read') : openEdit())}>
-            <Icon name="edit" size={12} /> {mode === 'edit' ? dict.rpp.editor.batal : dict.rpp.editor.edit}
+            <Icon name="edit" size={12} /> {mode === 'edit' ? dict.common.batal : dict.rpp.editor.edit}
           </button>
           <button className="btn btn-ghost small" disabled={pending}
             onClick={() => setMode(mode === 'refine' ? 'read' : 'refine')}>
-            <Icon name="sparkle" size={12} /> {mode === 'refine' ? dict.rpp.editor.tutup : dict.rpp.editor.ubahDenganAi}
+            <Icon name="sparkle" size={12} /> {mode === 'refine' ? dict.common.tutup : dict.rpp.editor.ubahDenganAi}
           </button>
         </span>
       </div>
@@ -59,7 +59,7 @@ export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
         <div className="flex gap-2" style={{ marginTop: 12 }}>
           <button className="btn btn-primary" disabled={pending}
             onClick={() => run(() => saveSection(id, sectionKey, draft), interpolate(dict.rpp.editor.disimpan, { label }))}>
-            <Icon name="check" size={13} /> {dict.rpp.editor.simpan}
+            <Icon name="check" size={13} /> {dict.common.simpan}
           </button>
         </div>
       )}

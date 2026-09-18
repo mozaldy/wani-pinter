@@ -179,7 +179,7 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
           <div className="card-title">
             <h3>{dict.profil.portofolioTitle}</h3>
             <div className="seg">
-              <button className="seg-btn active">{dict.profil.segSemua}</button>
+              <button className="seg-btn active">{dict.common.semua}</button>
               <button className="seg-btn">{dict.profil.segTugas}</button>
               <button className="seg-btn">{dict.profil.segP5}</button>
               <button className="seg-btn">{dict.profil.segRefleksi}</button>

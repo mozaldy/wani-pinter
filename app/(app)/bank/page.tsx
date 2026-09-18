@@ -60,7 +60,7 @@ export default async function BankSoalPage() {
               <div>
                 <div className="tiny muted mb-2" style={{ fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{dict.bank.filterTingkat}</div>
                 <div className="seg" style={{ width: '100%' }}>
-                  <button className="seg-btn active" style={{ flex: 1 }}>{dict.bank.semua}</button>
+                  <button className="seg-btn active" style={{ flex: 1 }}>{dict.common.semua}</button>
                   <button className="seg-btn" style={{ flex: 1 }}>M</button>
                   <button className="seg-btn" style={{ flex: 1 }}>S</button>
                   <button className="seg-btn" style={{ flex: 1 }}>K</button>

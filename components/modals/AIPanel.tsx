@@ -9,7 +9,7 @@ export function AIPanel({ open, onClose, insights }: { open: boolean; onClose: (
     <Modal open={open} onClose={onClose} wide
       title={dict.modals.aiPanel.title}
       sub={dict.modals.aiPanel.sub}
-      footer={<button className="btn btn-primary" onClick={onClose}>{dict.modals.aiPanel.tutup}</button>}>
+      footer={<button className="btn btn-primary" onClick={onClose}>{dict.common.tutup}</button>}>
       <div className="flex flex-col gap-3">
         {insights.map(ins => (
           <div key={ins.id} style={{

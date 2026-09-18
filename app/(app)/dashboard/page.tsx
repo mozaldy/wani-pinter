@@ -125,7 +125,7 @@ export default async function DashboardPage() {
           <div className="card">
             <div className="card-title">
               <h3>{dict.dashboard.aktivitasTerbaru}</h3>
-              <button className="btn btn-ghost small">{dict.dashboard.semua}</button>
+              <button className="btn btn-ghost small">{dict.common.semua}</button>
             </div>
             <div className="timeline">
               {activity.map(a => (
@@ -146,7 +146,7 @@ export default async function DashboardPage() {
             <div className="card-title">
               <h3>{interpolate(dict.dashboard.classSummaryTitle, { kelas: 'VIII-A' })}</h3>
               <div className="seg">
-                <button className="seg-btn active">{dict.dashboard.semua}</button>
+                <button className="seg-btn active">{dict.common.semua}</button>
                 <button className="seg-btn">{dict.dashboard.segBerisiko}</button>
                 <button className="seg-btn">{dict.dashboard.segBerprestasi}</button>
               </div>
@@ -154,8 +154,8 @@ export default async function DashboardPage() {
             <table className="tbl">
               <thead>
                 <tr>
-                  <th>{dict.dashboard.colSiswa}</th><th>{dict.dashboard.colRerata}</th><th>{dict.dashboard.colKehadiran}</th>
-                  <th>{dict.dashboard.colTren}</th><th>{dict.dashboard.colRisiko}</th><th></th>
+                  <th>{dict.common.colSiswa}</th><th>{dict.common.colRerata}</th><th>{dict.common.colKehadiran}</th>
+                  <th>{dict.dashboard.colTren}</th><th>{dict.common.colRisiko}</th><th></th>
                 </tr>
               </thead>
               <tbody>

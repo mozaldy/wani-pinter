@@ -72,7 +72,7 @@ export default async function KepsekDashboardPage() {
             <table className="tbl">
               <thead>
                 <tr>
-                  <th>{dict.kepsek.dashboard.colKelas}</th><th>{dict.kepsek.dashboard.colJumlahSiswa}</th><th>{dict.kepsek.dashboard.colRerataNilai}</th><th>{dict.kepsek.dashboard.colKehadiran}</th><th>{dict.kepsek.dashboard.colBerisiko}</th>
+                  <th>{dict.common.colKelas}</th><th>{dict.kepsek.dashboard.colJumlahSiswa}</th><th>{dict.kepsek.dashboard.colRerataNilai}</th><th>{dict.common.colKehadiran}</th><th>{dict.kepsek.dashboard.colBerisiko}</th>
                 </tr>
               </thead>
               <tbody>
@@ -158,7 +158,7 @@ export default async function KepsekDashboardPage() {
           <table className="tbl">
             <thead>
               <tr>
-                <th>{dict.kepsek.dashboard.colSiswa}</th><th>{dict.kepsek.dashboard.colKelas}</th><th>{dict.kepsek.dashboard.colRerata}</th><th>{dict.kepsek.dashboard.colKehadiran}</th><th>{dict.kepsek.dashboard.colRisiko}</th>
+                <th>{dict.common.colSiswa}</th><th>{dict.common.colKelas}</th><th>{dict.common.colRerata}</th><th>{dict.common.colKehadiran}</th><th>{dict.common.colRisiko}</th>
               </tr>
             </thead>
             <tbody>

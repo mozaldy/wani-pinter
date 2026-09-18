@@ -41,7 +41,7 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
       sub={dict.modals.quickInput.sub}
       footer={
         <>
-          <button className="btn btn-ghost" onClick={onClose}>{dict.modals.quickInput.batal}</button>
+          <button className="btn btn-ghost" onClick={onClose}>{dict.common.batal}</button>
           {step > 0 && <button className="btn btn-outline" onClick={() => setStep(step - 1)}>{dict.modals.quickInput.kembali}</button>}
           {step < 2 ? (
             <button className="btn btn-primary" onClick={() => setStep(step + 1)}>{dict.modals.quickInput.lanjut} <Icon name="arrowR" size={13} /></button>

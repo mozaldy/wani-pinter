@@ -101,7 +101,7 @@ function ProfilTab() {
           </div>
         </div>
         <div className="flex gap-2 justify-end" style={{ marginTop: 16 }}>
-          <button className="btn btn-ghost">{p.cancel}</button>
+          <button className="btn btn-ghost">{dict.common.batal}</button>
           <button className="btn btn-primary">{p.saveChanges}</button>
         </div>
       </div>

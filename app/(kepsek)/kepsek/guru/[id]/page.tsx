@@ -148,11 +148,11 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
                   <table className="tbl">
                     <thead>
                       <tr>
-                        <th>{dict.kepsek.guruDetail.colSiswa}</th>
+                        <th>{dict.common.colSiswa}</th>
                         <th>{interpolate(dict.kepsek.guruDetail.nilaiMapelHeader, { mapel: lookup(dict.enums.mapel, mapel) })}</th>
                         <th>{dict.kepsek.guruDetail.colRerataKeseluruhan}</th>
-                        <th>{dict.kepsek.guruDetail.colKehadiran}</th>
-                        <th>{dict.kepsek.guruDetail.colRisiko}</th>
+                        <th>{dict.common.colKehadiran}</th>
+                        <th>{dict.common.colRisiko}</th>
                       </tr>
                     </thead>
                     <tbody>

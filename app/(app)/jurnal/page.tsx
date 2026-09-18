@@ -48,7 +48,7 @@ export default async function JurnalPage() {
             <div className="card-title">
               <h3>{dict.jurnal.entriTerbaru}</h3>
               <div className="seg">
-                <button className="seg-btn active">{dict.jurnal.semua}</button>
+                <button className="seg-btn active">{dict.common.semua}</button>
                 <button className="seg-btn">VIII-A</button>
                 <button className="seg-btn">VIII-B</button>
                 <button className="seg-btn">IX-A</button>

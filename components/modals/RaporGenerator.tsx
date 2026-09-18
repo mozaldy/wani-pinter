@@ -53,7 +53,7 @@ export function RaporGenerator({ student, onClose }: { student: Student | null; 
       title={step === 2 ? interpolate(dict.modals.rapor.titleStep2, { nama: student.nama }) : dict.modals.rapor.titleStep0}
       sub={step === 2 ? interpolate(dict.modals.rapor.subStep2, { kelas: student.kelas }) : dict.modals.rapor.subStep0}
       footer={
-        step === 0 ? <><button className="btn btn-ghost" onClick={onClose}>{dict.modals.rapor.batal}</button><button className="btn btn-primary" onClick={handleGenerate}><Icon name="sparkle" size={13} /> {dict.modals.rapor.mulaiGenerate}</button></>
+        step === 0 ? <><button className="btn btn-ghost" onClick={onClose}>{dict.common.batal}</button><button className="btn btn-primary" onClick={handleGenerate}><Icon name="sparkle" size={13} /> {dict.modals.rapor.mulaiGenerate}</button></>
         : step === 1 ? null
         : <><button className="btn btn-ghost" onClick={() => setStep(0)}>{dict.modals.rapor.generateUlang}</button><button className="btn btn-outline"><Icon name="download" size={13} /> {dict.modals.rapor.unduhPdf}</button><button className="btn btn-primary"><Icon name="check" size={13} /> {dict.modals.rapor.simpanRapor}</button></>
       }>

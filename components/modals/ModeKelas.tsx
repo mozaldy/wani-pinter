@@ -224,7 +224,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
             }}>
               <Icon name="mic" size={14} /> {recording ? dict.modals.modeKelas.merekamDots : dict.modals.modeKelas.voice}
             </button>
-            <button onClick={() => addObs(obsInput)} style={{ flex: 1, padding: 10, borderRadius: 10, background: '#06B6D4', color: 'white', fontSize: 12, fontWeight: 600 }}>{dict.modals.modeKelas.simpan}</button>
+            <button onClick={() => addObs(obsInput)} style={{ flex: 1, padding: 10, borderRadius: 10, background: '#06B6D4', color: 'white', fontSize: 12, fontWeight: 600 }}>{dict.common.simpan}</button>
           </div>
 
           <div style={{ fontSize: 11, opacity: 0.5, textTransform: 'uppercase', letterSpacing: 0.08, fontWeight: 700, marginBottom: 8 }}>{dict.modals.modeKelas.pintasan}</div>

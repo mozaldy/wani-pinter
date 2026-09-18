@@ -35,7 +35,7 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
         <span className="flex gap-1">
           {filled && (
             <button className="btn btn-ghost small" onClick={() => setOpen(o => !o)}>
-              {open ? dict.rpp.editor.tutup : dict.rpp.editor.lihat}
+              {open ? dict.common.tutup : dict.rpp.editor.lihat}
             </button>
           )}
           <button className="btn btn-ghost small" disabled={pending}
@@ -64,9 +64,9 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
                   onClick={() => run(
                     () => savePertemuan(id, p.no, { langkah: langkah.split('\n').map(s => s.trim()).filter(Boolean) }),
                     interpolate(dict.rpp.editor.pertemuanDisimpanToast, { no: p.no }))}>
-                  <Icon name="check" size={13} /> {dict.rpp.editor.simpan}
+                  <Icon name="check" size={13} /> {dict.common.simpan}
                 </button>
-                <button className="btn btn-ghost" onClick={() => { setLangkah(p.langkah.join('\n')); setEditing(false); }}>{dict.rpp.editor.batal}</button>
+                <button className="btn btn-ghost" onClick={() => { setLangkah(p.langkah.join('\n')); setEditing(false); }}>{dict.common.batal}</button>
               </div>
             </div>
           ) : (
