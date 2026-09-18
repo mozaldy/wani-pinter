@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 import { Pill } from '@/components/ui';
@@ -28,7 +28,12 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
     catch (e) { pushToast(e instanceof Error ? e.message : dict.rpp.editor.gagal, 'warn'); }
   });
 
+  const handledPhase = useRef<typeof gen.phase>('idle');
+
   useEffect(() => {
+    if (gen.phase === handledPhase.current) return;
+    handledPhase.current = gen.phase;
+
     if (gen.phase === 'done') {
       pushToast(interpolate(dict.rpp.editor.pertemuanTersusunToast, { no: p.no }), 'good');
       setOpen(true);
