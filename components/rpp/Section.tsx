@@ -1,8 +1,10 @@
 'use client';
-import { useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 import { useModals } from '@/components/modals/ModalProvider';
-import { refineSection, saveSection } from '@/app/(app)/rpp/actions';
+import { saveSection } from '@/app/(app)/rpp/actions';
+import { useStreamedGeneration } from './useStreamedGeneration';
 import type { RuteRow, SectionKind } from '@/lib/rpp';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { interpolate } from '@/lib/i18n/format';
@@ -16,10 +18,14 @@ export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
 }) {
   const { dict } = useI18n();
   const { pushToast } = useModals();
+  const router = useRouter();
   const [mode, setMode] = useState<'read' | 'edit' | 'refine'>('read');
   const [draft, setDraft] = useState<Value>(value);
   const [instruction, setInstruction] = useState('');
   const [pending, start] = useTransition();
+  const refine = useStreamedGeneration();
+  const streaming = refine.phase === 'thinking' || refine.phase === 'streaming';
+  const busy = pending || streaming;
 
   const run = (fn: () => Promise<void>, ok: string) => start(async () => {
     try {
@@ -32,19 +38,35 @@ export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
     }
   });
 
+  const handledPhase = useRef<typeof refine.phase>('idle');
+
+  useEffect(() => {
+    if (refine.phase === handledPhase.current) return;
+    handledPhase.current = refine.phase;
+
+    if (refine.phase === 'done') {
+      pushToast(interpolate(dict.rpp.editor.diperbarui, { label }), 'good');
+      setMode('read');
+      setInstruction('');
+      router.refresh();
+    } else if (refine.phase === 'error' && refine.error) {
+      pushToast(refine.error, 'warn');
+    }
+  }, [refine.phase, refine.error, dict, label, router, pushToast]);
+
   const openEdit = () => { setDraft(value); setMode('edit'); };
 
   return (
-    <div className="card" style={{ marginBottom: 14, opacity: pending ? 0.6 : 1 }}>
+    <div className="card" style={{ marginBottom: 14, opacity: busy ? 0.6 : 1 }}>
       <div className="card-title">
         <h3>{label}</h3>
         <span className="flex gap-1">
           {hint && mode === 'read' && <span className="sub" style={{ marginRight: 8 }}>{hint}</span>}
-          <button className="btn btn-ghost small" disabled={pending}
+          <button className="btn btn-ghost small" disabled={busy}
             onClick={() => (mode === 'edit' ? setMode('read') : openEdit())}>
             <Icon name="edit" size={12} /> {mode === 'edit' ? dict.common.batal : dict.rpp.editor.edit}
           </button>
-          <button className="btn btn-ghost small" disabled={pending}
+          <button className="btn btn-ghost small" disabled={busy}
             onClick={() => setMode(mode === 'refine' ? 'read' : 'refine')}>
             <Icon name="sparkle" size={12} /> {mode === 'refine' ? dict.common.tutup : dict.rpp.editor.ubahDenganAi}
           </button>
@@ -57,7 +79,7 @@ export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
 
       {mode === 'edit' && (
         <div className="flex gap-2" style={{ marginTop: 12 }}>
-          <button className="btn btn-primary" disabled={pending}
+          <button className="btn btn-primary" disabled={busy}
             onClick={() => run(() => saveSection(id, sectionKey, draft), interpolate(dict.rpp.editor.disimpan, { label }))}>
             <Icon name="check" size={13} /> {dict.common.simpan}
           </button>
@@ -68,14 +90,19 @@ export function Section({ id, sectionKey, label, kind, hint, ordered, value }: {
         <div className="ai-card" style={{ marginTop: 12 }}>
           <div className="ai-badge"><span className="ai-glyph"><Icon name="sparkle" size={11} /></span> {dict.rpp.editor.refineTitle}</div>
           <div className="field" style={{ marginBottom: 8, marginTop: 8 }}>
-            <textarea rows={2} value={instruction} disabled={pending}
+            <textarea rows={2} value={instruction} disabled={busy}
               placeholder={dict.rpp.editor.refinePlaceholder}
               onChange={e => setInstruction(e.target.value)} />
           </div>
-          <button className="btn btn-primary" disabled={pending || !instruction.trim()}
-            onClick={() => run(() => refineSection(id, sectionKey, instruction), interpolate(dict.rpp.editor.diperbarui, { label }))}>
-            <Icon name="sparkle" size={13} /> {pending ? dict.rpp.editor.menyusunUlang : dict.rpp.editor.terapkan}
+          <button className="btn btn-primary" disabled={busy || !instruction.trim()}
+            onClick={() => refine.start(`/api/rpp/${id}/refine`, { key: sectionKey, instruction })}>
+            <Icon name="sparkle" size={13} /> {streaming ? dict.rpp.editor.menyusunUlang : dict.rpp.editor.terapkan}
           </button>
+          {streaming && refine.chars !== null && (
+            <div className="tiny muted" style={{ marginTop: 8 }}>
+              {interpolate(dict.rpp.editor.karakterTersusun, { count: refine.chars })}
+            </div>
+          )}
         </div>
       )}
     </div>

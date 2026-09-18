@@ -3,10 +3,9 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { requireTeacher } from '@/lib/auth';
-import { generateJson } from '@/lib/gemini';
 import {
-  sectionSchema, isSectionKey, refinePrompt, emptyPertemuan,
-  type Rpp, type Pertemuan, type SectionKey,
+  isSectionKey, emptyPertemuan,
+  type Rpp, type Pertemuan,
 } from '@/lib/rpp';
 import { getRpp, updateRppContent, deleteRppRow } from '@/lib/queries';
 import { getDictionary } from '@/lib/i18n/server';
@@ -19,29 +18,6 @@ export async function loadOwned(id: string) {
   const row = await getRpp(id, user.userId);
   if (!row) throw new Error((await getDictionary()).errors.rppNotFound);
   return { user, row };
-}
-
-export async function refineSection(id: string, key: string, instruction: string) {
-  const dict = await getDictionary();
-  if (!isSectionKey(key)) throw new Error(interpolate(dict.errors.bagianTidakDikenal, { key }));
-  if (!instruction.trim()) throw new Error(dict.errors.instruksiWajibDiisi);
-  const { user, row } = await loadOwned(id);
-  const content = row.content;
-
-  const { value } = await generateJson<{ value: Rpp[SectionKey] }>(
-    refinePrompt(content, key, content[key], instruction),
-    sectionSchema(key),
-  );
-  const next = { ...content, [key]: value } as Rpp;
-
-  // Rute rows drive the pertemuan slots — keep the two in step after a refine.
-  if (key === 'rutePertemuan') {
-    next.pertemuan = next.rutePertemuan.map(r =>
-      content.pertemuan.find(p => p.no === r.no) ?? emptyPertemuan([r])[0]);
-  }
-
-  await updateRppContent(id, user.userId, next);
-  revalidatePath(`/rpp/${id}`);
 }
 
 export async function saveSection(id: string, key: string, value: unknown) {

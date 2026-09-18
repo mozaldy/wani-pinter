@@ -315,6 +315,7 @@ export const id = {
       refinePlaceholder: 'Contoh: buat lebih spesifik dan terukur, sesuaikan untuk kelas dengan 4 murid berkebutuhan khusus',
       terapkan: 'Terapkan',
       menyusunUlang: 'Menyusun ulang…',
+      karakterTersusun: '{count} karakter tersusun…',
       tableHeaders: { pertemuan: 'Pertemuan', tujuan: 'Tujuan', aktivitas: 'Aktivitas', alokasi: 'Alokasi Waktu' },
       tujuanPlaceholder: 'Tujuan pertemuan',
       aktivitasPlaceholder: 'Aktivitas',

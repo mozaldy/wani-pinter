@@ -317,6 +317,7 @@ export const en: Dictionary = {
       refinePlaceholder: 'Example: make it more specific and measurable, adapt it for a class with 4 students with special needs',
       terapkan: 'Apply',
       menyusunUlang: 'Redrafting…',
+      karakterTersusun: '{count} characters written…',
       tableHeaders: { pertemuan: 'Session', tujuan: 'Goal', aktivitas: 'Activity', alokasi: 'Time Allocation' },
       tujuanPlaceholder: 'Session goal',
       aktivitasPlaceholder: 'Activity',
