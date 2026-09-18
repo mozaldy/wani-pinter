@@ -1,16 +1,18 @@
 import { StudentAvatar, Pill } from '@/components/ui';
 import { getStudents } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate, lookup } from '@/lib/i18n/format';
 
 export default async function KepsekSiswaPage() {
-  const students = await getStudents();
+  const [students, dict] = await Promise.all([getStudents(), getDictionary()]);
 
   return (
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>Data Siswa</h1>
+          <h1 className="h-display" style={{ margin: 0, fontSize: 26 }}>{dict.kepsek.siswa.title}</h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
-            {students.length} siswa terdaftar · seluruh kelas
+            {interpolate(dict.kepsek.siswa.subtitle, { count: students.length })}
           </div>
         </div>
       </div>
@@ -19,7 +21,7 @@ export default async function KepsekSiswaPage() {
         <table className="tbl">
           <thead>
             <tr>
-              <th>Siswa</th><th>Kelas</th><th>Rerata</th><th>Kehadiran</th><th>Risiko</th>
+              <th>{dict.kepsek.siswa.colSiswa}</th><th>{dict.kepsek.siswa.colKelas}</th><th>{dict.kepsek.siswa.colRerata}</th><th>{dict.kepsek.siswa.colKehadiran}</th><th>{dict.kepsek.siswa.colRisiko}</th>
             </tr>
           </thead>
           <tbody>
@@ -30,14 +32,14 @@ export default async function KepsekSiswaPage() {
                     <StudentAvatar student={s} />
                     <div>
                       <div style={{ fontWeight: 600, color: 'var(--color-ink)' }}>{s.nama}</div>
-                      <div className="tiny muted">{s.nis} · {s.jk === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+                      <div className="tiny muted">{interpolate(dict.kepsek.siswa.nisJkLine, { nis: s.nis, jk: dict.enums.jk[s.jk] })}</div>
                     </div>
                   </div>
                 </td>
                 <td>{s.kelas}</td>
                 <td><strong style={{ color: s.rerata >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{s.rerata}</strong></td>
                 <td>{s.kehadiran}%</td>
-                <td><Pill kind={s.risiko === 'rendah' ? 'good' : s.risiko === 'sedang' ? 'warn' : 'bad'} dot>{s.risiko}</Pill></td>
+                <td><Pill kind={s.risiko === 'rendah' ? 'good' : s.risiko === 'sedang' ? 'warn' : 'bad'} dot>{lookup(dict.enums.risiko, s.risiko)}</Pill></td>
               </tr>
             ))}
           </tbody>

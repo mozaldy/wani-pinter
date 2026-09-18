@@ -3,6 +3,9 @@ import { Icon } from '@/components/Icon';
 import { StatCard, StudentAvatar, Pill } from '@/components/ui';
 import { getTeacherProfile, getTeacherClasses, getStudents } from '@/lib/queries';
 import type { Student } from '@/lib/types';
+import { getDictionary, getLocale } from '@/lib/i18n/server';
+import { formatDate, interpolate, lookup } from '@/lib/i18n/format';
+import type { Locale } from '@/lib/i18n/config';
 
 const MAPEL_TO_CP: Record<string, keyof Student> = {
   'Matematika': 'cp_matematika',
@@ -22,18 +25,20 @@ const MAPEL_COLOR: Record<string, string> = {
   'PJOK': '#EC4899',
 };
 
-function formatTgl(tgl: string | null) {
+function formatTgl(tgl: string | null, locale: Locale) {
   if (!tgl) return '—';
-  return new Date(tgl).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  return formatDate(tgl, locale, { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 export default async function GuruDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const [teacher, classes, allStudents] = await Promise.all([
+  const [teacher, classes, allStudents, dict, locale] = await Promise.all([
     getTeacherProfile(id),
     getTeacherClasses(id),
     getStudents(),
+    getDictionary(),
+    getLocale(),
   ]);
 
   if (!teacher) notFound();
@@ -73,31 +78,31 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
             <Pill kind="ink">{teacher.jabatan}</Pill>
-            <Pill kind="ink">{uniqueKelas.length} kelas</Pill>
+            <Pill kind="ink">{interpolate(dict.kepsek.guruDetail.jumlahKelas, { count: uniqueKelas.length })}</Pill>
             {statusAktif
-              ? <Pill kind="good" dot>Aktif minggu ini</Pill>
-              : <Pill kind="bad" dot>Tidak aktif</Pill>}
+              ? <Pill kind="good" dot>{dict.kepsek.guru.statAktifMingguIni}</Pill>
+              : <Pill kind="bad" dot>{dict.kepsek.guru.statTidakAktif}</Pill>}
           </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div className="muted small">Terakhir aktif</div>
-          <div style={{ fontWeight: 600, fontSize: 14 }}>{formatTgl(lastActive)}</div>
+          <div className="muted small">{dict.kepsek.guru.colTerakhirAktif}</div>
+          <div style={{ fontWeight: 600, fontSize: 14 }}>{formatTgl(lastActive, locale)}</div>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-12 gap-4 mb-6">
         <div className="col-span-3">
-          <StatCard label="Entri jurnal (30 hari)" value={totalEntri} foot={`${teacher.total_minggu} entri minggu ini`} icon="clipboard" accent="#4F46E5" />
+          <StatCard label={dict.kepsek.guruDetail.statEntriJurnal30Hari} value={totalEntri} foot={interpolate(dict.kepsek.guruDetail.statEntriJurnalFoot, { count: teacher.total_minggu })} icon="clipboard" accent="#4F46E5" />
         </div>
         <div className="col-span-3">
-          <StatCard label="Total siswa diajar" value={taughtStudents.length} foot={`${uniqueKelas.length} kelas aktif`} icon="users" accent="#06B6D4" />
+          <StatCard label={dict.kepsek.guruDetail.statTotalSiswaDiajar} value={taughtStudents.length} foot={interpolate(dict.kepsek.guruDetail.statTotalSiswaDiajarFoot, { count: uniqueKelas.length })} icon="users" accent="#06B6D4" />
         </div>
         <div className="col-span-3">
-          <StatCard label="Rerata siswa" value={avgRerata} foot={avgRerata >= 75 ? 'Di atas KKM' : 'Di bawah KKM'} trend={avgRerata >= 75 ? 'up' : 'down'} icon="target" accent="#10B981" />
+          <StatCard label={dict.kepsek.guruDetail.statRerataSiswa} value={avgRerata} foot={avgRerata >= 75 ? dict.kepsek.guruDetail.diAtasKkm : dict.kepsek.guruDetail.diBawahKkm} trend={avgRerata >= 75 ? 'up' : 'down'} icon="target" accent="#10B981" />
         </div>
         <div className="col-span-3">
-          <StatCard label="Siswa berisiko" value={berisiko} foot="Perlu perhatian" icon="alert" accent="#EF4444" />
+          <StatCard label={dict.kepsek.guruDetail.statSiswaBerisiko} value={berisiko} foot={dict.kepsek.guru.statPerluPerhatian} icon="alert" accent="#EF4444" />
         </div>
       </div>
 
@@ -122,18 +127,18 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{ width: 4, height: 36, borderRadius: 2, background: color, flexShrink: 0 }} />
                       <div>
-                        <h3 style={{ margin: 0 }}>{kelas} · {mapel}</h3>
-                        <div className="tiny muted">{entry_count} entri jurnal</div>
+                        <h3 style={{ margin: 0 }}>{kelas} · {lookup(dict.enums.mapel, mapel)}</h3>
+                        <div className="tiny muted">{interpolate(dict.kepsek.guruDetail.entriJurnalCount, { count: entry_count })}</div>
                       </div>
                     </div>
                     {classAvg !== null && (
                       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
                         <div style={{ textAlign: 'right' }}>
-                          <div className="tiny muted">Rerata kelas</div>
+                          <div className="tiny muted">{dict.kepsek.guruDetail.rerataKelasLabel}</div>
                           <div style={{ fontWeight: 700, fontSize: 20, color: classAvg >= 75 ? 'var(--color-good)' : 'var(--color-bad)' }}>{classAvg}</div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div className="tiny muted">Tuntas KKM</div>
+                          <div className="tiny muted">{dict.kepsek.guruDetail.tuntasKkmLabel}</div>
                           <div style={{ fontWeight: 700, fontSize: 20 }}>{tuntas}/{classStudents.length}</div>
                         </div>
                       </div>
@@ -143,11 +148,11 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
                   <table className="tbl">
                     <thead>
                       <tr>
-                        <th>Siswa</th>
-                        <th>Nilai {mapel}</th>
-                        <th>Rerata keseluruhan</th>
-                        <th>Kehadiran</th>
-                        <th>Risiko</th>
+                        <th>{dict.kepsek.guruDetail.colSiswa}</th>
+                        <th>{interpolate(dict.kepsek.guruDetail.nilaiMapelHeader, { mapel: lookup(dict.enums.mapel, mapel) })}</th>
+                        <th>{dict.kepsek.guruDetail.colRerataKeseluruhan}</th>
+                        <th>{dict.kepsek.guruDetail.colKehadiran}</th>
+                        <th>{dict.kepsek.guruDetail.colRisiko}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -186,7 +191,7 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
                               <td>{s.kehadiran}%</td>
                               <td>
                                 <Pill kind={s.risiko === 'rendah' ? 'good' : s.risiko === 'sedang' ? 'warn' : 'bad'} dot>
-                                  {s.risiko}
+                                  {lookup(dict.enums.risiko, s.risiko)}
                                 </Pill>
                               </td>
                             </tr>

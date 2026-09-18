@@ -10,19 +10,22 @@ import {
   type Rpp, type Pertemuan, type RppInput, type SectionKey,
 } from '@/lib/rpp';
 import { getRpp, insertRpp, updateRppContent, deleteRppRow } from '@/lib/queries';
+import { getDictionary } from '@/lib/i18n/server';
+import { interpolate } from '@/lib/i18n/format';
 
 // ponytail: read-modify-write of the whole JSONB document, last write wins.
 // Add optimistic concurrency on updated_at if one RPP is ever edited from two tabs.
 async function loadOwned(id: string) {
   const user = await requireTeacher();
   const row = await getRpp(id, user.userId);
-  if (!row) throw new Error('Modul ajar tidak ditemukan');
+  if (!row) throw new Error((await getDictionary()).errors.rppNotFound);
   return { user, row };
 }
 
 /** Returns an error message, or redirects on success (useActionState). */
 export async function createRpp(_prev: string | null, formData: FormData): Promise<string | null> {
   const user = await requireTeacher();
+  const dict = await getDictionary();
 
   const jumlah = Math.min(20, Math.max(1, Number(formData.get('jumlahPertemuan')) || 1));
   const input: RppInput = {
@@ -37,7 +40,7 @@ export async function createRpp(_prev: string | null, formData: FormData): Promi
     tujuanPembelajaran: String(formData.get('tujuanPembelajaran') || '').trim(),
     jumlahPertemuan: jumlah,
   };
-  if (!input.mapel || !input.topik) return 'Mata pelajaran dan topik wajib diisi';
+  if (!input.mapel || !input.topik) return dict.errors.mapelTopikRequired;
 
   let id: string;
   try {
@@ -51,7 +54,7 @@ export async function createRpp(_prev: string | null, formData: FormData): Promi
       kelas: content.identitas.kelas,
     }, content);
   } catch (e) {
-    return e instanceof Error ? e.message : 'Gagal menyusun modul ajar';
+    return e instanceof Error ? e.message : dict.errors.gagalMenyusunModul;
   }
 
   revalidatePath('/rpp');
@@ -64,7 +67,7 @@ export async function generatePertemuan(id: string, no: number) {
 
   const hasil = await generateJson<Pertemuan>(pertemuanPrompt(content, no), PERTEMUAN_SCHEMA);
   const i = content.pertemuan.findIndex(p => p.no === no);
-  if (i === -1) throw new Error(`Pertemuan ${no} tidak ada dalam rute`);
+  if (i === -1) throw new Error(interpolate((await getDictionary()).errors.pertemuanTidakAda, { no }));
   content.pertemuan[i] = { ...hasil, no };
 
   await updateRppContent(id, user.userId, content);
@@ -72,8 +75,9 @@ export async function generatePertemuan(id: string, no: number) {
 }
 
 export async function refineSection(id: string, key: string, instruction: string) {
-  if (!isSectionKey(key)) throw new Error(`Bagian tidak dikenal: ${key}`);
-  if (!instruction.trim()) throw new Error('Tulis dulu perubahan yang Anda inginkan');
+  const dict = await getDictionary();
+  if (!isSectionKey(key)) throw new Error(interpolate(dict.errors.bagianTidakDikenal, { key }));
+  if (!instruction.trim()) throw new Error(dict.errors.instruksiWajibDiisi);
   const { user, row } = await loadOwned(id);
   const content = row.content;
 
@@ -94,7 +98,7 @@ export async function refineSection(id: string, key: string, instruction: string
 }
 
 export async function saveSection(id: string, key: string, value: unknown) {
-  if (!isSectionKey(key)) throw new Error(`Bagian tidak dikenal: ${key}`);
+  if (!isSectionKey(key)) throw new Error(interpolate((await getDictionary()).errors.bagianTidakDikenal, { key }));
   const { user, row } = await loadOwned(id);
   const next = { ...row.content, [key]: value } as Rpp;
 
@@ -111,7 +115,7 @@ export async function savePertemuan(id: string, no: number, patch: Partial<Perte
   const { user, row } = await loadOwned(id);
   const content = row.content;
   const i = content.pertemuan.findIndex(p => p.no === no);
-  if (i === -1) throw new Error(`Pertemuan ${no} tidak ada dalam rute`);
+  if (i === -1) throw new Error(interpolate((await getDictionary()).errors.pertemuanTidakAda, { no }));
   content.pertemuan[i] = { ...content.pertemuan[i], ...patch, no };
 
   await updateRppContent(id, user.userId, content);

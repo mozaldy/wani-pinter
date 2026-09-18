@@ -3,14 +3,16 @@ import { redirect, notFound } from 'next/navigation';
 import { assertParentOwnsStudent, getStudentForParent, getCatatanForParent } from '@/lib/queries';
 import { StatCard, StudentAvatar, Pill } from '@/components/ui';
 import type { CatatanSiswa } from '@/lib/types';
+import { getDictionary, getLocale } from '@/lib/i18n/server';
+import { formatDate, interpolate, lookup } from '@/lib/i18n/format';
 
 const SUBJECTS = [
-  { key: 'cp_matematika' as const, label: 'Matematika', color: '#4F46E5' },
-  { key: 'cp_ipa' as const, label: 'IPA Terpadu', color: '#10B981' },
-  { key: 'cp_ips' as const, label: 'IPS Terpadu', color: '#F59E0B' },
-  { key: 'cp_bind' as const, label: 'Bahasa Indonesia', color: '#EF4444' },
-  { key: 'cp_bing' as const, label: 'Bahasa Inggris', color: '#06B6D4' },
-  { key: 'cp_pjok' as const, label: 'PJOK', color: '#EC4899' },
+  { key: 'cp_matematika' as const, mapel: 'Matematika', color: '#4F46E5' },
+  { key: 'cp_ipa' as const, mapel: 'IPA Terpadu', color: '#10B981' },
+  { key: 'cp_ips' as const, mapel: 'IPS Terpadu', color: '#F59E0B' },
+  { key: 'cp_bind' as const, mapel: 'Bahasa Indonesia', color: '#EF4444' },
+  { key: 'cp_bing' as const, mapel: 'Bahasa Inggris', color: '#06B6D4' },
+  { key: 'cp_pjok' as const, mapel: 'PJOK', color: '#EC4899' },
 ];
 
 const KATEGORI_KIND: Record<CatatanSiswa['kategori'], 'good' | 'warn' | 'primary' | 'accent'> = {
@@ -19,11 +21,6 @@ const KATEGORI_KIND: Record<CatatanSiswa['kategori'], 'good' | 'warn' | 'primary
   akademik: 'primary',
   sosial: 'accent',
 };
-
-function formatTgl(tgl: string) {
-  const d = new Date(tgl);
-  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-}
 
 export default async function AnakPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -34,9 +31,11 @@ export default async function AnakPage({ params }: { params: Promise<{ id: strin
   const owns = await assertParentOwnsStudent(parentId, id);
   if (!owns) notFound();
 
-  const [student, catatan] = await Promise.all([
+  const [student, catatan, dict, locale] = await Promise.all([
     getStudentForParent(id),
     getCatatanForParent(id),
+    getDictionary(),
+    getLocale(),
   ]);
 
   if (!student) notFound();
@@ -54,7 +53,7 @@ export default async function AnakPage({ params }: { params: Promise<{ id: strin
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
             <Pill kind="ink">{student.kelas}</Pill>
-            <Pill kind="ink">NIS {student.nis}</Pill>
+            <Pill kind="ink">{interpolate(dict.siswa.nisLabel, { nis: student.nis })}</Pill>
           </div>
         </div>
       </div>
@@ -62,31 +61,31 @@ export default async function AnakPage({ params }: { params: Promise<{ id: strin
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
         <StatCard
-          label="Rerata Nilai"
+          label={dict.parent.anak.statRerataNilai}
           value={student.rerata}
-          foot={student.rerata >= 75 ? 'Di atas KKM' : 'Di bawah KKM'}
+          foot={student.rerata >= 75 ? dict.parent.anak.diAtasKkm : dict.parent.anak.diBawahKkm}
           trend={student.rerata >= 75 ? 'up' : 'down'}
           icon="star"
           accent="#4F46E5"
         />
         <StatCard
-          label="Kehadiran"
+          label={dict.parent.anak.statKehadiran}
           value={`${student.kehadiran}%`}
-          foot="Data agregat semester ini"
+          foot={dict.parent.anak.statKehadiranFoot}
           icon="activity"
           accent="#10B981"
         />
         <StatCard
-          label="CP Tuntas"
-          value={`${cpTuntas} / 6`}
-          foot="Mata pelajaran"
+          label={dict.parent.anak.statCpTuntas}
+          value={interpolate(dict.parent.anak.cpTuntasValue, { count: cpTuntas })}
+          foot={dict.parent.anak.statCpTuntasFoot}
           icon="target"
           accent="#F59E0B"
         />
         <StatCard
-          label="Kelas"
+          label={dict.parent.anak.statKelas}
           value={student.kelas}
-          foot={student.jk === 'L' ? 'Laki-laki' : 'Perempuan'}
+          foot={dict.enums.jk[student.jk]}
           icon="users"
           accent="#06B6D4"
         />
@@ -94,14 +93,14 @@ export default async function AnakPage({ params }: { params: Promise<{ id: strin
 
       {/* CP Progress */}
       <div className="card">
-        <div className="card-title" style={{ marginBottom: 16 }}>Progres Capaian Pembelajaran</div>
+        <div className="card-title" style={{ marginBottom: 16 }}>{dict.parent.anak.progresCpTitle}</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           {SUBJECTS.map(s => {
             const val = student[s.key];
             const color = val >= 75 ? s.color : 'var(--color-bad)';
             return (
               <div key={s.key} className="bar-row">
-                <span style={{ fontSize: 13, color: 'var(--color-ink-2)', fontWeight: 500 }}>{s.label}</span>
+                <span style={{ fontSize: 13, color: 'var(--color-ink-2)', fontWeight: 500 }}>{lookup(dict.enums.mapel, s.mapel)}</span>
                 <div className="bar-track">
                   <div className="bar-fill" style={{
                     width: `${val}%`,
@@ -116,22 +115,22 @@ export default async function AnakPage({ params }: { params: Promise<{ id: strin
           })}
         </div>
         <p style={{ fontSize: 11.5, color: 'var(--color-ink-4)', marginTop: 12 }}>
-          Nilai ≥ 75% dianggap tuntas. Merah = perlu perhatian.
+          {dict.parent.anak.nilaiTuntasHint}
         </p>
       </div>
 
       {/* Catatan dari Guru */}
       <div className="card">
-        <div className="card-title" style={{ marginBottom: 16 }}>Catatan dari Guru</div>
+        <div className="card-title" style={{ marginBottom: 16 }}>{dict.parent.anak.catatanGuruTitle}</div>
         {catatan.length === 0 ? (
           <p style={{ fontSize: 14, color: 'var(--color-ink-3)', textAlign: 'center', padding: '24px 0' }}>
-            Belum ada catatan yang dibagikan oleh guru.
+            {dict.parent.anak.catatanEmptyState}
           </p>
         ) : (
           <div className="timeline">
             {catatan.map(c => (
               <div key={c.id} className={`timeline-item ${c.kategori === 'perhatian' ? 'warn' : c.kategori === 'positif' ? 'good' : ''}`}>
-                <div className="timeline-time">{formatTgl(c.tgl)}</div>
+                <div className="timeline-time">{formatDate(c.tgl, locale, { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                 <div className="timeline-title" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
                   <Pill kind={KATEGORI_KIND[c.kategori]} style={{ fontSize: 10, padding: '1px 7px' }}>{c.kategori}</Pill>
                 </div>
