@@ -5,8 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { requireTeacher } from '@/lib/auth';
 import { generateJson } from '@/lib/gemini';
 import {
-  PERTEMUAN_SCHEMA, sectionSchema, isSectionKey,
-  pertemuanPrompt, refinePrompt, emptyPertemuan,
+  sectionSchema, isSectionKey, refinePrompt, emptyPertemuan,
   type Rpp, type Pertemuan, type SectionKey,
 } from '@/lib/rpp';
 import { getRpp, updateRppContent, deleteRppRow } from '@/lib/queries';
@@ -15,24 +14,11 @@ import { interpolate } from '@/lib/i18n/format';
 
 // ponytail: read-modify-write of the whole JSONB document, last write wins.
 // Add optimistic concurrency on updated_at if one RPP is ever edited from two tabs.
-async function loadOwned(id: string) {
+export async function loadOwned(id: string) {
   const user = await requireTeacher();
   const row = await getRpp(id, user.userId);
   if (!row) throw new Error((await getDictionary()).errors.rppNotFound);
   return { user, row };
-}
-
-export async function generatePertemuan(id: string, no: number) {
-  const { user, row } = await loadOwned(id);
-  const content = row.content;
-
-  const hasil = await generateJson<Pertemuan>(pertemuanPrompt(content, no), PERTEMUAN_SCHEMA);
-  const i = content.pertemuan.findIndex(p => p.no === no);
-  if (i === -1) throw new Error(interpolate((await getDictionary()).errors.pertemuanTidakAda, { no }));
-  content.pertemuan[i] = { ...hasil, no };
-
-  await updateRppContent(id, user.userId, content);
-  revalidatePath(`/rpp/${id}`);
 }
 
 export async function refineSection(id: string, key: string, instruction: string) {

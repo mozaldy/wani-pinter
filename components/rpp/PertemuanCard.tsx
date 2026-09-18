@@ -1,9 +1,11 @@
 'use client';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 import { Pill } from '@/components/ui';
 import { useModals } from '@/components/modals/ModalProvider';
-import { generatePertemuan, savePertemuan } from '@/app/(app)/rpp/actions';
+import { savePertemuan } from '@/app/(app)/rpp/actions';
+import { useStreamedGeneration } from './useStreamedGeneration';
 import type { Pertemuan } from '@/lib/rpp';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { interpolate } from '@/lib/i18n/format';
@@ -11,19 +13,33 @@ import { interpolate } from '@/lib/i18n/format';
 export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
   const { dict } = useI18n();
   const { pushToast } = useModals();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [langkah, setLangkah] = useState(p.langkah.join('\n'));
   const [pending, start] = useTransition();
+  const gen = useStreamedGeneration();
   const filled = p.langkah.length > 0;
+  const streaming = gen.phase === 'thinking' || gen.phase === 'streaming';
+  const busy = pending || streaming;
 
   const run = (fn: () => Promise<void>, ok: string) => start(async () => {
     try { await fn(); pushToast(ok, 'good'); setEditing(false); setOpen(true); }
     catch (e) { pushToast(e instanceof Error ? e.message : dict.rpp.editor.gagal, 'warn'); }
   });
 
+  useEffect(() => {
+    if (gen.phase === 'done') {
+      pushToast(interpolate(dict.rpp.editor.pertemuanTersusunToast, { no: p.no }), 'good');
+      setOpen(true);
+      router.refresh();
+    } else if (gen.phase === 'error' && gen.error) {
+      pushToast(gen.error, 'warn');
+    }
+  }, [gen.phase, gen.error, dict, p.no, pushToast, router]);
+
   return (
-    <div className="card" style={{ marginBottom: 10, opacity: pending ? 0.6 : 1 }}>
+    <div className="card" style={{ marginBottom: 10, opacity: busy ? 0.6 : 1 }}>
       <div className="card-title" style={{ marginBottom: filled && open ? 12 : 0 }}>
         <h3 style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="tiny muted" style={{ fontFamily: 'var(--font-mono)' }}>P{p.no}</span>
@@ -38,13 +54,23 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
               {open ? dict.common.tutup : dict.rpp.editor.lihat}
             </button>
           )}
-          <button className="btn btn-ghost small" disabled={pending}
-            onClick={() => run(() => generatePertemuan(id, p.no), interpolate(dict.rpp.editor.pertemuanTersusunToast, { no: p.no }))}>
+          <button className="btn btn-ghost small" disabled={busy}
+            onClick={() => gen.start(`/api/rpp/${id}/pertemuan/${p.no}`, {})}>
             <Icon name="sparkle" size={12} />
-            {pending ? dict.rpp.editor.menyusun : filled ? dict.rpp.editor.susunUlang : dict.rpp.editor.susunDenganAi}
+            {busy ? dict.rpp.editor.menyusun : filled ? dict.rpp.editor.susunUlang : dict.rpp.editor.susunDenganAi}
           </button>
         </span>
       </div>
+
+      {streaming && gen.stages.length > 0 && (
+        <ul style={{ listStyle: 'none', margin: '0 0 12px', padding: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {gen.stages.map(s => (
+            <li key={s.key} className="tiny muted" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Icon name="check" size={11} /> {s.label}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {filled && open && (
         <div className="flex flex-col gap-3">
@@ -60,7 +86,7 @@ export function PertemuanCard({ id, p }: { id: string; p: Pertemuan }) {
               <textarea rows={Math.max(8, p.langkah.length + 2)} value={langkah}
                 onChange={e => setLangkah(e.target.value)} />
               <div className="flex gap-2" style={{ marginTop: 8 }}>
-                <button className="btn btn-primary" disabled={pending}
+                <button className="btn btn-primary" disabled={busy}
                   onClick={() => run(
                     () => savePertemuan(id, p.no, { langkah: langkah.split('\n').map(s => s.trim()).filter(Boolean) }),
                     interpolate(dict.rpp.editor.pertemuanDisimpanToast, { no: p.no }))}>
