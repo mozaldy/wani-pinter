@@ -9,8 +9,8 @@ import type { Locale } from '@/lib/i18n/config';
 
 const MAPEL_TO_CP: Record<string, keyof Student> = {
   'Matematika': 'cp_matematika',
-  'IPA Terpadu': 'cp_ipa',
-  'IPS Terpadu': 'cp_ips',
+  'IPAS': 'cp_ipa',
+  'Pendidikan Pancasila': 'cp_ips',
   'Bahasa Indonesia': 'cp_bind',
   'Bahasa Inggris': 'cp_bing',
   'PJOK': 'cp_pjok',
@@ -18,8 +18,8 @@ const MAPEL_TO_CP: Record<string, keyof Student> = {
 
 const MAPEL_COLOR: Record<string, string> = {
   'Matematika': '#4F46E5',
-  'IPA Terpadu': '#10B981',
-  'IPS Terpadu': '#F59E0B',
+  'IPAS': '#10B981',
+  'Pendidikan Pancasila': '#F59E0B',
   'Bahasa Indonesia': '#EF4444',
   'Bahasa Inggris': '#06B6D4',
   'PJOK': '#EC4899',

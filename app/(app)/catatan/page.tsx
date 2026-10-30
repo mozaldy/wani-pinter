@@ -6,12 +6,12 @@ import { getDictionary } from '@/lib/i18n/server';
 import { interpolate } from '@/lib/i18n/format';
 
 const NOTES = [
-  { id: 1, sId: 'S002', tgl: '27 Apr', kategori: 'positif' as const, icon: 'star' as IconName, text: 'Kontribusi luar biasa dalam diskusi kelompok hari ini. Membantu Bagas memahami konsep eliminasi dengan analogi yang kreatif.', tags: ['kepemimpinan', 'kolaborasi'] },
+  { id: 1, sId: 'S002', tgl: '27 Apr', kategori: 'positif' as const, icon: 'star' as IconName, text: 'Kontribusi luar biasa dalam diskusi kelompok hari ini. Membantu Bagas memahami konsep meminjam pada pengurangan dengan analogi yang kreatif.', tags: ['kepemimpinan', 'kolaborasi'] },
   { id: 2, sId: 'S007', tgl: '27 Apr', kategori: 'perhatian' as const, icon: 'alert' as IconName, text: 'Tidak hadir 3 hari berturut-turut tanpa keterangan. Sudah dihubungi wali — orang tua menyatakan akan datang ke sekolah Rabu.', tags: ['kehadiran', 'perlu-tindak-lanjut'] },
   { id: 3, sId: 'S003', tgl: '26 Apr', kategori: 'akademik' as const, icon: 'book' as IconName, text: 'Kesulitan konsisten pada konsep abstrak. Lebih responsif dengan manipulatif fisik. Disarankan diferensiasi dengan media konkret.', tags: ['gaya-belajar', 'matematika'] },
   { id: 4, sId: 'S005', tgl: '25 Apr', kategori: 'sosial' as const, icon: 'users' as IconName, text: 'Mulai membuka diri di kelompok. Tadi siang membantu siswa baru beradaptasi.', tags: ['perkembangan-sosial'] },
   { id: 5, sId: 'S008', tgl: '24 Apr', kategori: 'positif' as const, icon: 'star' as IconName, text: 'Inisiatif membuat ringkasan visual untuk kelompoknya. Karya yang sangat rapi dan informatif.', tags: ['kreativitas'] },
-  { id: 6, sId: 'S011', tgl: '23 Apr', kategori: 'akademik' as const, icon: 'book' as IconName, text: 'Tertinggal pada materi Lingkaran. Direkomendasikan ikut sesi remedial Sabtu.', tags: ['remedial'] },
+  { id: 6, sId: 'S011', tgl: '23 Apr', kategori: 'akademik' as const, icon: 'book' as IconName, text: 'Tertinggal pada materi Pecahan Senilai. Direkomendasikan ikut sesi remedial Sabtu.', tags: ['remedial'] },
 ];
 
 const KATEGORI_COLOR = {
@@ -114,7 +114,7 @@ export default async function CatatanPage() {
             <div className="flex flex-col gap-2">
               {[
                 { sId: 'S007', action: 'Pertemuan wali Rabu 13:00', urgent: true },
-                { sId: 'S003', action: 'Rencana diferensiasi Lingkaran', urgent: false },
+                { sId: 'S003', action: 'Rencana diferensiasi Pecahan Senilai', urgent: false },
                 { sId: 'S011', action: 'Daftar remedial Sabtu', urgent: false },
               ].map((t, i) => {
                 const s = find(t.sId);

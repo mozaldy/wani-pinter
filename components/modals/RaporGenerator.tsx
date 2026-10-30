@@ -33,10 +33,10 @@ export function RaporGenerator({ student, onClose }: { student: Student | null; 
   };
 
   const naratifPerMapel = [
-    { mapel: 'Matematika', cp: ['Bilangan Berpangkat', 'SPLDV', 'Pythagoras'],
-      naratif: `${first} menunjukkan pemahaman yang baik pada konsep Bilangan Berpangkat dan Akar (CP-MTK-8.1), terlihat dari kemampuannya menyelesaikan soal-soal kontekstual dengan strategi yang tepat. Pada materi Sistem Persamaan Linear Dua Variabel, ${first} masih perlu penguatan terutama pada metode eliminasi — konsep menyamakan koefisien sering menjadi tantangan. Untuk Teorema Pythagoras, kemampuan visualisasi geometrisnya sudah berkembang dengan baik. Semester depan, ${first} dianjurkan lebih banyak berlatih soal aljabar abstrak.` },
-    { mapel: 'IPA Terpadu', cp: ['Gerak & Gaya', 'Optika', 'Sistem Pencernaan'],
-      naratif: `Pada mata pelajaran IPA, ${first} sangat antusias terutama saat praktikum laboratorium. Eksperimen pembiasan cahaya pada cermin cekung dilaporkan dengan rapi dan analitis. Pemahaman konseptual tentang Hukum Newton sudah baik, namun penerapan pada soal hitungan masih perlu ditingkatkan. ${first} memiliki potensi besar di sains terapan.` },
+    { mapel: 'Matematika', cp: ['Bilangan Cacah', 'Penjumlahan & Pengurangan', 'Faktor & Kelipatan'],
+      naratif: `${first} menunjukkan pemahaman yang baik pada konsep Bilangan Cacah sampai 10.000 (CP-MTK-4.1), terlihat dari kemampuannya membaca, menulis, dan membandingkan bilangan dengan tepat. Pada materi Penjumlahan dan Pengurangan, ${first} masih perlu penguatan terutama pada teknik meminjam — menukar satu puluhan menjadi sepuluh satuan sering menjadi tantangan. Untuk Faktor dan Kelipatan, kemampuannya mengenali pola bilangan sudah berkembang dengan baik. Semester depan, ${first} dianjurkan lebih banyak berlatih soal cerita.` },
+    { mapel: 'IPAS', cp: ['Gaya & Gerak', 'Sifat Cahaya', 'Perubahan Wujud Zat'],
+      naratif: `Pada mata pelajaran IPAS, ${first} sangat antusias terutama saat percobaan di kelas. Percobaan sifat cahaya dan bayangan dilaporkan dengan rapi dan runtut. Pemahaman tentang gaya dorong dan gaya tarik sudah baik, namun menuliskan kesimpulan percobaan dengan kalimat sendiri masih perlu ditingkatkan. ${first} memiliki rasa ingin tahu yang besar terhadap alam sekitar.` },
   ];
 
   const dimensi = [
@@ -45,7 +45,7 @@ export function RaporGenerator({ student, onClose }: { student: Student | null; 
     { d: 'Bergotong-Royong', skor: 'SB', narasi: 'Sangat aktif membantu teman, terutama pada peer-learning.' },
     { d: 'Mandiri', skor: 'MB', narasi: 'Masih perlu dorongan untuk menyelesaikan tugas tepat waktu.' },
     { d: 'Bernalar Kritis', skor: 'MB', narasi: 'Mulai berani bertanya dan menganalisis informasi.' },
-    { d: 'Kreatif', skor: 'BSH', narasi: 'Menunjukkan kreativitas baik pada portofolio cerpen dan vlog.' },
+    { d: 'Kreatif', skor: 'BSH', narasi: 'Menunjukkan kreativitas baik pada portofolio dongeng dan video perkenalan diri.' },
   ];
 
   return (

@@ -6,7 +6,7 @@ import { getStudents, getCPList, getMapel, getHeatmap } from '@/lib/queries';
 import { getDictionary } from '@/lib/i18n/server';
 import { interpolate } from '@/lib/i18n/format';
 
-const KELAS_LIST = ['VII-A', 'VII-B', 'VIII-A', 'VIII-B', 'IX-A'];
+const KELAS_LIST = ['III-A', 'III-B', 'IV-A', 'IV-B', 'V-A'];
 
 export default async function AnalyticsPage() {
   const [students, cps, mapel, heatmap] = await Promise.all([
@@ -15,7 +15,7 @@ export default async function AnalyticsPage() {
   const dict = await getDictionary();
 
   const mapelKeyMap: Record<string, keyof typeof students[0]> = {
-    MTK: 'cp_matematika', IPA: 'cp_ipa', IPS: 'cp_ips',
+    MTK: 'cp_matematika', IPAS: 'cp_ipa', PPKN: 'cp_ips',
     BIND: 'cp_bind', BING: 'cp_bing', PJOK: 'cp_pjok',
   };
 
@@ -31,7 +31,7 @@ export default async function AnalyticsPage() {
         <div className="flex gap-2 items-center">
           <div className="seg">
             {KELAS_LIST.map(k => (
-              <button key={k} className={`seg-btn ${k === 'VIII-A' ? 'active' : ''}`}>{k}</button>
+              <button key={k} className={`seg-btn ${k === 'IV-A' ? 'active' : ''}`}>{k}</button>
             ))}
           </div>
           <button className="btn btn-outline"><Icon name="download" size={14} /> {dict.analytics.ekspor}</button>
@@ -40,7 +40,7 @@ export default async function AnalyticsPage() {
 
       <div className="grid grid-cols-12 gap-4 mb-4">
         <div className="col-span-3"><StatCard label={dict.analytics.statCpTuntas} value="58%" foot={dict.analytics.statCpTuntasFoot} trend="up" icon="target" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label={dict.analytics.statGapTerbesar} value="Statistika" foot={dict.analytics.statGapTerbesarFoot} icon="alert" accent="#F59E0B" /></div>
+        <div className="col-span-3"><StatCard label={dict.analytics.statGapTerbesar} value="Penyajian Data" foot={dict.analytics.statGapTerbesarFoot} icon="alert" accent="#F59E0B" /></div>
         <div className="col-span-3"><StatCard label={dict.analytics.statBerisikoTinggi} value="3" foot={dict.analytics.statBerisikoTinggiFoot} icon="flame" accent="#EF4444" /></div>
         <div className="col-span-3"><StatCard label={dict.analytics.statDiferensiasi} value="A−" foot={dict.analytics.statDiferensiasiFoot} trend="up" icon="star" accent="#4F46E5" /></div>
       </div>
@@ -95,9 +95,9 @@ export default async function AnalyticsPage() {
 
         <div className="col-span-5 flex flex-col gap-4">
           {[
-            { type: 'risk', title: '3 siswa berisiko tidak tuntas pada CP-MTK-8.5 (Lingkaran)', body: 'Bagas, Rendra, dan Galih menunjukkan kesulitan konsisten pada konsep busur dan juring.', action: 'Lihat rencana intervensi' },
-            { type: 'gap', title: 'Gap belajar terbesar: Statistika (TP-3)', body: 'Hanya 22% kelas VIII-A telah menuntaskan TP-3.', action: 'Buat sesi remedial' },
-            { type: 'win', title: '87% siswa tuntas Bilangan Berpangkat', body: 'Kelas VIII-A melampaui target untuk CP-MTK-8.1.', action: 'Bagikan ke rekan guru' },
+            { type: 'risk', title: '3 siswa berisiko tidak tuntas pada CP-MTK-4.5 (Pecahan Senilai)', body: 'Bagas, Rendra, dan Galih menunjukkan kesulitan konsisten pada konsep pecahan senilai dan membandingkan pecahan.', action: 'Lihat rencana intervensi' },
+            { type: 'gap', title: 'Gap belajar terbesar: Penyajian Data (TP-3)', body: 'Hanya 22% kelas IV-A telah menuntaskan TP-3.', action: 'Buat sesi remedial' },
+            { type: 'win', title: '87% siswa tuntas Bilangan Cacah sampai 10.000', body: 'Kelas IV-A melampaui target untuk CP-MTK-4.1.', action: 'Bagikan ke rekan guru' },
           ].map((ins, i) => (
             <div key={i} className="ai-card" style={{
               background: ins.type === 'risk' ? 'linear-gradient(135deg, #FEF2F2, #FEE2E2)'

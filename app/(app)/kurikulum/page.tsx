@@ -79,7 +79,7 @@ export default async function KurikulumPage() {
               {dict.kurikulum.saranAtpBadge}
             </div>
             <div className="ai-text">
-              Berdasarkan kemajuan kelas, saya menyarankan <strong>memindahkan CP-MTK-8.7 (Statistika)</strong> sebelum CP-MTK-8.6 — siswa lebih siap dengan konsep konkret data nyata sekolah dibanding bangun ruang abstrak. Estimasi penyelesaian membaik 9 hari.
+              Berdasarkan kemajuan kelas, saya menyarankan <strong>memindahkan CP-MTK-4.7 (Penyajian Data)</strong> sebelum CP-MTK-4.6 — siswa lebih siap dengan konsep konkret data nyata kelas dibanding keliling dan luas yang menuntut rumus. Estimasi penyelesaian membaik 9 hari.
             </div>
             <div className="flex gap-2" style={{ marginTop: 12 }}>
               <button className="btn btn-primary"><Icon name="check" size={13} /> {dict.kurikulum.terapkanSaran}</button>

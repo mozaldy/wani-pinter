@@ -46,11 +46,11 @@ export function StudentDetail({ student, onClose }: { student: Student | null; o
         </div>
         <div className="ai-text">
           {student.risiko === 'tinggi' ? (
-            <>{first} menunjukkan <strong>penurunan konsisten</strong> di Matematika dan IPA selama 2 minggu terakhir. Kehadiran turun ke {student.kehadiran}%. Direkomendasikan: <strong>sesi konseling wali</strong> + materi remedial Sistem Persamaan Linear.</>
+            <>{first} menunjukkan <strong>penurunan konsisten</strong> di Matematika dan IPAS selama 2 minggu terakhir. Kehadiran turun ke {student.kehadiran}%. Direkomendasikan: <strong>sesi konseling wali</strong> + materi remedial Penjumlahan dan Pengurangan.</>
           ) : student.risiko === 'sedang' ? (
             <>{first} stabil tapi <strong>belum tuntas KKM</strong> di 2 mata pelajaran. Pola: kuat di praktik, lemah di soal abstrak. Cocok untuk <strong>peer learning</strong> dengan siswa berprestasi.</>
           ) : (
-            <>{first} <strong>konsisten di atas KKM</strong> dengan kehadiran sangat baik. Pertimbangkan beri tantangan <strong>pengayaan</strong> di Matematika dan IPA agar tidak jenuh.</>
+            <>{first} <strong>konsisten di atas KKM</strong> dengan kehadiran sangat baik. Pertimbangkan beri tantangan <strong>pengayaan</strong> di Matematika dan IPAS agar tidak jenuh.</>
           )}
         </div>
       </div>

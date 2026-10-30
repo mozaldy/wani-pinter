@@ -208,7 +208,7 @@ function LoginContent() {
                 <div>
                   <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>{dict.auth.aiInsightTitle}</div>
                   <div style={{ fontSize: 12, opacity: 0.85, lineHeight: 1.5 }}>
-                    "3 siswa di kelas VIII-A menunjukkan penurunan konsisten pada Sistem Persamaan Linear. Pertimbangkan sesi peer-learning."
+                    "3 siswa di kelas IV-A menunjukkan penurunan konsisten pada Penjumlahan dan Pengurangan Bilangan Cacah. Pertimbangkan sesi peer-learning."
                   </div>
                 </div>
               </div>

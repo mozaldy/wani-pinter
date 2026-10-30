@@ -184,9 +184,9 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
                 <div className="small" style={{ opacity: 0.7, marginBottom: 8 }}>{dict.modals.modeKelas.tujuanHariIni}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {[
-                    { l: 'Siswa dapat menyusun model SPLDV dari masalah kontekstual', done: true },
-                    { l: 'Siswa dapat menyelesaikan SPLDV dengan metode eliminasi', done: false },
-                    { l: 'Siswa dapat memilih metode terbaik untuk konteks tertentu', done: false },
+                    { l: 'Siswa dapat menjumlahkan bilangan cacah dengan teknik menyimpan', done: true },
+                    { l: 'Siswa dapat mengurangkan bilangan cacah dengan teknik meminjam', done: false },
+                    { l: 'Siswa dapat menyelesaikan soal cerita penjumlahan dan pengurangan', done: false },
                   ].map((tp, i) => (
                     <label key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                       <input type="checkbox" defaultChecked={tp.done} />

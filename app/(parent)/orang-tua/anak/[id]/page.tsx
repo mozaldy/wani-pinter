@@ -8,8 +8,8 @@ import { formatDate, interpolate, lookup } from '@/lib/i18n/format';
 
 const SUBJECTS = [
   { key: 'cp_matematika' as const, mapel: 'Matematika', color: '#4F46E5' },
-  { key: 'cp_ipa' as const, mapel: 'IPA Terpadu', color: '#10B981' },
-  { key: 'cp_ips' as const, mapel: 'IPS Terpadu', color: '#F59E0B' },
+  { key: 'cp_ipa' as const, mapel: 'IPAS', color: '#10B981' },
+  { key: 'cp_ips' as const, mapel: 'Pendidikan Pancasila', color: '#F59E0B' },
   { key: 'cp_bind' as const, mapel: 'Bahasa Indonesia', color: '#EF4444' },
   { key: 'cp_bing' as const, mapel: 'Bahasa Inggris', color: '#06B6D4' },
   { key: 'cp_pjok' as const, mapel: 'PJOK', color: '#EC4899' },

@@ -49,8 +49,8 @@ export function AdminTabs({ students, cps, mapel }: { students: Student[]; cps: 
               </div>
               <div className="seg">
                 <button className="seg-btn active">{dict.adminTabs.semuaKelas}</button>
-                <button className="seg-btn">VIII-A</button>
-                <button className="seg-btn">VIII-B</button>
+                <button className="seg-btn">IV-A</button>
+                <button className="seg-btn">IV-B</button>
               </div>
             </div>
             <button className="btn btn-ghost"><Icon name="filter" size={14} /> {dict.adminTabs.filter}</button>

@@ -5,11 +5,11 @@ import { getDictionary } from '@/lib/i18n/server';
 import { interpolate } from '@/lib/i18n/format';
 
 const JOURNALS = [
-  { id: 1, tgl: '27 Apr 2026', hari: 'Senin', jam: '07.00–08.20', mapel: 'Matematika', kelas: 'VIII-A', topic: 'Sistem Persamaan Linear Dua Variabel · Pertemuan 3', metode: 'Diskusi kelompok', cp: 'CP-MTK-8.2', hadir: 30, total: 32, mood: 'good' as const, notes: 'Diskusi kelompok berjalan baik. Bagas mulai aktif bertanya. Perlu lebih banyak contoh kontekstual untuk konsep eliminasi.' },
-  { id: 2, tgl: '26 Apr 2026', hari: 'Jumat', jam: '08.20–09.40', mapel: 'Matematika', kelas: 'VIII-B', topic: 'Sistem Persamaan Linear · Pertemuan 2', metode: 'Ekspositori + latihan', cp: 'CP-MTK-8.2', hadir: 28, total: 30, mood: 'ok' as const, notes: 'Beberapa siswa kesulitan dengan metode substitusi. Direkomendasikan remedial mini.' },
-  { id: 3, tgl: '25 Apr 2026', hari: 'Kamis', jam: '10.00–11.20', mapel: 'Matematika', kelas: 'IX-A', topic: 'Bangun Ruang Sisi Lengkung · Pengantar', metode: 'Demonstrasi + manipulatif', cp: 'CP-MTK-9.4', hadir: 31, total: 32, mood: 'good' as const, notes: 'Manipulatif tabung dari kardus efektif. Siswa antusias.' },
-  { id: 4, tgl: '24 Apr 2026', hari: 'Rabu', jam: '12.30–13.50', mapel: 'Matematika', kelas: 'VII-A', topic: 'Bilangan Bulat · Operasi Campuran', metode: 'Game-based', cp: 'CP-MTK-7.1', hadir: 29, total: 30, mood: 'good' as const, notes: 'Game kartu operasi efektif untuk remedial.' },
-  { id: 5, tgl: '23 Apr 2026', hari: 'Selasa', jam: '07.00–08.20', mapel: 'Matematika', kelas: 'VIII-A', topic: 'Sistem Persamaan Linear · Pertemuan 2', metode: 'Inquiry', cp: 'CP-MTK-8.2', hadir: 32, total: 32, mood: 'good' as const, notes: 'Kehadiran penuh. Strategi inquiry memunculkan banyak pertanyaan kritis.' },
+  { id: 1, tgl: '27 Apr 2026', hari: 'Senin', jam: '07.00–08.10', mapel: 'Matematika', kelas: 'IV-A', topic: 'Penjumlahan dan Pengurangan Bilangan Cacah · Pertemuan 3', metode: 'Diskusi kelompok', cp: 'CP-MTK-4.2', hadir: 30, total: 32, mood: 'good' as const, notes: 'Diskusi kelompok berjalan baik. Bagas mulai aktif bertanya. Perlu lebih banyak contoh kontekstual untuk konsep meminjam pada pengurangan.' },
+  { id: 2, tgl: '26 Apr 2026', hari: 'Jumat', jam: '08.10–09.20', mapel: 'Matematika', kelas: 'IV-B', topic: 'Penjumlahan dan Pengurangan Bilangan Cacah · Pertemuan 2', metode: 'Ekspositori + latihan', cp: 'CP-MTK-4.2', hadir: 28, total: 30, mood: 'ok' as const, notes: 'Beberapa siswa kesulitan pada pengurangan bersusun dengan meminjam. Direkomendasikan remedial mini.' },
+  { id: 3, tgl: '25 Apr 2026', hari: 'Kamis', jam: '09.40–10.50', mapel: 'Matematika', kelas: 'V-A', topic: 'Volume Kubus dan Balok · Pengantar', metode: 'Demonstrasi + manipulatif', cp: 'CP-MTK-5.4', hadir: 31, total: 32, mood: 'good' as const, notes: 'Susunan kubus satuan dari balok mainan efektif. Siswa antusias.' },
+  { id: 4, tgl: '24 Apr 2026', hari: 'Rabu', jam: '10.50–12.00', mapel: 'Matematika', kelas: 'III-A', topic: 'Bilangan Cacah sampai 1.000 · Nilai Tempat', metode: 'Game-based', cp: 'CP-MTK-3.1', hadir: 29, total: 30, mood: 'good' as const, notes: 'Game kartu nilai tempat efektif untuk remedial.' },
+  { id: 5, tgl: '23 Apr 2026', hari: 'Selasa', jam: '07.00–08.10', mapel: 'Matematika', kelas: 'IV-A', topic: 'Penjumlahan dan Pengurangan Bilangan Cacah · Pertemuan 2', metode: 'Inquiry', cp: 'CP-MTK-4.2', hadir: 32, total: 32, mood: 'good' as const, notes: 'Kehadiran penuh. Strategi inquiry memunculkan banyak pertanyaan kritis.' },
 ];
 
 const MOOD_COLOR = { good: 'var(--color-good)', ok: 'var(--color-warn)', bad: 'var(--color-bad)' };
@@ -49,9 +49,9 @@ export default async function JurnalPage() {
               <h3>{dict.jurnal.entriTerbaru}</h3>
               <div className="seg">
                 <button className="seg-btn active">{dict.common.semua}</button>
-                <button className="seg-btn">VIII-A</button>
-                <button className="seg-btn">VIII-B</button>
-                <button className="seg-btn">IX-A</button>
+                <button className="seg-btn">IV-A</button>
+                <button className="seg-btn">IV-B</button>
+                <button className="seg-btn">V-A</button>
               </div>
             </div>
             <div className="flex flex-col gap-3">
@@ -93,7 +93,7 @@ export default async function JurnalPage() {
               {dict.jurnal.polaTitle}
             </div>
             <div className="ai-text">
-              <strong>Diskusi kelompok</strong> menghasilkan tingkat kehadiran 4% lebih tinggi dan refleksi siswa yang lebih dalam dibandingkan ekspositori. Pertimbangkan untuk meningkatkan frekuensi metode ini di kelas VIII-B.
+              <strong>Diskusi kelompok</strong> menghasilkan tingkat kehadiran 4% lebih tinggi dan refleksi siswa yang lebih dalam dibandingkan ekspositori. Pertimbangkan untuk meningkatkan frekuensi metode ini di kelas IV-B.
             </div>
           </div>
 

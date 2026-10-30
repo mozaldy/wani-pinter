@@ -17,10 +17,10 @@ const SUBJECTS = [
 ] as const;
 
 const ANEK = [
-  { date: '24 Apr 2026', kind: 'akademik' as const, title: 'Kesulitan konsep eliminasi SPLDV', body: 'Saat diskusi kelompok, kesulitan menyamakan koefisien. Diberikan contoh konkret jual-beli warung — mulai paham di akhir sesi.' },
-  { date: '21 Apr 2026', kind: 'sosial' as const, title: 'Bantu teman sekelompok', body: 'Membantu Rendra memahami operasi bilangan bulat saat tutor sebaya. Sikap yang patut diapresiasi.' },
+  { date: '24 Apr 2026', kind: 'akademik' as const, title: 'Kesulitan teknik meminjam pada pengurangan', body: 'Saat diskusi kelompok, kesulitan menukar satu puluhan menjadi sepuluh satuan. Diberikan contoh konkret uang mainan — mulai paham di akhir sesi.' },
+  { date: '21 Apr 2026', kind: 'sosial' as const, title: 'Bantu teman sekelompok', body: 'Membantu Rendra memahami penjumlahan bersusun saat tutor sebaya. Sikap yang patut diapresiasi.' },
   { date: '17 Apr 2026', kind: 'perhatian' as const, title: 'Kehadiran tidak konsisten', body: 'Alpa 2 hari berturut tanpa keterangan. Sudah hubungi orang tua via WA — sedang ada masalah keluarga.' },
-  { date: '12 Apr 2026', kind: 'positif' as const, title: 'Aktif bertanya', body: 'Mulai berani bertanya saat tidak paham. Pertanyaan tentang pythagoras menarik dan dijawab di depan kelas.' },
+  { date: '12 Apr 2026', kind: 'positif' as const, title: 'Aktif bertanya', body: 'Mulai berani bertanya saat tidak paham. Pertanyaan tentang mengapa 1/2 sama dengan 2/4 menarik dan dijawab di depan kelas.' },
 ];
 
 const KIND_COLOR = { akademik: '#4F46E5', sosial: '#06B6D4', perhatian: '#F59E0B', positif: '#10B981' };
@@ -188,13 +188,13 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
             {[
               { t: 'Refleksi P5 Kewirausahaan', d: '24 Apr · 4 hal', c: '#10B981', tag: 'P5' },
-              { t: 'Tugas SPLDV Kontekstual', d: '21 Apr · gambar', c: '#4F46E5', tag: 'Matematika' },
-              { t: 'Esai Pancasila', d: '18 Apr · 3 hal', c: '#F59E0B', tag: 'PPKn' },
-              { t: 'Lab IPA Cermin', d: '15 Apr · video 2:30', c: '#06B6D4', tag: 'IPA' },
-              { t: 'Cerpen "Hujan Pertama"', d: '12 Apr · 5 hal', c: '#EF4444', tag: 'B. Indonesia' },
-              { t: 'Vlog Bahasa Inggris', d: '10 Apr · video 3:45', c: '#EC4899', tag: 'B. Inggris' },
+              { t: 'Tugas Soal Cerita Jual-Beli', d: '21 Apr · gambar', c: '#4F46E5', tag: 'Matematika' },
+              { t: 'Gambar Lambang Pancasila', d: '18 Apr · gambar', c: '#F59E0B', tag: 'PPKn' },
+              { t: 'Percobaan Sifat Cahaya', d: '15 Apr · video 2:30', c: '#06B6D4', tag: 'IPAS' },
+              { t: 'Dongeng "Hujan Pertama"', d: '12 Apr · 5 hal', c: '#EF4444', tag: 'B. Indonesia' },
+              { t: 'Video Perkenalan Diri', d: '10 Apr · video 1:45', c: '#EC4899', tag: 'B. Inggris' },
               { t: 'Poster Kampanye Anti-Bullying', d: '8 Apr · gambar', c: '#8B5CF6', tag: 'P5' },
-              { t: 'Quiz Pythagoras', d: '5 Apr · 90/100', c: '#4F46E5', tag: 'Matematika' },
+              { t: 'Kuis Faktor dan Kelipatan', d: '5 Apr · 90/100', c: '#4F46E5', tag: 'Matematika' },
             ].map((p, i) => (
               <div key={i} style={{ aspectRatio: '4/5', borderRadius: 12, border: '1px solid var(--color-line)', overflow: 'hidden', background: 'var(--color-surface)' }}>
                 <div style={{ height: '60%', background: `linear-gradient(135deg, ${p.c}40, ${p.c}10)`, display: 'grid', placeItems: 'center' }}>

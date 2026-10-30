@@ -5,12 +5,12 @@ import { getDictionary } from '@/lib/i18n/server';
 import { interpolate } from '@/lib/i18n/format';
 
 const SOAL = [
-  { id: 'Q-001', kode: 'CP-MTK-8.2', tingkat: 'mudah', tipe: 'PG', text: 'Tentukan nilai x dan y dari sistem persamaan: 2x + y = 10 dan x − y = 2', tags: ['eliminasi', 'dasar'], dipakai: 12, sukses: 88, pembuat: 'Sari R.' },
-  { id: 'Q-002', kode: 'CP-MTK-8.2', tingkat: 'sedang', tipe: 'Esai', text: 'Sebuah toko menjual 3 buku dan 2 pensil seharga Rp 17.000, dan 2 buku dan 5 pensil seharga Rp 19.000. Tentukan harga 1 buku dan 1 pensil.', tags: ['cerita', 'kontekstual'], dipakai: 8, sukses: 72, pembuat: 'AI Generated' },
-  { id: 'Q-003', kode: 'CP-MTK-8.5', tingkat: 'sulit', tipe: 'Esai', text: 'Diketahui lingkaran dengan jari-jari 14 cm. Hitung luas juring jika sudut pusat 60°.', tags: ['lingkaran', 'juring'], dipakai: 4, sukses: 45, pembuat: 'Bp. Hadi' },
-  { id: 'Q-004', kode: 'CP-MTK-8.4', tingkat: 'sedang', tipe: 'PG', text: 'Sebuah segitiga siku-siku memiliki sisi tegak 6 cm dan 8 cm. Berapa panjang sisi miring?', tags: ['pythagoras'], dipakai: 24, sukses: 91, pembuat: 'Sari R.' },
-  { id: 'Q-005', kode: 'CP-MTK-8.1', tingkat: 'mudah', tipe: 'Isian', text: '2³ × 2⁴ = 2^?', tags: ['eksponen'], dipakai: 18, sukses: 95, pembuat: 'Bank Nasional' },
-  { id: 'Q-006', kode: 'CP-MTK-8.5', tingkat: 'sedang', tipe: 'PG', text: 'Keliling lingkaran dengan diameter 21 cm adalah... (π = 22/7)', tags: ['lingkaran', 'keliling'], dipakai: 11, sukses: 78, pembuat: 'AI Generated' },
+  { id: 'Q-001', kode: 'CP-MTK-4.2', tingkat: 'mudah', tipe: 'PG', text: 'Hasil dari 3.456 + 2.345 adalah ...', tags: ['bersusun', 'dasar'], dipakai: 12, sukses: 88, pembuat: 'Sari R.' },
+  { id: 'Q-002', kode: 'CP-MTK-4.2', tingkat: 'sedang', tipe: 'Esai', text: 'Toko Bu Rina memiliki 4.250 butir telur. Hari ini terjual 1.875 butir, lalu sore hari datang kiriman 2.400 butir. Berapa butir telur Bu Rina sekarang?', tags: ['cerita', 'kontekstual'], dipakai: 8, sukses: 72, pembuat: 'AI Generated' },
+  { id: 'Q-003', kode: 'CP-MTK-4.5', tingkat: 'sulit', tipe: 'Esai', text: 'Sebuah pita dibagi menjadi 8 bagian sama panjang. Ani mengambil 3/8 bagian dan Budi mengambil 6/16 bagian. Apakah bagian mereka sama? Jelaskan dengan pecahan senilai.', tags: ['pecahan senilai', 'membandingkan'], dipakai: 4, sukses: 45, pembuat: 'Bp. Hadi' },
+  { id: 'Q-004', kode: 'CP-MTK-4.4', tingkat: 'sedang', tipe: 'PG', text: 'Manakah yang merupakan semua faktor dari 12?', tags: ['faktor'], dipakai: 24, sukses: 91, pembuat: 'Sari R.' },
+  { id: 'Q-005', kode: 'CP-MTK-4.1', tingkat: 'mudah', tipe: 'Isian', text: 'Bilangan "tujuh ribu dua ratus tiga puluh lima" ditulis ...', tags: ['nilai tempat'], dipakai: 18, sukses: 95, pembuat: 'Bank Nasional' },
+  { id: 'Q-006', kode: 'CP-MTK-4.5', tingkat: 'sedang', tipe: 'PG', text: 'Pecahan yang senilai dengan 1/2 adalah ...', tags: ['pecahan senilai'], dipakai: 11, sukses: 78, pembuat: 'AI Generated' },
 ];
 
 const TINGKAT_KIND: Record<string, 'good' | 'warn' | 'bad'> = { mudah: 'good', sedang: 'warn', sulit: 'bad' };

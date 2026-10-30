@@ -5,23 +5,23 @@ import { useI18n } from '@/lib/i18n/I18nProvider';
 import { interpolate } from '@/lib/i18n/format';
 import type { CP } from '@/lib/types';
 
-const TPS_8_2 = [
-  { kode: 'TP-1', nama: 'Mengidentifikasi sistem persamaan linear dua variabel dari konteks', mastered: 92, tugas: 3 },
-  { kode: 'TP-2', nama: 'Menyelesaikan SPLDV dengan metode eliminasi', mastered: 84, tugas: 2 },
-  { kode: 'TP-3', nama: 'Menyelesaikan SPLDV dengan metode substitusi', mastered: 67, tugas: 2 },
-  { kode: 'TP-4', nama: 'Menerapkan SPLDV pada masalah kontekstual', mastered: 71, tugas: 2 },
-  { kode: 'TP-5', nama: 'Menganalisis solusi SPLDV (tunggal, banyak, tidak ada)', mastered: 45, tugas: 1 },
+const TPS_4_2 = [
+  { kode: 'TP-1', nama: 'Menjumlahkan bilangan cacah sampai 10.000 tanpa menyimpan', mastered: 92, tugas: 3 },
+  { kode: 'TP-2', nama: 'Menjumlahkan bilangan cacah dengan teknik menyimpan', mastered: 84, tugas: 2 },
+  { kode: 'TP-3', nama: 'Mengurangkan bilangan cacah dengan teknik meminjam', mastered: 67, tugas: 2 },
+  { kode: 'TP-4', nama: 'Menyelesaikan soal cerita penjumlahan dan pengurangan', mastered: 71, tugas: 2 },
+  { kode: 'TP-5', nama: 'Memperkirakan hasil penjumlahan dan pengurangan', mastered: 45, tugas: 1 },
 ];
 
 export function KurikulumExpander({ cps }: { cps: CP[] }) {
   const { dict } = useI18n();
-  const [expanded, setExpanded] = useState<string | null>('CP-MTK-8.2');
+  const [expanded, setExpanded] = useState<string | null>('CP-MTK-4.2');
 
   return (
     <div className="flex flex-col gap-2">
       {cps.map(cp => {
         const isExp = expanded === cp.kode;
-        const tpList = cp.kode === 'CP-MTK-8.2' ? TPS_8_2 : Array.from({ length: cp.tp_count }).map((_, i) => ({
+        const tpList = cp.kode === 'CP-MTK-4.2' ? TPS_4_2 : Array.from({ length: cp.tp_count }).map((_, i) => ({
           kode: `TP-${i + 1}`,
           nama: interpolate(dict.kurikulum.tpDefaultLabel, { n: i + 1 }),
           mastered: Math.max(0, cp.mastered + (Math.sin(i) * 15) | 0),

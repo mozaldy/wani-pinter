@@ -114,7 +114,7 @@ export default async function DashboardPage() {
               {dict.dashboard.aiSummaryBadge}
             </div>
             <div className="ai-text">
-              <strong>3 siswa</strong> butuh perhatian di kelas berikutnya (VIII-B). Nilai formatif <strong>Bagas</strong> turun 18% — pertimbangkan pasangkan dengan <strong>Siti</strong> untuk peer learning saat sesi Sistem Persamaan Linear.
+              <strong>3 siswa</strong> butuh perhatian di kelas berikutnya (IV-B). Nilai formatif <strong>Bagas</strong> turun 18% — pertimbangkan pasangkan dengan <strong>Siti</strong> untuk peer learning saat sesi Penjumlahan dan Pengurangan.
             </div>
             <div className="flex gap-2" style={{ marginTop: 14 }}>
               <OpenAIButton><Icon name="sparkle" size={13} /> {dict.dashboard.lihatDetail}</OpenAIButton>
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
         <div className="col-span-8">
           <div className="card">
             <div className="card-title">
-              <h3>{interpolate(dict.dashboard.classSummaryTitle, { kelas: 'VIII-A' })}</h3>
+              <h3>{interpolate(dict.dashboard.classSummaryTitle, { kelas: 'IV-A' })}</h3>
               <div className="seg">
                 <button className="seg-btn active">{dict.common.semua}</button>
                 <button className="seg-btn">{dict.dashboard.segBerisiko}</button>

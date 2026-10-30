@@ -94,7 +94,7 @@ function ProfilTab() {
           <div className="field"><label className="field-label">{p.fields.schoolEmail}</label><input defaultValue="sari.rahmawati@sdn1keputran.sch.id" /></div>
           <div className="field"><label className="field-label">{p.fields.whatsapp}</label><input defaultValue="+62 812-3456-7890" /></div>
           <div className="field"><label className="field-label">{p.fields.subject}</label><input defaultValue="Matematika" /></div>
-          <div className="field"><label className="field-label">{p.fields.homeroom}</label><select><option>VIII-A</option><option>VIII-B</option><option>—</option></select></div>
+          <div className="field"><label className="field-label">{p.fields.homeroom}</label><select><option>IV-A</option><option>IV-B</option><option>—</option></select></div>
           <div className="field" style={{ gridColumn: 'span 2' }}>
             <label className="field-label">{p.fields.bio}</label>
             <textarea rows={3} defaultValue="Guru Matematika SD dengan minat khusus pada diferensiasi pembelajaran dan numerasi kontekstual. 14 tahun mengajar." />

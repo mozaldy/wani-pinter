@@ -17,8 +17,6 @@ const DEFAULT_MAPEL = [
   'Matematika',
   'Bahasa Indonesia',
   'Bahasa Inggris',
-  'IPA Terpadu',
-  'IPS Terpadu',
   'IPAS',
   'Pendidikan Pancasila',
   'Pendidikan Agama & Budi Pekerti',
@@ -81,6 +79,10 @@ const FASE_OPTIONS = [
   },
 ] as const;
 
+// This school is SD-only; widen to ['A'..'F'] to serve SMP/SMA as well.
+const SCHOOL_FASE: readonly string[] = ['A', 'B', 'C'];
+const SCHOOL_FASE_OPTIONS = FASE_OPTIONS.filter(f => SCHOOL_FASE.includes(f.value));
+
 export function CreateRppForm({ mapel, jabatan }: { mapel: string[]; jabatan: string }) {
   const { dict } = useI18n();
   const router = useRouter();
@@ -134,14 +136,14 @@ export function CreateRppForm({ mapel, jabatan }: { mapel: string[]; jabatan: st
 }
 
 function Fieldset({ mapel, mapelDefault, dict, pending }: { mapel: string[]; mapelDefault: string; dict: Dictionary; pending: boolean }) {
-  const [fase, setFase] = useState('A');
-  const [kelas, setKelas] = useState('I');
+  const [fase, setFase] = useState('B');
+  const [kelas, setKelas] = useState('IV');
 
-  const activeFase = FASE_OPTIONS.find(f => f.value === fase) ?? FASE_OPTIONS[0];
+  const activeFase = SCHOOL_FASE_OPTIONS.find(f => f.value === fase) ?? SCHOOL_FASE_OPTIONS[0];
 
   const handleFaseChange = (newFase: string) => {
     setFase(newFase);
-    const targetFase = FASE_OPTIONS.find(f => f.value === newFase);
+    const targetFase = SCHOOL_FASE_OPTIONS.find(f => f.value === newFase);
     if (targetFase && !targetFase.kelas.some(k => k.value === kelas)) {
       setKelas(targetFase.kelas[0].value);
     }
@@ -166,7 +168,7 @@ function Fieldset({ mapel, mapelDefault, dict, pending }: { mapel: string[]; map
         <div className="col-span-3 field">
           <label className="field-label">{dict.rpp.create.faseLabel}</label>
           <select name="fase" required value={fase} onChange={e => handleFaseChange(e.target.value)}>
-            {FASE_OPTIONS.map(f => (
+            {SCHOOL_FASE_OPTIONS.map(f => (
               <option key={f.value} value={f.value}>{dict.rpp.create.faseOptions[f.value]}</option>
             ))}
           </select>

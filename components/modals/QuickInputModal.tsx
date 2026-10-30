@@ -12,7 +12,7 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
 }) {
   const { dict } = useI18n();
   const [step, setStep] = useState(0);
-  const [topic, setTopic] = useState('Sistem Persamaan Linear Dua Variabel');
+  const [topic, setTopic] = useState('Penjumlahan dan Pengurangan Bilangan Cacah');
   const [hadir, setHadir] = useState<Record<string, string>>({});
   const [recording, setRecording] = useState(false);
   const [notes, setNotes] = useState('');
@@ -29,7 +29,7 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
   const toggleVoice = () => {
     if (recording) {
       setRecording(false);
-      setNotes('Diskusi kelompok berjalan baik. Bagas mulai aktif bertanya. Perlu lebih banyak contoh kontekstual untuk konsep eliminasi. Rendra masih tertinggal — coba pasangkan dengan Siti minggu depan.');
+      setNotes('Diskusi kelompok berjalan baik. Bagas mulai aktif bertanya. Perlu lebih banyak contoh kontekstual untuk konsep meminjam pada pengurangan. Rendra masih tertinggal — coba pasangkan dengan Siti minggu depan.');
     } else setRecording(true);
   };
 
@@ -62,7 +62,7 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
           <div className="field">
             <label className="field-label">{dict.modals.quickInput.topikLabel}</label>
             <input value={topic} onChange={e => setTopic(e.target.value)} />
-            <div className="tiny muted">{dict.modals.quickInput.terhubungBefore}<strong>CP-MTK-8.2</strong>{dict.modals.quickInput.terhubungAfter}</div>
+            <div className="tiny muted">{dict.modals.quickInput.terhubungBefore}<strong>CP-MTK-4.2</strong>{dict.modals.quickInput.terhubungAfter}</div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="field">
@@ -137,7 +137,7 @@ export function QuickInputModal({ open, onClose, onSubmit, students }: {
               {dict.modals.quickInput.aiMenyarankan}
             </div>
             <div className="ai-text small flex gap-2 flex-wrap items-center">
-              {dict.modals.quickInput.tagOtomatis} <Pill kind="primary">diskusi-kelompok</Pill> <Pill kind="primary">CP-MTK-8.2</Pill> <Pill kind="warn">tindak-lanjut: Rendra</Pill>
+              {dict.modals.quickInput.tagOtomatis} <Pill kind="primary">diskusi-kelompok</Pill> <Pill kind="primary">CP-MTK-4.2</Pill> <Pill kind="warn">tindak-lanjut: Rendra</Pill>
             </div>
           </div>
         </>

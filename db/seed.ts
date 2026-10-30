@@ -11,45 +11,45 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const sql = neon(process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL!);
 
 const STUDENTS = [
-  { id: 'S001', nama: 'Ahmad Fauzi Rizky', nis: '0078451123', kelas: 'VIII-A', jk: 'L', avatar: '#4F46E5', rerata: 88, kehadiran: 96, risiko: 'rendah', ortu: 'Bp. Budi Santoso', alamat: 'Jl. Diponegoro 12, Yogyakarta', cp: { matematika: 85, ipa: 90, ips: 86, bind: 92, bing: 88, pjok: 95 } },
-  { id: 'S002', nama: 'Siti Nurhaliza', nis: '0078451124', kelas: 'VIII-A', jk: 'P', avatar: '#EC4899', rerata: 92, kehadiran: 98, risiko: 'rendah', ortu: 'Ibu Rina Wulandari', alamat: 'Jl. Malioboro 45', cp: { matematika: 95, ipa: 92, ips: 90, bind: 94, bing: 91, pjok: 89 } },
-  { id: 'S003', nama: 'Bagas Pratama', nis: '0078451125', kelas: 'VIII-A', jk: 'L', avatar: '#06B6D4', rerata: 65, kehadiran: 78, risiko: 'tinggi', ortu: 'Bp. Hadi Pratama', alamat: 'Jl. Solo Km 8', cp: { matematika: 55, ipa: 62, ips: 70, bind: 68, bing: 60, pjok: 75 } },
-  { id: 'S004', nama: 'Dewi Anggraini', nis: '0078451126', kelas: 'VIII-A', jk: 'P', avatar: '#10B981', rerata: 78, kehadiran: 92, risiko: 'rendah', ortu: 'Ibu Yuni Lestari', alamat: 'Perum Griya Asri B-12', cp: { matematika: 75, ipa: 80, ips: 78, bind: 82, bing: 76, pjok: 80 } },
-  { id: 'S005', nama: 'Muhammad Ilham', nis: '0078451127', kelas: 'VIII-A', jk: 'L', avatar: '#F59E0B', rerata: 71, kehadiran: 85, risiko: 'sedang', ortu: 'Bp. Dedi Kurniawan', alamat: 'Jl. Kaliurang Km 12', cp: { matematika: 68, ipa: 70, ips: 72, bind: 75, bing: 68, pjok: 78 } },
-  { id: 'S006', nama: 'Putri Maharani', nis: '0078451128', kelas: 'VIII-A', jk: 'P', avatar: '#8B5CF6', rerata: 84, kehadiran: 94, risiko: 'rendah', ortu: 'Ibu Siti Aminah', alamat: 'Jl. Gejayan 78', cp: { matematika: 80, ipa: 86, ips: 84, bind: 88, bing: 82, pjok: 85 } },
-  { id: 'S007', nama: 'Rendra Wijaya', nis: '0078451129', kelas: 'VIII-A', jk: 'L', avatar: '#EF4444', rerata: 58, kehadiran: 72, risiko: 'tinggi', ortu: 'Bp. Joko Wijaya', alamat: 'Jl. Kapas 23', cp: { matematika: 50, ipa: 55, ips: 60, bind: 62, bing: 58, pjok: 70 } },
-  { id: 'S008', nama: 'Anisa Rahmadhani', nis: '0078451130', kelas: 'VIII-A', jk: 'P', avatar: '#14B8A6', rerata: 90, kehadiran: 100, risiko: 'rendah', ortu: 'Ibu Ratna Sari', alamat: 'Jl. Magelang Km 5', cp: { matematika: 92, ipa: 88, ips: 90, bind: 94, bing: 89, pjok: 87 } },
-  { id: 'S009', nama: 'Yoga Adi Pratama', nis: '0078451131', kelas: 'VIII-A', jk: 'L', avatar: '#F97316', rerata: 76, kehadiran: 90, risiko: 'rendah', ortu: 'Bp. Sutrisno', alamat: 'Jl. Wonosari 14', cp: { matematika: 72, ipa: 78, ips: 76, bind: 80, bing: 74, pjok: 78 } },
-  { id: 'S010', nama: 'Najwa Salsabila', nis: '0078451132', kelas: 'VIII-A', jk: 'P', avatar: '#A855F7', rerata: 81, kehadiran: 93, risiko: 'rendah', ortu: 'Ibu Maya Indah', alamat: 'Jl. Tamansiswa 56', cp: { matematika: 78, ipa: 84, ips: 82, bind: 85, bing: 80, pjok: 78 } },
-  { id: 'S011', nama: 'Galih Setiawan', nis: '0078451133', kelas: 'VIII-A', jk: 'L', avatar: '#0EA5E9', rerata: 68, kehadiran: 82, risiko: 'sedang', ortu: 'Bp. Agus Setiawan', alamat: 'Jl. Imogiri 99', cp: { matematika: 62, ipa: 65, ips: 70, bind: 72, bing: 65, pjok: 76 } },
-  { id: 'S012', nama: 'Lulu Aulia Sari', nis: '0078451134', kelas: 'VIII-A', jk: 'P', avatar: '#84CC16', rerata: 87, kehadiran: 95, risiko: 'rendah', ortu: 'Ibu Endang', alamat: 'Jl. Bantul Km 7', cp: { matematika: 84, ipa: 88, ips: 86, bind: 90, bing: 86, pjok: 88 } },
+  { id: 'S001', nama: 'Ahmad Fauzi Rizky', nis: '0078451123', kelas: 'IV-A', jk: 'L', avatar: '#4F46E5', rerata: 88, kehadiran: 96, risiko: 'rendah', ortu: 'Bp. Budi Santoso', alamat: 'Jl. Diponegoro 12, Yogyakarta', cp: { matematika: 85, ipa: 90, ips: 86, bind: 92, bing: 88, pjok: 95 } },
+  { id: 'S002', nama: 'Siti Nurhaliza', nis: '0078451124', kelas: 'IV-A', jk: 'P', avatar: '#EC4899', rerata: 92, kehadiran: 98, risiko: 'rendah', ortu: 'Ibu Rina Wulandari', alamat: 'Jl. Malioboro 45', cp: { matematika: 95, ipa: 92, ips: 90, bind: 94, bing: 91, pjok: 89 } },
+  { id: 'S003', nama: 'Bagas Pratama', nis: '0078451125', kelas: 'IV-A', jk: 'L', avatar: '#06B6D4', rerata: 65, kehadiran: 78, risiko: 'tinggi', ortu: 'Bp. Hadi Pratama', alamat: 'Jl. Solo Km 8', cp: { matematika: 55, ipa: 62, ips: 70, bind: 68, bing: 60, pjok: 75 } },
+  { id: 'S004', nama: 'Dewi Anggraini', nis: '0078451126', kelas: 'IV-A', jk: 'P', avatar: '#10B981', rerata: 78, kehadiran: 92, risiko: 'rendah', ortu: 'Ibu Yuni Lestari', alamat: 'Perum Griya Asri B-12', cp: { matematika: 75, ipa: 80, ips: 78, bind: 82, bing: 76, pjok: 80 } },
+  { id: 'S005', nama: 'Muhammad Ilham', nis: '0078451127', kelas: 'IV-A', jk: 'L', avatar: '#F59E0B', rerata: 71, kehadiran: 85, risiko: 'sedang', ortu: 'Bp. Dedi Kurniawan', alamat: 'Jl. Kaliurang Km 12', cp: { matematika: 68, ipa: 70, ips: 72, bind: 75, bing: 68, pjok: 78 } },
+  { id: 'S006', nama: 'Putri Maharani', nis: '0078451128', kelas: 'IV-A', jk: 'P', avatar: '#8B5CF6', rerata: 84, kehadiran: 94, risiko: 'rendah', ortu: 'Ibu Siti Aminah', alamat: 'Jl. Gejayan 78', cp: { matematika: 80, ipa: 86, ips: 84, bind: 88, bing: 82, pjok: 85 } },
+  { id: 'S007', nama: 'Rendra Wijaya', nis: '0078451129', kelas: 'IV-A', jk: 'L', avatar: '#EF4444', rerata: 58, kehadiran: 72, risiko: 'tinggi', ortu: 'Bp. Joko Wijaya', alamat: 'Jl. Kapas 23', cp: { matematika: 50, ipa: 55, ips: 60, bind: 62, bing: 58, pjok: 70 } },
+  { id: 'S008', nama: 'Anisa Rahmadhani', nis: '0078451130', kelas: 'IV-A', jk: 'P', avatar: '#14B8A6', rerata: 90, kehadiran: 100, risiko: 'rendah', ortu: 'Ibu Ratna Sari', alamat: 'Jl. Magelang Km 5', cp: { matematika: 92, ipa: 88, ips: 90, bind: 94, bing: 89, pjok: 87 } },
+  { id: 'S009', nama: 'Yoga Adi Pratama', nis: '0078451131', kelas: 'IV-A', jk: 'L', avatar: '#F97316', rerata: 76, kehadiran: 90, risiko: 'rendah', ortu: 'Bp. Sutrisno', alamat: 'Jl. Wonosari 14', cp: { matematika: 72, ipa: 78, ips: 76, bind: 80, bing: 74, pjok: 78 } },
+  { id: 'S010', nama: 'Najwa Salsabila', nis: '0078451132', kelas: 'IV-A', jk: 'P', avatar: '#A855F7', rerata: 81, kehadiran: 93, risiko: 'rendah', ortu: 'Ibu Maya Indah', alamat: 'Jl. Tamansiswa 56', cp: { matematika: 78, ipa: 84, ips: 82, bind: 85, bing: 80, pjok: 78 } },
+  { id: 'S011', nama: 'Galih Setiawan', nis: '0078451133', kelas: 'IV-A', jk: 'L', avatar: '#0EA5E9', rerata: 68, kehadiran: 82, risiko: 'sedang', ortu: 'Bp. Agus Setiawan', alamat: 'Jl. Imogiri 99', cp: { matematika: 62, ipa: 65, ips: 70, bind: 72, bing: 65, pjok: 76 } },
+  { id: 'S012', nama: 'Lulu Aulia Sari', nis: '0078451134', kelas: 'IV-A', jk: 'P', avatar: '#84CC16', rerata: 87, kehadiran: 95, risiko: 'rendah', ortu: 'Ibu Endang', alamat: 'Jl. Bantul Km 7', cp: { matematika: 84, ipa: 88, ips: 86, bind: 90, bing: 86, pjok: 88 } },
 ];
 
 const MAPEL = [
   { kode: 'MTK', nama: 'Matematika', icon: 'sigma', color: '#4F46E5' },
-  { kode: 'IPA', nama: 'IPA Terpadu', icon: 'leaf', color: '#10B981' },
-  { kode: 'IPS', nama: 'IPS Terpadu', icon: 'globe', color: '#F59E0B' },
+  { kode: 'IPAS', nama: 'IPAS', icon: 'leaf', color: '#10B981' },
+  { kode: 'PPKN', nama: 'Pendidikan Pancasila', icon: 'globe', color: '#F59E0B' },
   { kode: 'BIND', nama: 'Bahasa Indonesia', icon: 'book', color: '#EF4444' },
   { kode: 'BING', nama: 'Bahasa Inggris', icon: 'message', color: '#06B6D4' },
   { kode: 'PJOK', nama: 'PJOK', icon: 'activity', color: '#EC4899' },
 ];
 
 const CP_LIST = [
-  { kode: 'CP-MTK-8.1', nama: 'Bilangan Berpangkat & Akar', tp: 4, mastered: 87 },
-  { kode: 'CP-MTK-8.2', nama: 'Sistem Persamaan Linear Dua Variabel', tp: 5, mastered: 72 },
-  { kode: 'CP-MTK-8.3', nama: 'Persamaan Garis Lurus', tp: 3, mastered: 64 },
-  { kode: 'CP-MTK-8.4', nama: 'Teorema Pythagoras', tp: 4, mastered: 81 },
-  { kode: 'CP-MTK-8.5', nama: 'Lingkaran', tp: 6, mastered: 45 },
-  { kode: 'CP-MTK-8.6', nama: 'Bangun Ruang Sisi Datar', tp: 5, mastered: 38 },
-  { kode: 'CP-MTK-8.7', nama: 'Statistika', tp: 4, mastered: 22 },
-  { kode: 'CP-MTK-8.8', nama: 'Peluang', tp: 3, mastered: 0 },
+  { kode: 'CP-MTK-4.1', nama: 'Bilangan Cacah sampai 10.000', tp: 4, mastered: 87 },
+  { kode: 'CP-MTK-4.2', nama: 'Penjumlahan & Pengurangan Bilangan Cacah', tp: 5, mastered: 72 },
+  { kode: 'CP-MTK-4.3', nama: 'Perkalian & Pembagian', tp: 3, mastered: 64 },
+  { kode: 'CP-MTK-4.4', nama: 'Faktor & Kelipatan', tp: 4, mastered: 81 },
+  { kode: 'CP-MTK-4.5', nama: 'Pecahan Senilai', tp: 6, mastered: 45 },
+  { kode: 'CP-MTK-4.6', nama: 'Keliling & Luas Persegi dan Persegi Panjang', tp: 5, mastered: 38 },
+  { kode: 'CP-MTK-4.7', nama: 'Penyajian Data (Diagram Batang)', tp: 4, mastered: 22 },
+  { kode: 'CP-MTK-4.8', nama: 'Sudut dan Simetri', tp: 3, mastered: 0 },
 ];
 
 const JADWAL = [
-  { waktu: '07.00 - 08.20', mapel: 'Matematika', kelas: 'VIII-A', topic: 'Sistem Persamaan Linear', status: 'selesai', ruang: 'R-201' },
-  { waktu: '08.20 - 09.40', mapel: 'Matematika', kelas: 'VIII-B', topic: 'Sistem Persamaan Linear', status: 'aktif', ruang: 'R-203' },
-  { waktu: '10.00 - 11.20', mapel: 'Matematika', kelas: 'IX-A', topic: 'Bangun Ruang Sisi Lengkung', status: 'mendatang', ruang: 'R-301' },
-  { waktu: '12.30 - 13.50', mapel: 'Matematika', kelas: 'VII-A', topic: 'Bilangan Bulat', status: 'mendatang', ruang: 'R-101' },
+  { waktu: '07.00 - 08.10', mapel: 'Matematika', kelas: 'IV-A', topic: 'Penjumlahan Bersusun sampai 10.000', status: 'selesai', ruang: 'Ruang IV-A' },
+  { waktu: '08.10 - 09.20', mapel: 'Matematika', kelas: 'IV-B', topic: 'Penjumlahan Bersusun sampai 10.000', status: 'aktif', ruang: 'Ruang IV-B' },
+  { waktu: '09.40 - 10.50', mapel: 'Matematika', kelas: 'V-A', topic: 'Volume Kubus dan Balok', status: 'mendatang', ruang: 'Ruang V-A' },
+  { waktu: '10.50 - 12.00', mapel: 'Matematika', kelas: 'III-A', topic: 'Bilangan Cacah sampai 1.000', status: 'mendatang', ruang: 'Ruang III-A' },
 ];
 
 const KEHADIRAN = [
@@ -61,17 +61,17 @@ const KEHADIRAN = [
 ];
 
 const INSIGHTS = [
-  { type: 'risk', title: '3 siswa berisiko tidak tuntas pada CP-MTK-8.5 (Lingkaran)', body: 'Bagas, Rendra, dan Galih menunjukkan kesulitan konsisten pada konsep busur dan juring. Skor formatif mereka turun 18% dalam 2 minggu terakhir, dan kehadiran Rendra hanya 72%.', action: 'Lihat rencana intervensi' },
-  { type: 'gap', title: 'Gap belajar terbesar: Statistika (TP-3 — Penyajian Data)', body: 'Hanya 22% kelas VIII-A telah menuntaskan TP-3. Disarankan memberi 1 sesi remedial dengan studi kasus data sekolah agar lebih kontekstual.', action: 'Buat sesi remedial' },
-  { type: 'win', title: 'Pencapaian: 87% siswa tuntas Bilangan Berpangkat (target 80%)', body: 'Kelas VIII-A melampaui target untuk CP-MTK-8.1. Strategi diferensiasi yang Anda terapkan minggu lalu efektif — pertimbangkan dokumentasi sebagai praktik terbaik.', action: 'Bagikan ke rekan guru' },
+  { type: 'risk', title: '3 siswa berisiko tidak tuntas pada CP-MTK-4.5 (Pecahan Senilai)', body: 'Bagas, Rendra, dan Galih menunjukkan kesulitan konsisten pada konsep pecahan senilai dan membandingkan pecahan. Skor formatif mereka turun 18% dalam 2 minggu terakhir, dan kehadiran Rendra hanya 72%.', action: 'Lihat rencana intervensi' },
+  { type: 'gap', title: 'Gap belajar terbesar: Penyajian Data (TP-3 — Diagram Batang)', body: 'Hanya 22% kelas IV-A telah menuntaskan TP-3. Disarankan memberi 1 sesi remedial dengan data nyata kelas, misalnya jumlah siswa per hobi, agar lebih kontekstual.', action: 'Buat sesi remedial' },
+  { type: 'win', title: 'Pencapaian: 87% siswa tuntas Bilangan Cacah sampai 10.000 (target 80%)', body: 'Kelas IV-A melampaui target untuk CP-MTK-4.1. Strategi diferensiasi yang Anda terapkan minggu lalu efektif — pertimbangkan dokumentasi sebagai praktik terbaik.', action: 'Bagikan ke rekan guru' },
 ];
 
 const USERS = [
   { email: 'sari.rahmawati@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Sari Rahmawati, S.Pd', initials: 'SR', role: 'guru', jabatan: 'Guru Matematika' },
   { email: 'kepala@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Dr. Baskoro Adi, M.Pd', initials: 'BA', role: 'kepsek', jabatan: 'Kepala Sekolah' },
-  { email: 'ahmad.fadli@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Ahmad Fadli, S.Pd', initials: 'AF', role: 'guru', jabatan: 'Guru IPA Terpadu' },
+  { email: 'ahmad.fadli@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Ahmad Fadli, S.Pd', initials: 'AF', role: 'guru', jabatan: 'Guru IPAS' },
   { email: 'rina.kusuma@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Rina Kusuma, S.Pd', initials: 'RK', role: 'guru', jabatan: 'Guru Bahasa Indonesia' },
-  { email: 'dwi.santoso@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Dwi Santoso, S.Pd', initials: 'DS', role: 'guru', jabatan: 'Guru IPS Terpadu' },
+  { email: 'dwi.santoso@sdn1keputran.sch.id', password: 'passwordpass', nama: 'Dwi Santoso, S.Pd', initials: 'DS', role: 'guru', jabatan: 'Guru Pendidikan Pancasila' },
 ];
 
 const PARENTS = [
@@ -81,18 +81,18 @@ const PARENTS = [
 
 const CATATAN = [
   { studentId: 'S001', tgl: '2026-05-01', kategori: 'positif', text: 'Ahmad aktif berdiskusi dan membantu teman dalam kelompok. Sangat kooperatif.', tags: ['diskusi', 'kerjasama'], visible: true },
-  { studentId: 'S001', tgl: '2026-04-20', kategori: 'akademik', text: 'Nilai formatif Matematika meningkat dari 82 ke 88. Konsep SPLDV sudah dikuasai dengan baik.', tags: ['matematika', 'formatif'], visible: true },
+  { studentId: 'S001', tgl: '2026-04-20', kategori: 'akademik', text: 'Nilai formatif Matematika meningkat dari 82 ke 88. Penjumlahan dan pengurangan bersusun sudah dikuasai dengan baik.', tags: ['matematika', 'formatif'], visible: true },
   { studentId: 'S001', tgl: '2026-04-10', kategori: 'perhatian', text: 'Ahmad tampak kurang fokus pada 2 pertemuan terakhir. Perlu dikomunikasikan ke orang tua.', tags: ['fokus'], visible: false },
   { studentId: 'S003', tgl: '2026-05-05', kategori: 'perhatian', text: 'Bagas absen 3 kali dalam 2 minggu terakhir. Mohon orang tua memantau kehadiran.', tags: ['kehadiran'], visible: true },
-  { studentId: 'S003', tgl: '2026-04-28', kategori: 'akademik', text: 'Nilai sumatif IPA di bawah KKM (58). Butuh program remediasi.', tags: ['ipa', 'sumatif', 'remedial'], visible: true },
+  { studentId: 'S003', tgl: '2026-04-28', kategori: 'akademik', text: 'Nilai sumatif IPAS di bawah KKM (58). Butuh program remediasi.', tags: ['ipa', 'sumatif', 'remedial'], visible: true },
   { studentId: 'S003', tgl: '2026-04-15', kategori: 'sosial', text: 'Bagas tampak menarik diri dari teman-teman. Perlu perhatian khusus dari wali kelas.', tags: ['sosial', 'observasi'], visible: false },
   { studentId: 'S004', tgl: '2026-05-08', kategori: 'positif', text: 'Dewi mendapat nilai tertinggi di kelas pada ulangan Bahasa Indonesia. Prestasi luar biasa!', tags: ['bahasa-indonesia', 'prestasi'], visible: true },
   { studentId: 'S004', tgl: '2026-04-22', kategori: 'akademik', text: 'Progres CP Matematika Dewi konsisten. Sudah menguasai 4 dari 6 CP yang ditargetkan semester ini.', tags: ['matematika', 'cp'], visible: true },
 ];
 
 const ACTIVITY = [
-  { time: '5 menit lalu', type: 'good', title: 'Penilaian Harian VIII-B tersimpan', desc: '24 dari 30 siswa mendapat nilai ≥ KKM (75)' },
-  { time: '32 menit lalu', type: 'default', title: 'Jurnal mengajar VIII-A diperbarui', desc: 'Sistem Persamaan Linear — pertemuan ke-3' },
+  { time: '5 menit lalu', type: 'good', title: 'Penilaian Harian IV-B tersimpan', desc: '24 dari 30 siswa mendapat nilai ≥ KKM (75)' },
+  { time: '32 menit lalu', type: 'default', title: 'Jurnal mengajar IV-A diperbarui', desc: 'Penjumlahan dan Pengurangan Bilangan Cacah — pertemuan ke-3' },
   { time: '1 jam lalu', type: 'warn', title: 'AI mendeteksi pola penurunan', desc: 'Rendra Wijaya: skor turun 18% di 2 minggu terakhir' },
   { time: '2 jam lalu', type: 'default', title: 'Impor data Quizizz selesai', desc: '4 file → 96 record nilai formatif' },
   { time: 'Kemarin', type: 'muted', title: 'Catatan perilaku ditambahkan', desc: 'Siti Nurhaliza — kontribusi luar biasa dalam diskusi kelompok' },
@@ -102,49 +102,49 @@ type JurnalEntry = { tgl: string; kelas: string; mapel: string; topic: string; m
 
 const JURNAL: Record<string, JurnalEntry[]> = {
   'sari.rahmawati@sdn1keputran.sch.id': [
-    { tgl: '2026-04-14', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Persamaan Garis Lurus', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 1, alpa: 0, catatan: 'Siswa antusias, diskusi berjalan baik.', mood: 'baik' },
-    { tgl: '2026-04-16', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Persamaan Garis Lurus', metode: 'Ekspositori', hadir: 28, izin: 0, sakit: 2, alpa: 1, catatan: 'Perlu remedial untuk 3 siswa.', mood: 'netral' },
-    { tgl: '2026-04-18', kelas: 'IX-A', mapel: 'Matematika', topic: 'Bangun Ruang Sisi Lengkung', metode: 'Inkuiri', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Konsep silinder sudah dipahami dengan baik.', mood: 'baik' },
-    { tgl: '2026-04-21', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Teorema Pythagoras', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: 'Latihan soal berjalan lancar.', mood: 'baik' },
-    { tgl: '2026-04-23', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Teorema Pythagoras', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
-    { tgl: '2026-04-24', kelas: 'IX-A', mapel: 'Matematika', topic: 'Bangun Ruang Sisi Lengkung', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Presentasi kelompok sangat memuaskan.', mood: 'baik' },
-    { tgl: '2026-04-25', kelas: 'VII-A', mapel: 'Matematika', topic: 'Bilangan Bulat', metode: 'Berbasis permainan', hadir: 33, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa aktif dan semangat.', mood: 'baik' },
-    { tgl: '2026-04-28', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Lingkaran', metode: 'Inkuiri', hadir: 30, izin: 1, sakit: 1, alpa: 0, catatan: 'Konsep busur perlu diulang.', mood: 'netral' },
-    { tgl: '2026-04-29', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Lingkaran', metode: 'Ekspositori', hadir: 28, izin: 0, sakit: 2, alpa: 1, catatan: '', mood: 'netral' },
-    { tgl: '2026-04-30', kelas: 'IX-A', mapel: 'Matematika', topic: 'Statistika', metode: 'Diskusi kelompok', hadir: 31, izin: 0, sakit: 1, alpa: 0, catatan: 'Pengolahan data berjalan baik.', mood: 'baik' },
-    { tgl: '2026-05-05', kelas: 'VIII-A', mapel: 'Matematika', topic: 'Lingkaran — Lanjutan', metode: 'Demonstrasi', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: 'Pemahaman meningkat setelah remedial.', mood: 'baik' },
-    { tgl: '2026-05-07', kelas: 'VIII-B', mapel: 'Matematika', topic: 'Lingkaran — Lanjutan', metode: 'Berbasis proyek', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
-    { tgl: '2026-05-08', kelas: 'VII-A', mapel: 'Matematika', topic: 'Pecahan', metode: 'Berbasis permainan', hadir: 33, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa sangat antusias.', mood: 'baik' },
-    { tgl: '2026-05-09', kelas: 'IX-A', mapel: 'Matematika', topic: 'Peluang', metode: 'Diskusi kelompok', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Pengenalan materi peluang berjalan baik.', mood: 'baik' },
+    { tgl: '2026-04-14', kelas: 'IV-A', mapel: 'Matematika', topic: 'Perkalian Bersusun', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 1, alpa: 0, catatan: 'Siswa antusias, diskusi berjalan baik.', mood: 'baik' },
+    { tgl: '2026-04-16', kelas: 'IV-B', mapel: 'Matematika', topic: 'Perkalian Bersusun', metode: 'Ekspositori', hadir: 28, izin: 0, sakit: 2, alpa: 1, catatan: 'Perlu remedial untuk 3 siswa.', mood: 'netral' },
+    { tgl: '2026-04-18', kelas: 'V-A', mapel: 'Matematika', topic: 'Volume Kubus dan Balok', metode: 'Inkuiri', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Konsep volume balok sudah dipahami dengan baik.', mood: 'baik' },
+    { tgl: '2026-04-21', kelas: 'IV-A', mapel: 'Matematika', topic: 'Faktor dan Kelipatan', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: 'Latihan soal berjalan lancar.', mood: 'baik' },
+    { tgl: '2026-04-23', kelas: 'IV-B', mapel: 'Matematika', topic: 'Faktor dan Kelipatan', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-24', kelas: 'V-A', mapel: 'Matematika', topic: 'Volume Kubus dan Balok', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Presentasi kelompok sangat memuaskan.', mood: 'baik' },
+    { tgl: '2026-04-25', kelas: 'III-A', mapel: 'Matematika', topic: 'Bilangan Cacah sampai 1.000', metode: 'Berbasis permainan', hadir: 33, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa aktif dan semangat.', mood: 'baik' },
+    { tgl: '2026-04-28', kelas: 'IV-A', mapel: 'Matematika', topic: 'Pecahan Senilai', metode: 'Inkuiri', hadir: 30, izin: 1, sakit: 1, alpa: 0, catatan: 'Konsep pecahan senilai perlu diulang.', mood: 'netral' },
+    { tgl: '2026-04-29', kelas: 'IV-B', mapel: 'Matematika', topic: 'Pecahan Senilai', metode: 'Ekspositori', hadir: 28, izin: 0, sakit: 2, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-04-30', kelas: 'V-A', mapel: 'Matematika', topic: 'Pengolahan Data', metode: 'Diskusi kelompok', hadir: 31, izin: 0, sakit: 1, alpa: 0, catatan: 'Pengolahan data berjalan baik.', mood: 'baik' },
+    { tgl: '2026-05-05', kelas: 'IV-A', mapel: 'Matematika', topic: 'Pecahan Senilai — Lanjutan', metode: 'Demonstrasi', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: 'Pemahaman meningkat setelah remedial.', mood: 'baik' },
+    { tgl: '2026-05-07', kelas: 'IV-B', mapel: 'Matematika', topic: 'Pecahan Senilai — Lanjutan', metode: 'Berbasis proyek', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-05-08', kelas: 'III-A', mapel: 'Matematika', topic: 'Pecahan Sederhana', metode: 'Berbasis permainan', hadir: 33, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa sangat antusias.', mood: 'baik' },
+    { tgl: '2026-05-09', kelas: 'V-A', mapel: 'Matematika', topic: 'Pecahan Desimal dan Persen', metode: 'Diskusi kelompok', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Pengenalan pecahan desimal berjalan baik.', mood: 'baik' },
   ],
   'ahmad.fadli@sdn1keputran.sch.id': [
-    { tgl: '2026-04-15', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Gerak Manusia', metode: 'Inkuiri', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: 'Praktikum berjalan lancar.', mood: 'baik' },
-    { tgl: '2026-04-17', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Gerak Manusia', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: '', mood: 'baik' },
-    { tgl: '2026-04-18', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Listrik Statis', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Eksperimen muatan listrik sukses.', mood: 'baik' },
-    { tgl: '2026-04-21', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Pencernaan', metode: 'Diskusi kelompok', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
-    { tgl: '2026-04-23', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Pencernaan', metode: 'Ekspositori', hadir: 28, izin: 1, sakit: 1, alpa: 1, catatan: 'Materi padat, perlu sesi lanjutan.', mood: 'netral' },
-    { tgl: '2026-04-25', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Listrik Dinamis', metode: 'Inkuiri', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Rangkaian seri dan paralel dipahami.', mood: 'baik' },
-    { tgl: '2026-04-28', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Pernapasan', metode: 'Demonstrasi', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
-    { tgl: '2026-04-29', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Pernapasan', metode: 'Diskusi kelompok', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: '', mood: 'netral' },
-    { tgl: '2026-05-01', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Kemagnetan', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Praktikum magnet berjalan baik.', mood: 'baik' },
-    { tgl: '2026-05-06', kelas: 'VIII-A', mapel: 'IPA Terpadu', topic: 'Sistem Ekskresi', metode: 'Inkuiri', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
-    { tgl: '2026-05-07', kelas: 'VIII-B', mapel: 'IPA Terpadu', topic: 'Sistem Ekskresi', metode: 'Ekspositori', hadir: 29, izin: 1, sakit: 0, alpa: 1, catatan: 'Perlu pendalaman konsep ginjal.', mood: 'netral' },
-    { tgl: '2026-05-08', kelas: 'IX-A', mapel: 'IPA Terpadu', topic: 'Bioteknologi', metode: 'Diskusi kelompok', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Antusias tinggi pada topik ini.', mood: 'baik' },
+    { tgl: '2026-04-15', kelas: 'IV-A', mapel: 'IPAS', topic: 'Gaya dan Gerak', metode: 'Inkuiri', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: 'Praktikum berjalan lancar.', mood: 'baik' },
+    { tgl: '2026-04-17', kelas: 'IV-B', mapel: 'IPAS', topic: 'Gaya dan Gerak', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-18', kelas: 'V-A', mapel: 'IPAS', topic: 'Organ Pencernaan', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Peragaan perjalanan makanan berhasil.', mood: 'baik' },
+    { tgl: '2026-04-21', kelas: 'IV-A', mapel: 'IPAS', topic: 'Perubahan Wujud Zat', metode: 'Diskusi kelompok', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-23', kelas: 'IV-B', mapel: 'IPAS', topic: 'Perubahan Wujud Zat', metode: 'Ekspositori', hadir: 28, izin: 1, sakit: 1, alpa: 1, catatan: 'Materi padat, perlu sesi lanjutan.', mood: 'netral' },
+    { tgl: '2026-04-25', kelas: 'V-A', mapel: 'IPAS', topic: 'Organ Pernapasan', metode: 'Inkuiri', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Praktik menghitung napas dan denyut nadi berjalan baik.', mood: 'baik' },
+    { tgl: '2026-04-28', kelas: 'IV-A', mapel: 'IPAS', topic: 'Siklus Air', metode: 'Demonstrasi', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-29', kelas: 'IV-B', mapel: 'IPAS', topic: 'Siklus Air', metode: 'Diskusi kelompok', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-05-01', kelas: 'V-A', mapel: 'IPAS', topic: 'Sifat Cahaya', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Percobaan cahaya dan bayangan berjalan baik.', mood: 'baik' },
+    { tgl: '2026-05-06', kelas: 'IV-A', mapel: 'IPAS', topic: 'Sumber Energi', metode: 'Inkuiri', hadir: 31, izin: 0, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-05-07', kelas: 'IV-B', mapel: 'IPAS', topic: 'Sumber Energi', metode: 'Ekspositori', hadir: 29, izin: 1, sakit: 0, alpa: 1, catatan: 'Perlu pendalaman energi terbarukan.', mood: 'netral' },
+    { tgl: '2026-05-08', kelas: 'V-A', mapel: 'IPAS', topic: 'Rantai Makanan', metode: 'Diskusi kelompok', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Antusias tinggi pada topik ini.', mood: 'baik' },
   ],
   'rina.kusuma@sdn1keputran.sch.id': [
-    { tgl: '2026-04-14', kelas: 'VIII-A', mapel: 'Bahasa Indonesia', topic: 'Teks Eksposisi', metode: 'Diskusi kelompok', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa aktif berdiskusi.', mood: 'baik' },
-    { tgl: '2026-04-18', kelas: 'VIII-B', mapel: 'Bahasa Indonesia', topic: 'Teks Eksposisi', metode: 'Ekspositori', hadir: 28, izin: 1, sakit: 1, alpa: 1, catatan: '', mood: 'netral' },
-    { tgl: '2026-04-21', kelas: 'IX-A', mapel: 'Bahasa Indonesia', topic: 'Teks Argumentasi', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Proyek berjalan baik.', mood: 'baik' },
-    { tgl: '2026-04-23', kelas: 'VIII-A', mapel: 'Bahasa Indonesia', topic: 'Menulis Cerpen', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
-    { tgl: '2026-04-29', kelas: 'VIII-B', mapel: 'Bahasa Indonesia', topic: 'Puisi', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: 'Perlu latihan lebih banyak.', mood: 'sulit' },
-    { tgl: '2026-04-30', kelas: 'IX-A', mapel: 'Bahasa Indonesia', topic: 'Debat', metode: 'Diskusi kelompok', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Debat berjalan seru.', mood: 'baik' },
-    { tgl: '2026-05-02', kelas: 'VIII-A', mapel: 'Bahasa Indonesia', topic: 'Laporan Observasi', metode: 'Inkuiri', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: '', mood: 'netral' },
-    { tgl: '2026-05-02', kelas: 'VIII-B', mapel: 'Bahasa Indonesia', topic: 'Laporan Observasi', metode: 'Inkuiri', hadir: 28, izin: 1, sakit: 0, alpa: 1, catatan: 'Perlu bimbingan lebih lanjut.', mood: 'netral' },
+    { tgl: '2026-04-14', kelas: 'IV-A', mapel: 'Bahasa Indonesia', topic: 'Teks Narasi', metode: 'Diskusi kelompok', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: 'Siswa aktif berdiskusi.', mood: 'baik' },
+    { tgl: '2026-04-18', kelas: 'IV-B', mapel: 'Bahasa Indonesia', topic: 'Teks Narasi', metode: 'Ekspositori', hadir: 28, izin: 1, sakit: 1, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-04-21', kelas: 'V-A', mapel: 'Bahasa Indonesia', topic: 'Teks Prosedur', metode: 'Berbasis proyek', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Proyek berjalan baik.', mood: 'baik' },
+    { tgl: '2026-04-23', kelas: 'IV-A', mapel: 'Bahasa Indonesia', topic: 'Menulis Dongeng', metode: 'Diskusi kelompok', hadir: 30, izin: 1, sakit: 0, alpa: 0, catatan: '', mood: 'baik' },
+    { tgl: '2026-04-29', kelas: 'IV-B', mapel: 'Bahasa Indonesia', topic: 'Puisi', metode: 'Demonstrasi', hadir: 29, izin: 0, sakit: 1, alpa: 1, catatan: 'Perlu latihan lebih banyak.', mood: 'sulit' },
+    { tgl: '2026-04-30', kelas: 'V-A', mapel: 'Bahasa Indonesia', topic: 'Pidato Singkat', metode: 'Diskusi kelompok', hadir: 31, izin: 1, sakit: 0, alpa: 0, catatan: 'Latihan pidato berjalan seru.', mood: 'baik' },
+    { tgl: '2026-05-02', kelas: 'IV-A', mapel: 'Bahasa Indonesia', topic: 'Teks Deskripsi', metode: 'Inkuiri', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: '', mood: 'netral' },
+    { tgl: '2026-05-02', kelas: 'IV-B', mapel: 'Bahasa Indonesia', topic: 'Teks Deskripsi', metode: 'Inkuiri', hadir: 28, izin: 1, sakit: 0, alpa: 1, catatan: 'Perlu bimbingan lebih lanjut.', mood: 'netral' },
   ],
   'dwi.santoso@sdn1keputran.sch.id': [
-    { tgl: '2026-04-14', kelas: 'VIII-A', mapel: 'IPS Terpadu', topic: 'Kondisi Geografis Indonesia', metode: 'Ekspositori', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: 'Materi tersampaikan.', mood: 'netral' },
-    { tgl: '2026-04-16', kelas: 'VIII-B', mapel: 'IPS Terpadu', topic: 'Kondisi Geografis Indonesia', metode: 'Diskusi kelompok', hadir: 29, izin: 1, sakit: 0, alpa: 1, catatan: '', mood: 'netral' },
-    { tgl: '2026-04-22', kelas: 'IX-A', mapel: 'IPS Terpadu', topic: 'Perdagangan Internasional', metode: 'Ekspositori', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Perlu referensi lebih banyak.', mood: 'sulit' },
+    { tgl: '2026-04-14', kelas: 'IV-A', mapel: 'Pendidikan Pancasila', topic: 'Pancasila dalam Kehidupan Sehari-hari', metode: 'Ekspositori', hadir: 30, izin: 0, sakit: 1, alpa: 0, catatan: 'Materi tersampaikan.', mood: 'netral' },
+    { tgl: '2026-04-16', kelas: 'IV-B', mapel: 'Pendidikan Pancasila', topic: 'Pancasila dalam Kehidupan Sehari-hari', metode: 'Diskusi kelompok', hadir: 29, izin: 1, sakit: 0, alpa: 1, catatan: '', mood: 'netral' },
+    { tgl: '2026-04-22', kelas: 'V-A', mapel: 'Pendidikan Pancasila', topic: 'Hak dan Kewajiban sebagai Warga', metode: 'Ekspositori', hadir: 32, izin: 0, sakit: 0, alpa: 0, catatan: 'Perlu referensi lebih banyak.', mood: 'sulit' },
   ],
 };
 
