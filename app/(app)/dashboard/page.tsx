@@ -4,20 +4,22 @@ import { Pill, StatCard, Sparkline, StudentAvatar } from '@/components/ui';
 import { QuickInputButton, OpenAIButton } from '@/components/QuickInputButton';
 import { getStudents, getJadwal, getActivity, getKehadiran } from '@/lib/queries';
 import { getDictionary } from '@/lib/i18n/server';
-import { interpolate } from '@/lib/i18n/format';
+import { interpolate, firstName } from '@/lib/i18n/format';
+import { currentTeacher } from '@/lib/auth';
 
 export default async function DashboardPage() {
   const [students, jadwal, activity, kehadiran] = await Promise.all([
     getStudents(), getJadwal(), getActivity(), getKehadiran(),
   ]);
   const dict = await getDictionary();
+  const teacher = await currentTeacher();
 
   return (
     <div className="screen-enter">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="h-display" style={{ margin: 0, fontSize: 26, lineHeight: 1.1 }}>
-            {dict.dashboard.greeting}
+            {interpolate(dict.dashboard.greeting, { name: teacher ? firstName(teacher.nama) : '' })}
           </h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
             {dict.dashboard.dateLine}

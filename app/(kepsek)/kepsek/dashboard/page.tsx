@@ -5,7 +5,7 @@ import { StatCard, StudentAvatar, Pill } from '@/components/ui';
 import { getStudents, getTeacherActivity, type TeacherActivity } from '@/lib/queries';
 import type { Student } from '@/lib/types';
 import { getDictionary } from '@/lib/i18n/server';
-import { interpolate } from '@/lib/i18n/format';
+import { interpolate, firstName } from '@/lib/i18n/format';
 
 function groupByKelas(students: Student[]) {
   const map = new Map<string, Student[]>();
@@ -26,7 +26,6 @@ export default async function KepsekDashboardPage() {
   const [students, teachers, hdrs, dict] = await Promise.all([getStudents(), getTeacherActivity(), headers(), getDictionary()]);
 
   const nama = hdrs.get('x-user-nama') || dict.kepsekNav.defaultRole;
-  const firstName = nama.split(' ')[0].replace(',', '');
 
   const totalSiswa = students.length;
   const rerataSekolah = Math.round(students.reduce((a, s) => a + s.rerata, 0) / students.length);
@@ -48,7 +47,7 @@ export default async function KepsekDashboardPage() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="h-display" style={{ margin: 0, fontSize: 26, lineHeight: 1.1 }}>
-            {interpolate(dict.kepsek.dashboard.greeting, { name: firstName })}
+            {interpolate(dict.kepsek.dashboard.greeting, { name: firstName(nama) })}
           </h1>
           <div className="muted" style={{ marginTop: 4, fontSize: 13.5 }}>
             {dict.kepsek.dashboard.subtitle}

@@ -6,7 +6,7 @@ import { Pill } from '@/components/ui';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { locales } from '@/lib/i18n/config';
 import { setLocale } from '@/lib/i18n/actions';
-import { interpolate } from '@/lib/i18n/format';
+import { interpolate, firstName } from '@/lib/i18n/format';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 
 type TabId = keyof Dictionary['settings']['tabs'];
@@ -20,7 +20,9 @@ const TABS: { id: TabId; icon: IconName }[] = [
   { id: 'tagihan', icon: 'fileText' },
 ];
 
-export function SettingsClient() {
+type SettingsUser = { nama: string; initials: string };
+
+export function SettingsClient({ user }: { user: SettingsUser }) {
   const [tab, setTab] = useState<TabId>('profil');
   const { dict } = useI18n();
 
@@ -53,7 +55,7 @@ export function SettingsClient() {
         </div>
 
         <div className="col-span-9">
-          {tab === 'profil' && <ProfilTab />}
+          {tab === 'profil' && <ProfilTab user={user} />}
           {tab === 'akun' && <AkunTab />}
           {tab === 'notifikasi' && <NotifikasiTab />}
           {tab === 'preferensi' && <PreferensiTab />}
@@ -65,7 +67,7 @@ export function SettingsClient() {
   );
 }
 
-function ProfilTab() {
+function ProfilTab({ user }: { user: SettingsUser }) {
   const { dict } = useI18n();
   const p = dict.settings.profil;
   return (
@@ -73,7 +75,7 @@ function ProfilTab() {
       <div className="card">
         <div className="card-title"><h3>{p.photoTitle}</h3></div>
         <div className="flex gap-4 items-center">
-          <div style={{ width: 80, height: 80, borderRadius: 50, background: 'linear-gradient(135deg, #FCA5A5, #F59E0B)', display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 28, fontFamily: 'var(--font-display)' }}>SR</div>
+          <div style={{ width: 80, height: 80, borderRadius: 50, background: 'linear-gradient(135deg, #FCA5A5, #F59E0B)', display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 28, fontFamily: 'var(--font-display)' }}>{user.initials}</div>
           <div style={{ flex: 1 }}>
             <div className="small mb-2">{p.photoDesc}</div>
             <div className="flex gap-2">
@@ -87,8 +89,8 @@ function ProfilTab() {
       <div className="card">
         <div className="card-title"><h3>{p.infoTitle}</h3><span className="sub">{p.infoSynced}</span></div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="field"><label className="field-label">{p.fields.fullName}</label><input defaultValue="Sari Rahmawati, S.Pd" /></div>
-          <div className="field"><label className="field-label">{p.fields.nickname}</label><input defaultValue="Bu Sari" /></div>
+          <div className="field"><label className="field-label">{p.fields.fullName}</label><input defaultValue={user.nama} /></div>
+          <div className="field"><label className="field-label">{p.fields.nickname}</label><input defaultValue={firstName(user.nama)} /></div>
           <div className="field"><label className="field-label">{p.fields.nip}</label><input defaultValue="198509142010012015" style={{ fontFamily: 'var(--font-mono)' }} /></div>
           <div className="field"><label className="field-label">{p.fields.nuptk}</label><input defaultValue="2046763664300003" style={{ fontFamily: 'var(--font-mono)' }} /></div>
           <div className="field"><label className="field-label">{p.fields.schoolEmail}</label><input defaultValue="sari.rahmawati@sdn1keputran.sch.id" /></div>

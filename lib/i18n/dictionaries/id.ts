@@ -350,7 +350,7 @@ export const id = {
     gagalMembacaHasilAi: 'Gagal membaca hasil dari AI. Coba lagi.',
   },
   dashboard: {
-    greeting: 'Selamat pagi, Bu Sari ☀️',
+    greeting: 'Selamat pagi, {name} ☀️',
     dateLine: 'Senin, 27 April 2026 · 4 kelas hari ini · 2 deadline minggu ini',
     dateChip: 'Rabu, 28 Apr',
     quickInput: 'Input cepat',

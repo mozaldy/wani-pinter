@@ -352,7 +352,7 @@ export const en: Dictionary = {
     gagalMembacaHasilAi: 'Failed to read the AI result. Try again.',
   },
   dashboard: {
-    greeting: 'Good morning, Bu Sari ☀️',
+    greeting: 'Good morning, {name} ☀️',
     dateLine: 'Monday, 27 April 2026 · 4 classes today · 2 deadlines this week',
     dateChip: 'Wed, 28 Apr',
     quickInput: 'Quick input',
