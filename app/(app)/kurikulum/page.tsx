@@ -24,8 +24,8 @@ export default async function KurikulumPage() {
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label={dict.kurikulum.statTotalCp} value="8" foot={dict.kurikulum.statTotalCpFoot} icon="layers" accent="#4F46E5" /></div>
-        <div className="col-span-3"><StatCard label={dict.kurikulum.statTotalTp} value="34" foot={dict.kurikulum.statTotalTpFoot} icon="target" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.kurikulum.statTotalCp} value="8" foot={dict.kurikulum.statTotalCpFoot} icon="layers" accent="var(--color-primary)" /></div>
+        <div className="col-span-3"><StatCard label={dict.kurikulum.statTotalTp} value="34" foot={dict.kurikulum.statTotalTpFoot} icon="target" accent="var(--color-olive)" /></div>
         <div className="col-span-3"><StatCard label={dict.kurikulum.statTuntas} value="58%" foot={dict.kurikulum.statTuntasFoot} icon="check" accent="#10B981" /></div>
         <div className="col-span-3"><StatCard label={dict.kurikulum.statEstimasiSelesai} value="14 Jun" foot={dict.kurikulum.statEstimasiSelesaiFoot} icon="calendar" accent="#F59E0B" /></div>
       </div>
@@ -96,10 +96,10 @@ export default async function KurikulumPage() {
               {[
                 { d: 'Beriman, bertaqwa, berakhlak mulia', p: 78, c: '#10B981' },
                 { d: 'Berkebinekaan global', p: 65, c: '#F59E0B' },
-                { d: 'Bergotong-royong', p: 88, c: '#4F46E5' },
-                { d: 'Mandiri', p: 72, c: '#06B6D4' },
+                { d: 'Bergotong-royong', p: 88, c: '#6B2236' },
+                { d: 'Mandiri', p: 72, c: '#7F7B2D' },
                 { d: 'Bernalar kritis', p: 81, c: '#EC4899' },
-                { d: 'Kreatif', p: 76, c: '#8B5CF6' },
+                { d: 'Kreatif', p: 76, c: '#F17C6A' },
               ].map(p => (
                 <div key={p.d} className="bar-row" style={{ gridTemplateColumns: '1fr 70px 36px' }}>
                   <span className="small">{p.d}</span>

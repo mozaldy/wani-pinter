@@ -18,7 +18,7 @@ const KATEGORI_COLOR = {
   positif: { bg: 'var(--color-good-soft)', border: '#86EFAC', text: 'var(--color-good)' },
   perhatian: { bg: 'var(--color-bad-soft)', border: '#FCA5A5', text: 'var(--color-bad)' },
   akademik: { bg: 'var(--color-primary-soft)', border: 'var(--color-primary)', text: 'var(--color-primary)' },
-  sosial: { bg: 'var(--color-accent-soft)', border: '#67E8F9', text: '#0E7490' },
+  sosial: { bg: 'var(--color-accent-soft)', border: '#FCD47A', text: '#8A5A00' },
 };
 
 export default async function CatatanPage() {
@@ -44,7 +44,7 @@ export default async function CatatanPage() {
       <div className="grid grid-cols-12 gap-4 mb-4">
         <div className="col-span-3"><StatCard label={dict.catatan.statPositif} value="28" foot={dict.catatan.statPositifFoot} icon="star" accent="#10B981" /></div>
         <div className="col-span-3"><StatCard label={dict.catatan.statPerhatian} value="6" foot={dict.catatan.statPerhatianFoot} icon="alert" accent="#EF4444" /></div>
-        <div className="col-span-3"><StatCard label={dict.catatan.statAkademik} value="9" foot={dict.catatan.statAkademikFoot} icon="book" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.catatan.statAkademik} value="9" foot={dict.catatan.statAkademikFoot} icon="book" accent="var(--color-primary)" /></div>
         <div className="col-span-3"><StatCard label={dict.catatan.statVoiceNotes} value="14" foot={dict.catatan.statVoiceNotesFoot} icon="mic" accent="#F59E0B" /></div>
       </div>
 

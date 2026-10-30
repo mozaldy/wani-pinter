@@ -26,11 +26,11 @@ const STUDENTS = [
 ];
 
 const MAPEL = [
-  { kode: 'MTK', nama: 'Matematika', icon: 'sigma', color: '#4F46E5' },
+  { kode: 'MTK', nama: 'Matematika', icon: 'sigma', color: '#6B2236' },
   { kode: 'IPAS', nama: 'IPAS', icon: 'leaf', color: '#10B981' },
   { kode: 'PPKN', nama: 'Pendidikan Pancasila', icon: 'globe', color: '#F59E0B' },
   { kode: 'BIND', nama: 'Bahasa Indonesia', icon: 'book', color: '#EF4444' },
-  { kode: 'BING', nama: 'Bahasa Inggris', icon: 'message', color: '#06B6D4' },
+  { kode: 'BING', nama: 'Bahasa Inggris', icon: 'message', color: '#7F7B2D' },
   { kode: 'PJOK', nama: 'PJOK', icon: 'activity', color: '#EC4899' },
 ];
 

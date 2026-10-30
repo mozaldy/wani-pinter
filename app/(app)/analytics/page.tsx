@@ -42,7 +42,7 @@ export default async function AnalyticsPage() {
         <div className="col-span-3"><StatCard label={dict.analytics.statCpTuntas} value="58%" foot={dict.analytics.statCpTuntasFoot} trend="up" icon="target" accent="#10B981" /></div>
         <div className="col-span-3"><StatCard label={dict.analytics.statGapTerbesar} value="Penyajian Data" foot={dict.analytics.statGapTerbesarFoot} icon="alert" accent="#F59E0B" /></div>
         <div className="col-span-3"><StatCard label={dict.analytics.statBerisikoTinggi} value="3" foot={dict.analytics.statBerisikoTinggiFoot} icon="flame" accent="#EF4444" /></div>
-        <div className="col-span-3"><StatCard label={dict.analytics.statDiferensiasi} value="A−" foot={dict.analytics.statDiferensiasiFoot} trend="up" icon="star" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.analytics.statDiferensiasi} value="A−" foot={dict.analytics.statDiferensiasiFoot} trend="up" icon="star" accent="var(--color-primary)" /></div>
       </div>
 
       <div className="card mb-4">

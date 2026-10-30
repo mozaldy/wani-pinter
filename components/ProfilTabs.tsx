@@ -8,11 +8,11 @@ import { interpolate } from '@/lib/i18n/format';
 import type { Student, CP } from '@/lib/types';
 
 const SUBJECTS = [
-  { key: 'cp_matematika', color: '#4F46E5' },
+  { key: 'cp_matematika', color: '#6B2236' },
   { key: 'cp_ipa', color: '#10B981' },
   { key: 'cp_ips', color: '#F59E0B' },
   { key: 'cp_bind', color: '#EF4444' },
-  { key: 'cp_bing', color: '#06B6D4' },
+  { key: 'cp_bing', color: '#7F7B2D' },
   { key: 'cp_pjok', color: '#EC4899' },
 ] as const;
 
@@ -23,7 +23,7 @@ const ANEK = [
   { date: '12 Apr 2026', kind: 'positif' as const, title: 'Aktif bertanya', body: 'Mulai berani bertanya saat tidak paham. Pertanyaan tentang mengapa 1/2 sama dengan 2/4 menarik dan dijawab di depan kelas.' },
 ];
 
-const KIND_COLOR = { akademik: '#4F46E5', sosial: '#06B6D4', perhatian: '#F59E0B', positif: '#10B981' };
+const KIND_COLOR = { akademik: '#6B2236', sosial: '#7F7B2D', perhatian: '#F59E0B', positif: '#10B981' };
 
 const TABS: { id: 'akademik' | 'anekdotal' | 'portofolio' | 'komunikasi' | 'rapor'; icon: IconName; count?: number }[] = [
   { id: 'akademik', icon: 'chart' },
@@ -188,13 +188,13 @@ export function ProfilTabs({ student, cps }: { student: Student; cps: CP[] }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
             {[
               { t: 'Refleksi P5 Kewirausahaan', d: '24 Apr · 4 hal', c: '#10B981', tag: 'P5' },
-              { t: 'Tugas Soal Cerita Jual-Beli', d: '21 Apr · gambar', c: '#4F46E5', tag: 'Matematika' },
+              { t: 'Tugas Soal Cerita Jual-Beli', d: '21 Apr · gambar', c: '#6B2236', tag: 'Matematika' },
               { t: 'Gambar Lambang Pancasila', d: '18 Apr · gambar', c: '#F59E0B', tag: 'PPKn' },
-              { t: 'Percobaan Sifat Cahaya', d: '15 Apr · video 2:30', c: '#06B6D4', tag: 'IPAS' },
+              { t: 'Percobaan Sifat Cahaya', d: '15 Apr · video 2:30', c: '#7F7B2D', tag: 'IPAS' },
               { t: 'Dongeng "Hujan Pertama"', d: '12 Apr · 5 hal', c: '#EF4444', tag: 'B. Indonesia' },
               { t: 'Video Perkenalan Diri', d: '10 Apr · video 1:45', c: '#EC4899', tag: 'B. Inggris' },
-              { t: 'Poster Kampanye Anti-Bullying', d: '8 Apr · gambar', c: '#8B5CF6', tag: 'P5' },
-              { t: 'Kuis Faktor dan Kelipatan', d: '5 Apr · 90/100', c: '#4F46E5', tag: 'Matematika' },
+              { t: 'Poster Kampanye Anti-Bullying', d: '8 Apr · gambar', c: '#F17C6A', tag: 'P5' },
+              { t: 'Kuis Faktor dan Kelipatan', d: '5 Apr · 90/100', c: '#6B2236', tag: 'Matematika' },
             ].map((p, i) => (
               <div key={i} style={{ aspectRatio: '4/5', borderRadius: 12, border: '1px solid var(--color-line)', overflow: 'hidden', background: 'var(--color-surface)' }}>
                 <div style={{ height: '60%', background: `linear-gradient(135deg, ${p.c}40, ${p.c}10)`, display: 'grid', placeItems: 'center' }}>

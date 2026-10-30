@@ -5,6 +5,7 @@ import { Icon, type IconName } from '@/components/Icon';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import type { Dictionary } from '@/lib/i18n/dictionaries';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { BeeMark } from '@/components/ui';
 
 type SidebarUser = { nama: string; initials: string; jabatan: string };
 
@@ -31,13 +32,7 @@ export function KepsekSidebar({ user }: { user: SidebarUser }) {
       position: 'sticky', top: 0, height: '100vh',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 8px 20px' }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 10,
-          background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
-          display: 'grid', placeItems: 'center', color: 'white', fontWeight: 800,
-          fontFamily: 'var(--font-display)', fontSize: 18, flexShrink: 0,
-          boxShadow: '0 4px 12px color-mix(in oklab, var(--color-primary) 30%, transparent)',
-        }}>w</div>
+        <BeeMark size={40} />
         <div>
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 17, letterSpacing: '-0.01em', lineHeight: 1.1 }}>wani·pinter</div>
           <div style={{ fontSize: 11, color: 'var(--color-ink-3)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>SDN 1 Keputran Surabaya</div>
@@ -63,7 +58,7 @@ export function KepsekSidebar({ user }: { user: SidebarUser }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 34, height: 34, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #4F46E5, #06B6D4)',
+            background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
             display: 'grid', placeItems: 'center', color: 'white', fontWeight: 700, fontSize: 13,
             flexShrink: 0,
           }}>{user.initials}</div>

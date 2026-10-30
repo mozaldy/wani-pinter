@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { BeeMark } from '@/components/ui';
 
 const PARENT_FEATURES: { id: 'nilai' | 'kehadiran' | 'capaian' | 'catatan'; icon: 'star' | 'activity' | 'target' | 'book' }[] = [
   { id: 'nilai', icon: 'star' },
@@ -28,13 +29,7 @@ function ParentLoginContent() {
       {/* Left: form */}
       <div style={{ display: 'flex', flexDirection: 'column', padding: '40px 56px', background: 'var(--color-surface)' }}>
         <div className="flex gap-3 items-center">
-          <div style={{
-            width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-            background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
-            display: 'grid', placeItems: 'center', color: 'white',
-            fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 20,
-            boxShadow: '0 4px 16px color-mix(in oklab, var(--color-primary) 30%, transparent)',
-          }}>w</div>
+          <BeeMark size={44} />
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 20 }}>wani·pinter</div>
             <div style={{ fontSize: 11, color: 'var(--color-ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{dict.auth.parentPortalLabel}</div>
@@ -93,12 +88,13 @@ function ParentLoginContent() {
 
       {/* Right: info panel */}
       <div style={{
-        background: 'linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)',
-        color: 'white', padding: '48px 56px', display: 'flex', flexDirection: 'column',
+        background: 'linear-gradient(135deg, #FDD36B 0%, #FCBC31 55%, #F6A623 100%)',
+        color: 'var(--color-primary-ink)', padding: '48px 56px', display: 'flex', flexDirection: 'column',
         justifyContent: 'center', position: 'relative', overflow: 'hidden', gap: 32,
       }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.12), transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08), transparent 50%)' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
+          <BeeMark words size={150} style={{ display: 'block', marginBottom: 28, filter: 'drop-shadow(0 10px 20px rgba(83,26,40,0.25))' }} />
           <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 34, lineHeight: 1.2, letterSpacing: '-0.02em', margin: '0 0 16px' }}>
             {dict.auth.roles.ortu.rightHeading}
           </h2>
@@ -112,11 +108,11 @@ function ParentLoginContent() {
             const t = dict.auth.parentFeatures[f.id];
             return (
               <div key={f.id} style={{
-                background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.2)', borderRadius: 12, padding: '12px 16px',
+                background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(83,26,40,0.12)', borderRadius: 12, padding: '12px 16px',
                 display: 'flex', gap: 12, alignItems: 'center',
               }}>
-                <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(255,255,255,0.2)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(255,255,255,0.6)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
                   <Icon name={f.icon} size={17} />
                 </div>
                 <div>

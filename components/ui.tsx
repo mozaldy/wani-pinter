@@ -1,4 +1,5 @@
 import type { ReactNode, CSSProperties } from 'react';
+import Image from 'next/image';
 import { Icon, type IconName } from './Icon';
 import type { Student } from '@/lib/types';
 
@@ -6,6 +7,12 @@ export type PillKind = 'good' | 'warn' | 'bad' | 'ink' | 'primary' | 'accent';
 
 export function Pill({ kind = 'ink', children, dot, style }: { kind?: PillKind; children: ReactNode; dot?: boolean; style?: CSSProperties }) {
   return <span className={`pill pill-${kind}`} style={style}>{dot && <span className="dot" />}{children}</span>;
+}
+
+export function BeeMark({ size = 36, words = false, style }: { size?: number; words?: boolean; style?: CSSProperties }) {
+  return words
+    ? <Image src="/images/icon_with_words.png" alt="wani·pinter" width={447} height={503} style={{ height: size, width: 'auto', flexShrink: 0, ...style }} />
+    : <Image src="/images/icon.png" alt="wani·pinter" width={485} height={521} style={{ height: size, width: 'auto', flexShrink: 0, ...style }} />;
 }
 
 export function StatCard({ label, value, foot, trend, icon, accent }: {

@@ -36,9 +36,9 @@ export default async function JurnalPage() {
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label={dict.jurnal.statEntriMinggu} value="12" foot={dict.jurnal.statEntriMingguFoot} trend="up" icon="clipboard" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.jurnal.statEntriMinggu} value="12" foot={dict.jurnal.statEntriMingguFoot} trend="up" icon="clipboard" accent="var(--color-primary)" /></div>
         <div className="col-span-3"><StatCard label={dict.jurnal.statKonsistensi} value="89%" foot={dict.jurnal.statKonsistensiFoot} trend="up" icon="target" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label={dict.jurnal.statRefleksi} value="34" foot={dict.jurnal.statRefleksiFoot} icon="fileText" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.jurnal.statRefleksi} value="34" foot={dict.jurnal.statRefleksiFoot} icon="fileText" accent="var(--color-olive)" /></div>
         <div className="col-span-3"><StatCard label={dict.jurnal.statCatatanAi} value="8" foot={dict.jurnal.statCatatanAiFoot} icon="sparkle" accent="#F59E0B" /></div>
       </div>
 
@@ -104,8 +104,8 @@ export default async function JurnalPage() {
             </div>
             <div className="flex flex-col gap-2">
               {[
-                { l: 'Diskusi kelompok', v: 38, c: '#4F46E5' },
-                { l: 'Ekspositori', v: 28, c: '#06B6D4' },
+                { l: 'Diskusi kelompok', v: 38, c: '#6B2236' },
+                { l: 'Ekspositori', v: 28, c: '#7F7B2D' },
                 { l: 'Inquiry', v: 18, c: '#10B981' },
                 { l: 'Demonstrasi', v: 10, c: '#F59E0B' },
                 { l: 'Game-based', v: 6, c: '#EC4899' },

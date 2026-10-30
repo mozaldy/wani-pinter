@@ -44,7 +44,7 @@ export default async function PenilaianPage() {
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label={dict.penilaian.statRerataKelas} value="78.4" foot={dict.penilaian.statRerataKelasFoot} trend="up" icon="target" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.penilaian.statRerataKelas} value="78.4" foot={dict.penilaian.statRerataKelasFoot} trend="up" icon="target" accent="var(--color-primary)" /></div>
         <div className="col-span-3"><StatCard label={dict.penilaian.statTuntasKkm} value="84%" foot={dict.penilaian.statTuntasKkmFoot} icon="check" accent="#10B981" /></div>
         <div className="col-span-3"><StatCard label={dict.penilaian.statBelumTuntas} value="5" foot={dict.penilaian.statBelumTuntasFoot} icon="alert" accent="#F59E0B" /></div>
         <div className="col-span-3"><StatCard label={dict.penilaian.statTugasTertunda} value="2" foot={dict.penilaian.statTugasTertundaFoot} icon="clipboard" accent="#EF4444" /></div>

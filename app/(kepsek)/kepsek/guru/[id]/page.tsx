@@ -17,11 +17,11 @@ const MAPEL_TO_CP: Record<string, keyof Student> = {
 };
 
 const MAPEL_COLOR: Record<string, string> = {
-  'Matematika': '#4F46E5',
+  'Matematika': '#6B2236',
   'IPAS': '#10B981',
   'Pendidikan Pancasila': '#F59E0B',
   'Bahasa Indonesia': '#EF4444',
-  'Bahasa Inggris': '#06B6D4',
+  'Bahasa Inggris': '#7F7B2D',
   'PJOK': '#EC4899',
 };
 
@@ -93,10 +93,10 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
       {/* Stats */}
       <div className="grid grid-cols-12 gap-4 mb-6">
         <div className="col-span-3">
-          <StatCard label={dict.kepsek.guruDetail.statEntriJurnal30Hari} value={totalEntri} foot={interpolate(dict.kepsek.guruDetail.statEntriJurnalFoot, { count: teacher.total_minggu })} icon="clipboard" accent="#4F46E5" />
+          <StatCard label={dict.kepsek.guruDetail.statEntriJurnal30Hari} value={totalEntri} foot={interpolate(dict.kepsek.guruDetail.statEntriJurnalFoot, { count: teacher.total_minggu })} icon="clipboard" accent="var(--color-primary)" />
         </div>
         <div className="col-span-3">
-          <StatCard label={dict.kepsek.guruDetail.statTotalSiswaDiajar} value={taughtStudents.length} foot={interpolate(dict.kepsek.guruDetail.statTotalSiswaDiajarFoot, { count: uniqueKelas.length })} icon="users" accent="#06B6D4" />
+          <StatCard label={dict.kepsek.guruDetail.statTotalSiswaDiajar} value={taughtStudents.length} foot={interpolate(dict.kepsek.guruDetail.statTotalSiswaDiajarFoot, { count: uniqueKelas.length })} icon="users" accent="var(--color-olive)" />
         </div>
         <div className="col-span-3">
           <StatCard label={dict.kepsek.guruDetail.statRerataSiswa} value={avgRerata} foot={avgRerata >= 75 ? dict.kepsek.guruDetail.diAtasKkm : dict.kepsek.guruDetail.diBawahKkm} trend={avgRerata >= 75 ? 'up' : 'down'} icon="target" accent="#10B981" />
@@ -113,7 +113,7 @@ export default async function GuruDetailPage({ params }: { params: Promise<{ id:
           <div key={kelas} style={{ marginBottom: 24 }}>
             {mapelList.map(({ mapel, entry_count }) => {
               const cpKey = MAPEL_TO_CP[mapel];
-              const color = MAPEL_COLOR[mapel] || '#4F46E5';
+              const color = MAPEL_COLOR[mapel] || '#6B2236';
               const classAvg = cpKey && classStudents.length
                 ? Math.round(classStudents.reduce((a, s) => a + (s[cpKey] as number), 0) / classStudents.length)
                 : null;

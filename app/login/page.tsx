@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Icon } from '@/components/Icon';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { BeeMark } from '@/components/ui';
 
 type Role = 'guru' | 'kepsek' | 'ortu';
 
@@ -42,7 +43,7 @@ function LoginContent() {
     <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1.1fr' }}>
       <div style={{ display: 'flex', flexDirection: 'column', padding: '40px 56px', background: 'var(--color-surface)' }}>
         <div className="flex gap-3 items-center">
-          <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))', display: 'grid', placeItems: 'center', color: 'white', fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 20, boxShadow: '0 4px 16px color-mix(in oklab, var(--color-primary) 30%, transparent)' }}>w</div>
+          <BeeMark size={44} />
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 20 }}>wani·pinter</div>
             <div style={{ fontSize: 11, color: 'var(--color-ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>SDN 1 Keputran Surabaya</div>
@@ -62,7 +63,7 @@ function LoginContent() {
                 padding: 10, borderRadius: 9, fontSize: 12.5, fontWeight: 600,
                 color: role === r.id ? 'var(--color-primary)' : 'var(--color-ink-3)',
                 background: role === r.id ? 'var(--color-surface)' : 'transparent',
-                boxShadow: role === r.id ? '0 1px 3px rgba(15,23,42,0.08)' : 'none',
+                boxShadow: role === r.id ? '0 1px 3px rgba(43,26,31,0.08)' : 'none',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
               }}>
                 <Icon name={r.icon} size={18} />
@@ -156,17 +157,18 @@ function LoginContent() {
       </div>
 
       <div style={{
-        background: 'linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)',
-        color: 'white', padding: '48px 56px', display: 'flex', flexDirection: 'column',
+        background: 'linear-gradient(135deg, #FDD36B 0%, #FCBC31 55%, #F6A623 100%)',
+        color: 'var(--color-primary-ink)', padding: '48px 56px', display: 'flex', flexDirection: 'column',
         justifyContent: 'space-between', position: 'relative', overflow: 'hidden',
       }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.12), transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08), transparent 50%)' }} />
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 520 }}>
+          <BeeMark words size={150} style={{ display: 'block', marginBottom: 28, filter: 'drop-shadow(0 10px 20px rgba(83,26,40,0.25))' }} />
           {!isOrtu && (
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '5px 12px', borderRadius: 999,
-              background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)',
+              background: 'rgba(255,255,255,0.45)', backdropFilter: 'blur(8px)',
               fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 24,
             }}>
               <Icon name="sparkle" size={12} />
@@ -187,8 +189,8 @@ function LoginContent() {
               {PARENT_FEATURES.map(f => {
                 const t = dict.auth.parentFeatures[f.id];
                 return (
-                  <div key={f.id} style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 12, padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center' }}>
-                    <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(255,255,255,0.2)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                  <div key={f.id} style={{ background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(8px)', border: '1px solid rgba(83,26,40,0.12)', borderRadius: 12, padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center' }}>
+                    <div style={{ width: 34, height: 34, borderRadius: 9, background: 'rgba(255,255,255,0.6)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
                       <Icon name={f.icon} size={17} />
                     </div>
                     <div>
@@ -201,8 +203,8 @@ function LoginContent() {
             </>
           ) : (
             <>
-              <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 16, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.2)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+              <div style={{ background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(12px)', border: '1px solid rgba(83,26,40,0.12)', borderRadius: 16, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.6)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
                   <Icon name="sparkle" size={18} />
                 </div>
                 <div>
@@ -212,7 +214,7 @@ function LoginContent() {
                   </div>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, padding: '24px 0', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, padding: '24px 0', borderTop: '1px solid rgba(83,26,40,0.15)' }}>
                 {[
                   { v: '2.847', l: 'Sekolah aktif' },
                   { v: '68rb+', l: 'Guru pengguna' },

@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { Icon } from '@/components/Icon';
-import { StudentAvatar } from '@/components/ui';
+import { StudentAvatar, BeeMark } from '@/components/ui';
 import { getParentStudentIds, getStudentForParent } from '@/lib/queries';
 import type { Student } from '@/lib/types';
 import { getDictionary } from '@/lib/i18n/server';
@@ -35,12 +35,7 @@ export default async function ParentLayout({ children }: { children: ReactNode }
         zIndex: 50,
       }}>
         <div className="flex gap-2 items-center">
-          <div style={{
-            width: 32, height: 32, borderRadius: 9, flexShrink: 0,
-            background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
-            display: 'grid', placeItems: 'center', color: 'white',
-            fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 16,
-          }}>w</div>
+          <BeeMark size={34} />
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 15, lineHeight: 1 }}>wani·pinter</div>
             <div style={{ fontSize: 10, color: 'var(--color-ink-3)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{dict.parent.shell.portalLabel}</div>

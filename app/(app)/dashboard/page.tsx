@@ -30,10 +30,10 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label={dict.dashboard.statTotalSiswa} value="156" foot={dict.dashboard.statTotalSiswaFoot} icon="users" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.dashboard.statTotalSiswa} value="156" foot={dict.dashboard.statTotalSiswaFoot} icon="users" accent="var(--color-primary)" /></div>
         <div className="col-span-3"><StatCard label={dict.dashboard.statTuntasKkm} value="84%" foot={dict.dashboard.statTuntasKkmFoot} trend="up" icon="target" accent="#10B981" /></div>
         <div className="col-span-3"><StatCard label={dict.dashboard.statBerisiko} value="12" foot={dict.dashboard.statBerisikoFoot} icon="alert" accent="#EF4444" /></div>
-        <div className="col-span-3"><StatCard label={dict.dashboard.statKehadiran} value="92%" foot={dict.dashboard.statKehadiranFoot} icon="pulse" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.dashboard.statKehadiran} value="92%" foot={dict.dashboard.statKehadiranFoot} icon="pulse" accent="var(--color-olive)" /></div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">

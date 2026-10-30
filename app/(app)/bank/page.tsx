@@ -34,9 +34,9 @@ export default async function BankSoalPage() {
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label={dict.bank.statTotalSoal} value="342" foot={dict.bank.statTotalSoalFoot} icon="folder" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.bank.statTotalSoal} value="342" foot={dict.bank.statTotalSoalFoot} icon="folder" accent="var(--color-primary)" /></div>
         <div className="col-span-3"><StatCard label={dict.bank.statCakupanCp} value="8/8" foot={dict.bank.statCakupanCpFoot} icon="target" accent="#10B981" /></div>
-        <div className="col-span-3"><StatCard label={dict.bank.statTingkatSukses} value="79%" foot={dict.bank.statTingkatSuksesFoot} icon="check" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.bank.statTingkatSukses} value="79%" foot={dict.bank.statTingkatSuksesFoot} icon="check" accent="var(--color-olive)" /></div>
         <div className="col-span-3"><StatCard label={dict.bank.statSoalAi} value="84" foot={dict.bank.statSoalAiFoot} icon="sparkle" accent="#F59E0B" /></div>
       </div>
 

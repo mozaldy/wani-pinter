@@ -57,10 +57,10 @@ export default async function KepsekDashboardPage() {
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">
-        <div className="col-span-3"><StatCard label={dict.kepsek.dashboard.statTotalSiswa} value={totalSiswa} foot={dict.kepsek.dashboard.statTotalSiswaFoot} icon="users" accent="#4F46E5" /></div>
+        <div className="col-span-3"><StatCard label={dict.kepsek.dashboard.statTotalSiswa} value={totalSiswa} foot={dict.kepsek.dashboard.statTotalSiswaFoot} icon="users" accent="var(--color-primary)" /></div>
         <div className="col-span-3"><StatCard label={dict.kepsek.dashboard.statRerataSekolah} value={rerataSekolah} foot={dict.kepsek.dashboard.statRerataSekolahFoot} icon="target" accent="#10B981" /></div>
         <div className="col-span-3"><StatCard label={dict.kepsek.dashboard.statSiswaBerisiko} value={siswaBerisiko} foot={dict.kepsek.dashboard.statSiswaBerisikoFoot} icon="alert" accent="#EF4444" /></div>
-        <div className="col-span-3"><StatCard label={dict.kepsek.dashboard.statRerataKehadiran} value={`${rerataKehadiran}%`} foot={dict.kepsek.dashboard.statRerataKehadiranFoot} icon="pulse" accent="#06B6D4" /></div>
+        <div className="col-span-3"><StatCard label={dict.kepsek.dashboard.statRerataKehadiran} value={`${rerataKehadiran}%`} foot={dict.kepsek.dashboard.statRerataKehadiranFoot} icon="pulse" accent="var(--color-olive)" /></div>
       </div>
 
       <div className="grid grid-cols-12 gap-4 mb-4">

@@ -40,7 +40,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 5000,
-      background: '#0F172A', color: 'white',
+      background: '#2B1A1F', color: 'white',
       display: 'flex', flexDirection: 'column',
       animation: 'fadeIn 0.25s',
     }}>
@@ -64,7 +64,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
           <button key={t.id} onClick={() => setTab(t.id)}
             style={{
               padding: '14px 16px',
-              borderBottom: tab === t.id ? '2px solid #06B6D4' : '2px solid transparent',
+              borderBottom: tab === t.id ? '2px solid #FCBC31' : '2px solid transparent',
               color: tab === t.id ? 'white' : 'rgba(255,255,255,0.5)',
               fontWeight: 600, fontSize: 13, marginBottom: -1,
               display: 'flex', alignItems: 'center', gap: 8,
@@ -123,8 +123,8 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
 
           {tab === 'observasi' && (
             <>
-              <div style={{ marginBottom: 16, padding: 14, background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.3)', borderRadius: 10 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.06, color: '#67E8F9', marginBottom: 8 }}>{dict.modals.modeKelas.tagSiswaCepat}</div>
+              <div style={{ marginBottom: 16, padding: 14, background: 'rgba(252,188,49,0.1)', border: '1px solid rgba(252,188,49,0.3)', borderRadius: 10 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.06, color: '#FDD36B', marginBottom: 8 }}>{dict.modals.modeKelas.tagSiswaCepat}</div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {students.slice(0, 6).map(s => (
                     <button key={s.id} onClick={() => addObs(`${s.nama.split(' ')[0]} berkontribusi`, s.id)}
@@ -169,9 +169,9 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
                   ].map((p, i) => (
                     <div key={i} style={{
                       flex: p.d, padding: '10px 8px', borderRadius: 8,
-                      background: p.done ? 'rgba(16,185,129,0.2)' : p.active ? '#06B6D4' : 'rgba(255,255,255,0.05)',
-                      border: p.active ? '2px solid #67E8F9' : '1px solid rgba(255,255,255,0.1)',
-                      color: 'white', fontSize: 11, fontWeight: 600, textAlign: 'center',
+                      background: p.done ? 'rgba(16,185,129,0.2)' : p.active ? '#FCBC31' : 'rgba(255,255,255,0.05)',
+                      border: p.active ? '2px solid #FDD36B' : '1px solid rgba(255,255,255,0.1)',
+                      color: p.active ? '#2B1A1F' : 'white', fontSize: 11, fontWeight: 600, textAlign: 'center',
                     }}>
                       <div>{dict.modals.modeKelas.fase[p.l]}</div>
                       <div style={{ fontSize: 9, opacity: 0.7, marginTop: 2 }}>{interpolate(dict.modals.modeKelas.durasiMnt, { d: p.d })}</div>
@@ -224,7 +224,7 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
             }}>
               <Icon name="mic" size={14} /> {recording ? dict.modals.modeKelas.merekamDots : dict.modals.modeKelas.voice}
             </button>
-            <button onClick={() => addObs(obsInput)} style={{ flex: 1, padding: 10, borderRadius: 10, background: '#06B6D4', color: 'white', fontSize: 12, fontWeight: 600 }}>{dict.common.simpan}</button>
+            <button onClick={() => addObs(obsInput)} style={{ flex: 1, padding: 10, borderRadius: 10, background: '#FCBC31', color: '#2B1A1F', fontSize: 12, fontWeight: 600 }}>{dict.common.simpan}</button>
           </div>
 
           <div style={{ fontSize: 11, opacity: 0.5, textTransform: 'uppercase', letterSpacing: 0.08, fontWeight: 700, marginBottom: 8 }}>{dict.modals.modeKelas.pintasan}</div>
@@ -240,8 +240,8 @@ export function ModeKelas({ open, onClose, students }: { open: boolean; onClose:
             ))}
           </div>
 
-          <div style={{ marginTop: 'auto', padding: 12, background: 'rgba(6,182,212,0.1)', borderRadius: 10, border: '1px solid rgba(6,182,212,0.3)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#67E8F9', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.06 }}>Wani AI</div>
+          <div style={{ marginTop: 'auto', padding: 12, background: 'rgba(252,188,49,0.1)', borderRadius: 10, border: '1px solid rgba(252,188,49,0.3)' }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#FDD36B', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.06 }}>Wani AI</div>
             <div style={{ fontSize: 12, lineHeight: 1.5 }}>{dict.modals.modeKelas.aiInsight}</div>
           </div>
         </aside>

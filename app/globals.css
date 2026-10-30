@@ -1,27 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #F8FAFC;
+  /* Palette sampled from the Wani bee mascot (public/images/icon.png):
+     maroon outline #531A28, honey #FCBC31, olive hat #7F7B2D, coral cheeks #F17C6A. */
+  --color-bg: #FBF8F3;
   --color-surface: #FFFFFF;
-  --color-surface-2: #F1F5F9;
-  --color-surface-3: #E2E8F0;
-  --color-ink: #0F172A;
-  --color-ink-2: #334155;
-  --color-ink-3: #64748B;
-  --color-ink-4: #94A3B8;
-  --color-line: #E2E8F0;
-  --color-line-2: #CBD5E1;
+  --color-surface-2: #F6F1E9;
+  --color-surface-3: #EBE3D7;
+  --color-ink: #2B1A1F;
+  --color-ink-2: #4D3B3F;
+  --color-ink-3: #7D6B6C;
+  --color-ink-4: #AA9C99;
+  --color-line: #EDE5DA;
+  --color-line-2: #DDD1C3;
 
-  --color-primary: #4F46E5;
-  --color-primary-soft: #EEF2FF;
-  --color-primary-ink: #3730A3;
-  --color-accent: #06B6D4;
-  --color-accent-soft: #ECFEFF;
+  --color-primary: #6B2236;
+  --color-primary-soft: #FDF1D8;
+  --color-primary-ink: #531A28;
+  --color-accent: #FCBC31;
+  --color-accent-soft: #FFF7E2;
+  --color-olive: #7F7B2D;
+  --color-coral: #F17C6A;
 
   --color-good: #10B981;
   --color-good-soft: #ECFDF5;
-  --color-warn: #F59E0B;
-  --color-warn-soft: #FFFBEB;
+  --color-warn: #E8731A;
+  --color-warn-soft: #FFF3E8;
   --color-bad: #EF4444;
   --color-bad-soft: #FEF2F2;
 
@@ -30,9 +34,9 @@
   --radius-lg: 20px;
   --radius-xl: 28px;
 
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 1px 2px rgba(43, 26, 31, 0.04), 0 1px 3px rgba(43, 26, 31, 0.06);
+  --shadow-md: 0 4px 12px rgba(43, 26, 31, 0.06), 0 2px 4px rgba(43, 26, 31, 0.04);
+  --shadow-lg: 0 16px 40px rgba(43, 26, 31, 0.10), 0 4px 12px rgba(43, 26, 31, 0.05);
 
   --font-sans: var(--font-jakarta), 'Inter', system-ui, sans-serif;
   --font-display: var(--font-fraunces), var(--font-jakarta), serif;
@@ -61,7 +65,7 @@ input, select, textarea { font-family: inherit; }
 }
 .btn-primary {
   background: var(--color-primary); color: white;
-  box-shadow: 0 1px 2px rgba(79,70,229,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+  box-shadow: 0 1px 2px rgba(107,34,54,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .btn-primary:hover { background: color-mix(in oklab, var(--color-primary) 90%, black); }
 .btn-ghost { color: var(--color-ink-2); }
@@ -93,11 +97,11 @@ input, select, textarea { font-family: inherit; }
   font-size: 11px; font-weight: 600; letter-spacing: 0.01em;
 }
 .pill-good { background: var(--color-good-soft); color: var(--color-good); }
-.pill-warn { background: var(--color-warn-soft); color: #B45309; }
+.pill-warn { background: var(--color-warn-soft); color: #A84E0E; }
 .pill-bad { background: var(--color-bad-soft); color: var(--color-bad); }
 .pill-ink { background: var(--color-surface-2); color: var(--color-ink-2); }
 .pill-primary { background: var(--color-primary-soft); color: var(--color-primary-ink); }
-.pill-accent { background: var(--color-accent-soft); color: #0E7490; }
+.pill-accent { background: var(--color-accent-soft); color: #8A5A00; }
 .pill .dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
 
 .stat-label { font-size: 12px; color: var(--color-ink-3); font-weight: 500; }
@@ -261,7 +265,7 @@ input, select, textarea { font-family: inherit; }
 @keyframes pulseScale { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 
 .modal-backdrop {
-  position: fixed; inset: 0; background: rgba(15,23,42,0.4);
+  position: fixed; inset: 0; background: rgba(43,26,31,0.4);
   backdrop-filter: blur(4px); display: grid; place-items: center;
   z-index: 1000; animation: fadeIn 0.2s;
 }
